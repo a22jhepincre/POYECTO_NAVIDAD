@@ -36,7 +36,7 @@ public class ProyectoNavidad {
         }
         String palabras []= new String [10];
         for (int j=0;j<10;j++){
-            System.err.println("ERROR MARICON");
+            System.out.println("ERROR MARICON");
         }
     }
     
