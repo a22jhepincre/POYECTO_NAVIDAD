@@ -34,6 +34,7 @@ public class ProyectoNavidad {
                 salir = true;
             i++;
         }
+        String palabras []= new String [10];
     }
     
 }
