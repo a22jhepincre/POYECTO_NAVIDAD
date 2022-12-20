@@ -19,6 +19,13 @@ public class ProyectoNavidad {
         //prueba 2
         for(int i = 0; i < 10; i++){
             System.out.println("hola");
+            if(i < 5){
+                System.out.println("tonto");
+            }
+            else{
+                System.out.println("");
+            }
+        }
     }
     
 }
