@@ -16,6 +16,9 @@ public class ProyectoNavidad {
     public static void main(String[] args) {
         // TODO code application logic here
         //Prueba 1
+        //prueba 2
+        for(int i = 0; i < 10; i++){
+            System.out.println("hola");
     }
     
 }
