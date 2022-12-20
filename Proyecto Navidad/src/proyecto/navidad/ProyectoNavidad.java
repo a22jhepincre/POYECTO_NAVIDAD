@@ -26,6 +26,14 @@ public class ProyectoNavidad {
                 System.out.println("");
             }
         }
+        boolean salir = false;
+        int i = 0;
+        while(!salir){
+            System.out.println("Pasa el codigo.");
+            if(i == 10)
+                salir = true;
+            i++;
+        }
     }
     
 }
