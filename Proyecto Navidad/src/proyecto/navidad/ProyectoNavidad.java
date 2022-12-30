@@ -7,13 +7,14 @@ public class ProyectoNavidad {
 
     public static Scanner s = new Scanner(System.in);
     public static Random rnd = new Random();
+    public static final int MAX = 13;
 
     public static void main(String[] args) {
-
-        menu();
+        int[] premiosGordos = ganadores();
+        menu(premiosGordos);
     }
 
-    static void menu() {
+    static void menu(int[] premiosGordos) {
         boolean salir = false;
         do {
 
@@ -21,7 +22,9 @@ public class ProyectoNavidad {
             int opcion = escanearEntero("Selecciona una opcion: ");
             switch (opcion) {
                 case 1 ->
-                    sorteig();
+                    sorteig(premiosGordos);
+                case 2 ->
+                    comprobarNumero(premiosGordos);
                 case 3 ->
                     salir = true;
                 default ->
@@ -42,13 +45,9 @@ public class ProyectoNavidad {
         return num;
     }
 
-    static void sorteig() {
-
-        final int MAX = 13;
+    static int[] ganadores() {
         int[] premiosGordos = new int[MAX];
-        int[] quintoPremio = new int[8];
-        int aux = 0;
-        
+
         for (int i = 0; i < MAX; i++) {
             premiosGordos[i] = rnd.nextInt(100000);
             for (int j = 0; j < i; j++) {
@@ -57,6 +56,13 @@ public class ProyectoNavidad {
                 }
             }
         }
+        return premiosGordos;
+    }
+
+    static void sorteig(int[] premiosGordos) {
+
+        int[] quintoPremio = new int[8];
+        int aux = 0;
 
         for (int i = 0; i < MAX; i++) {
             if (i == 0) {
@@ -86,10 +92,39 @@ public class ProyectoNavidad {
             }
         }
         System.out.print("Quinto premio : 60.000 --> ");
-        for (int k = 0; k < quintoPremio.length-1; k++) {
+        for (int k = 0; k < quintoPremio.length - 1; k++) {
             System.out.print(quintoPremio[k] + ", ");
         }
-        System.out.println(quintoPremio[quintoPremio.length-1]);
+        System.out.println(quintoPremio[quintoPremio.length - 1]);
+        System.out.print("\n");
+    }
+
+    static void comprobarNumero(int[] premiosGordos) {
+        int cantidad = 0;
+
+        int numero = escanearEntero("Introduce el número a comprobar: ");
+        for (int i = 0; i < premiosGordos.length; i++) {
+            if (numero == premiosGordos[i]) {
+                if (i == 0) {
+                    cantidad += 4000000;
+                }
+                if (i == 1) {
+                    cantidad += 1250000;
+                }
+                if (i == 2) {
+                    cantidad += 500000;
+                }
+                if (i == 3 || i == 4) {
+                    cantidad += 200000;
+                }
+                if (i > 4) {
+                    cantidad += 60000;
+                }
+            }
+
+        }
+
+        System.out.println("El numero " + numero + " ha ganado " + cantidad + " EUROS \n");
     }
 
 }
