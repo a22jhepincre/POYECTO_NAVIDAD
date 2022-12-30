@@ -7,14 +7,16 @@ public class ProyectoNavidad {
 
     public static Scanner s = new Scanner(System.in);
     public static Random rnd = new Random();
-    public static final int MAX = 13;
+    public static final int MAX_PREMIOSGORDOS = 13;
+    public static final int MAX_1000 = 1794;
 
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
-        menu(premiosGordos);
+        int[] premios1000 = ganadores1000();
+        menu(premiosGordos, premios1000);
     }
 
-    static void menu(int[] premiosGordos) {
+    static void menu(int[] premiosGordos, int[] premios1000) {
         boolean salir = false;
         do {
 
@@ -22,9 +24,9 @@ public class ProyectoNavidad {
             int opcion = escanearEntero("Selecciona una opcion: ");
             switch (opcion) {
                 case 1 ->
-                    sorteig(premiosGordos);
+                    sorteig(premiosGordos, premios1000);
                 case 2 ->
-                    comprobarNumero(premiosGordos);
+                    comprobarNumero(premiosGordos, premios1000);
                 case 3 ->
                     salir = true;
                 default ->
@@ -46,9 +48,9 @@ public class ProyectoNavidad {
     }
 
     static int[] ganadores() {
-        int[] premiosGordos = new int[MAX];
+        int[] premiosGordos = new int[MAX_PREMIOSGORDOS];
 
-        for (int i = 0; i < MAX; i++) {
+        for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
             premiosGordos[i] = rnd.nextInt(100000);
             for (int j = 0; j < i; j++) {
                 while (premiosGordos[i] == premiosGordos[j]) {
@@ -58,13 +60,27 @@ public class ProyectoNavidad {
         }
         return premiosGordos;
     }
+    
+    static int[] ganadores1000() {
+        int[] premiosGordos = new int[MAX_1000];
 
-    static void sorteig(int[] premiosGordos) {
+        for (int i = 0; i < MAX_1000; i++) {
+            premiosGordos[i] = rnd.nextInt(100000);
+            for (int j = 0; j < i; j++) {
+                while (premiosGordos[i] == premiosGordos[j]) {
+                    premiosGordos[i] = rnd.nextInt(100000);
+                }
+            }
+        }
+        return premiosGordos;
+    }
+    
+    static void sorteig(int[] premiosGordos, int[] premios1000) {
 
         int[] quintoPremio = new int[8];
         int aux = 0;
 
-        for (int i = 0; i < MAX; i++) {
+        for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
             if (i == 0) {
                 int primerPremio = premiosGordos[i];
                 System.out.println("Premio Gordo: 4.000.000 --> " + premiosGordos[i]);
@@ -99,9 +115,8 @@ public class ProyectoNavidad {
         System.out.print("\n");
     }
 
-    static void comprobarNumero(int[] premiosGordos) {
+    static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
         int cantidad = 0;
-
         int numero = escanearEntero("Introduce el número a comprobar: ");
         for (int i = 0; i < premiosGordos.length; i++) {
             if (numero == premiosGordos[i]) {
@@ -123,7 +138,13 @@ public class ProyectoNavidad {
             }
 
         }
-
+        
+        for(int i = 0; i < MAX_1000; i++){
+            if(numero == premios1000[i]){
+                cantidad += 1000;
+            }
+        }
+        
         System.out.println("El numero " + numero + " ha ganado " + cantidad + " EUROS \n");
     }
 
