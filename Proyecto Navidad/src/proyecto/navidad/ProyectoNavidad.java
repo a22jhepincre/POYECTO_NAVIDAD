@@ -141,6 +141,14 @@ public class ProyectoNavidad {
 
         }
         
+        //COMPROBAR LAS APROXIMACIONES DEL 1R, 2N Y 3R PREMIO GORDO
+        if(premiosGordos[0]+1 == numero || premiosGordos[0]-1 == numero)
+            cantidad += 20000;
+        if(premiosGordos[1]+1 == numero ||premiosGordos[1]-1 == numero)
+            cantidad += 12500;
+        if(premiosGordos[2]+1 == numero ||premiosGordos[2]-1 == numero)
+            cantidad += 9600;
+        
         for(int i = 0; i < MAX_1000; i++){
             if(numero == premios1000[i]){
                 cantidad += 1000;
