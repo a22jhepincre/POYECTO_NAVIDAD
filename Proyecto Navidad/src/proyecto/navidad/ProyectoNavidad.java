@@ -4,7 +4,9 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class ProyectoNavidad {
-
+    
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RESET = "\u001B[0m";
     public static Scanner s = new Scanner(System.in);
     public static Random rnd = new Random();
     public static final int MAX_PREMIOSGORDOS = 13;
@@ -83,21 +85,21 @@ public class ProyectoNavidad {
         for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
             if (i == 0) {
                 int primerPremio = premiosGordos[i];
-                System.out.println("Premio Gordo: 4.000.000 --> " + premiosGordos[i]);
+                System.out.println(ANSI_GREEN+ "Premio Gordo: 4.000.000 --> " + premiosGordos[i]+ ANSI_RESET);
             }
             if (i == 1) {
                 int segundoPremio = premiosGordos[i];
-                System.out.println("Segundo premio: 1.250.000 --> " + premiosGordos[i]);
+                System.out.println( ANSI_GREEN+ "Segundo premio: 1.250.000 --> " + premiosGordos[i]+ ANSI_RESET);
             }
             if (i == 2) {
                 int tercerPremio = premiosGordos[i];
-                System.out.println("Tercer Premio: 500.000 --> " + premiosGordos[i]);
+                System.out.println(ANSI_GREEN+ "Tercer Premio: 500.000 --> " + premiosGordos[i]+ ANSI_RESET);
             }
             if (i == 3) {
                 int[] cuartoPremio = new int[2];
                 cuartoPremio[0] = premiosGordos[i];
                 cuartoPremio[1] = premiosGordos[i + 1];
-                System.out.println("Cuarto premio : 200.000 --> " + cuartoPremio[0] + ", " + cuartoPremio[1]);
+                System.out.println(ANSI_GREEN+ "Cuarto premio : 200.000 --> " + cuartoPremio[0] + ", " + cuartoPremio[1]+ ANSI_RESET);
             }
             if (i > 4) {
                 {
@@ -107,11 +109,11 @@ public class ProyectoNavidad {
 
             }
         }
-        System.out.print("Quinto premio : 60.000 --> ");
+        System.out.print(ANSI_GREEN+ "Quinto premio : 60.000 --> "+ ANSI_RESET);
         for (int k = 0; k < quintoPremio.length - 1; k++) {
-            System.out.print(quintoPremio[k] + ", ");
+            System.out.print(ANSI_GREEN+ quintoPremio[k] + ", "+ ANSI_RESET);
         }
-        System.out.println(quintoPremio[quintoPremio.length - 1]);
+        System.out.println(ANSI_GREEN+ quintoPremio[quintoPremio.length - 1]+ ANSI_RESET);
         System.out.print("\n");
     }
 
@@ -145,7 +147,7 @@ public class ProyectoNavidad {
             }
         }
         
-        System.out.println("El numero " + numero + " ha ganado " + cantidad + " EUROS \n");
+        System.out.println(ANSI_GREEN+ "El numero " + numero + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
     }
 
 }
