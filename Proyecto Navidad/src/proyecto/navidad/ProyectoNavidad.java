@@ -149,8 +149,40 @@ public class ProyectoNavidad {
         if(premiosGordos[2]+1 == numero ||premiosGordos[2]-1 == numero)
             cantidad += 9600;
         
-        for(int i = 0; i < MAX_1000; i++){
-            if(numero == premios1000[i]){
+        //COMPROBAR LAS CENTENAS DEL 1R, 2N, 3, Y 4R PREMIO
+        if (premiosGordos[0] / 100 == numero / 100) {
+            cantidad += 1000;
+        } else if (numero == premiosGordos[0]) {
+            cantidad += 0;
+        }
+
+        if (premiosGordos[1] / 100 == numero / 100) {
+            cantidad += 1000;
+        } else if (numero == premiosGordos[1]) {
+            cantidad += 0;
+        }
+
+        if (premiosGordos[2] / 100 == numero / 100) {
+            cantidad += 1000;
+        } else if (numero == premiosGordos[2]) {
+            cantidad += 0;
+        }
+
+        if(premiosGordos[3] / 100 == numero / 100) {
+            cantidad += 1000; 
+        } else if(numero == premiosGordos[3]){
+            cantidad += 0;
+        }
+        
+        if(premiosGordos[4] / 100 == numero / 100) {
+            cantidad += 1000; 
+        } else if(numero == premiosGordos[4]){
+            cantidad += 0;
+        }
+
+        //COMPROBAR GANADOR DE 1000 1794 GANADORES
+        for (int i = 0; i < MAX_1000; i++) {
+            if (numero == premios1000[i]) {
                 cantidad += 1000;
             }
         }
