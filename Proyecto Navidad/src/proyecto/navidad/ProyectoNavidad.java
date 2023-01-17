@@ -20,19 +20,29 @@ public class ProyectoNavidad {
 
     static void menu(int[] premiosGordos, int[] premios1000) {
         boolean salir = false;
+        boolean sorteig = false;
         do {
 
             System.out.println("1. Realizar sorteo.\n2. Comprobar mi numero.\n3. Salir\n");
             int opcion = escanearEntero("Selecciona una opcion: ");
             switch (opcion) {
-                case 1 ->
+                case 1 -> {
                     sorteig(premiosGordos, premios1000);
-                case 2 ->
-                    comprobarNumero(premiosGordos, premios1000);
-                case 3 ->
+                    sorteig = true;
+                }
+                case 2 -> {
+                    if (!sorteig) {
+                        System.out.println("El sorteo todavía no se ha realizado");
+                    } else {
+                        comprobarNumero(premiosGordos, premios1000);
+                    }
+                }
+                case 3 -> {
                     salir = true;
-                default ->
+                }
+                default -> {
                     System.out.println("Opcion invalida. Prueba de nuevo");
+                }
             }
         } while (!salir);
     }
