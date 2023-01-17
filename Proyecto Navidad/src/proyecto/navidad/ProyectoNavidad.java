@@ -150,34 +150,71 @@ public class ProyectoNavidad {
             cantidad += 9600;
         
         //COMPROBAR LAS CENTENAS DEL 1R, 2N, 3, Y 4R PREMIO
+        boolean centena = false;
+
         if (premiosGordos[0] / 100 == numero / 100) {
             cantidad += 1000;
+            centena = true;
         } else if (numero == premiosGordos[0]) {
             cantidad += 0;
         }
 
         if (premiosGordos[1] / 100 == numero / 100) {
             cantidad += 1000;
+            centena = true;
         } else if (numero == premiosGordos[1]) {
             cantidad += 0;
         }
 
         if (premiosGordos[2] / 100 == numero / 100) {
             cantidad += 1000;
+            centena = true;
         } else if (numero == premiosGordos[2]) {
             cantidad += 0;
         }
 
-        if(premiosGordos[3] / 100 == numero / 100) {
-            cantidad += 1000; 
-        } else if(numero == premiosGordos[3]){
+        if (premiosGordos[3] / 100 == numero / 100) {
+            cantidad += 1000;
+            centena = true;
+        } else if (numero == premiosGordos[3]) {
             cantidad += 0;
         }
-        
-        if(premiosGordos[4] / 100 == numero / 100) {
-            cantidad += 1000; 
-        } else if(numero == premiosGordos[4]){
+
+        if (premiosGordos[4] / 100 == numero / 100) {
+            cantidad += 1000;
+            centena = true;
+        } else if (numero == premiosGordos[4]) {
             cantidad += 0;
+        }
+
+        //COMPROBAR LOS DOS ULTIMOS NUMEROS DEL 1R, 2N i 3R PREMIO
+        //Comprobem que si ja ha obtingut el premi de la centena no pot obtenir aquest
+        boolean dosultims = false;
+
+        if (premiosGordos[0] % 100 == numero % 100 && !centena) {
+            cantidad += 1000;
+            dosultims = true;
+        } else if (numero == premiosGordos[0]) {
+            cantidad += 0;
+        }
+        if (premiosGordos[1] % 100 == numero % 100 && !centena) {
+            cantidad += 1000;
+            dosultims = true;
+        } else if (numero == premiosGordos[1]) {
+            cantidad += 0;
+
+        }
+        if (premiosGordos[2] % 100 == numero % 100 && !centena) {
+            cantidad += 1000;
+            dosultims = true;
+        } else if (numero == premiosGordos[2]) {
+            cantidad += 0;
+
+        }
+
+        //Comprobem si l'ultim numero es igual al del primer premi
+        if ((premiosGordos[0] % 10 == numero % 10) && (!centena || !dosultims)) {
+            cantidad += 200;
         }
 
         //COMPROBAR GANADOR DE 1000 1794 GANADORES
