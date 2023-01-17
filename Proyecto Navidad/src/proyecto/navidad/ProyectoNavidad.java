@@ -213,8 +213,12 @@ public class ProyectoNavidad {
         }
 
         //Comprobem si l'ultim numero es igual al del primer premi
-        if ((premiosGordos[0] % 10 == numero % 10) && (!centena || !dosultims)) {
+        if ((premiosGordos[0] % 10 == numero % 10) && (!centena && !dosultims)) {
             cantidad += 200;
+        }
+        else if (numero == premiosGordos[0]) {
+            cantidad += 0;
+
         }
 
         //COMPROBAR GANADOR DE 1000 1794 GANADORES
@@ -223,8 +227,13 @@ public class ProyectoNavidad {
                 cantidad += 1000;
             }
         }
+        if(cantidad==0){
+            System.err.println("El numero "  + numero + " ha ganado " + cantidad + " EUROS \n");
+        }
+        else {
+            System.out.println(ANSI_GREEN+ "El numero " + numero + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
+        }
         
-        System.out.println(ANSI_GREEN+ "El numero " + numero + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
     }
 
 }
