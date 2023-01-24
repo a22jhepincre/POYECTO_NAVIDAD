@@ -4,7 +4,6 @@
  */
 package proyecto.navidad;
 
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,16 +20,31 @@ public class ProyectoNavidadTest {
     @Test
     public void testGanadores() {
         int[] result = ProyectoNavidad.ganadores();
-        assertEquals(13, result.length);
-        assertNotEquals(result[0], result[1]);
+        boolean unic = true;
+        for (int i = 0; i < result.length; i++) {
+            for (int j = i + 1; j < result.length; j++) {
+                if (result[i] == result[j]) {
+                    unic = false;
+                }
+            }
+            assertEquals(13, result.length);
+            assertTrue(unic);
+        }
     }
-    
+
     //Verifica si l'array de guanyadors de 1000 s'omple correctament i no hi ha numeros repetits
     @Test
     public void testGanadores1000() {
         int[] result = ProyectoNavidad.ganadores1000();
-        assertEquals(1794, result.length);
-        assertNotEquals(result[0], result[1]);
+        boolean unic = true;
+        for (int i = 0; i < result.length; i++) {
+            for (int j = i + 1; j < result.length; j++) {
+                if (result[i] == result[j]) {
+                    unic = false;
+                }
+            }
+            assertEquals(1794, result.length);
+            assertTrue(unic);
+        }
     }
-
 }
