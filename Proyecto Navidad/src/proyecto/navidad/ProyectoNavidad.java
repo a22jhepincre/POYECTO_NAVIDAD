@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class ProyectoNavidad {
     
+    public static final String ANSI_RED = "\033[0;31m";     
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
     public static Scanner s = new Scanner(System.in);
@@ -238,7 +239,7 @@ public class ProyectoNavidad {
             }
         }
         if(cantidad==0){
-            System.err.println("El numero "  + numero + " ha ganado " + cantidad + " EUROS \n");
+            System.out.println(ANSI_RED+ "El numero " + numero + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
         }
         else {
             System.out.println(ANSI_GREEN+ "El numero " + numero + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
