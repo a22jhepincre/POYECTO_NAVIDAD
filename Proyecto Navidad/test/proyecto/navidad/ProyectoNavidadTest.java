@@ -24,5 +24,13 @@ public class ProyectoNavidadTest {
         assertEquals(13, result.length);
         assertNotEquals(result[0], result[1]);
     }
+    
+    //Verifica si l'array de guanyadors de 1000 s'omple correctament i no hi ha numeros repetits
+    @Test
+    public void testGanadores1000() {
+        int[] result = ProyectoNavidad.ganadores1000();
+        assertEquals(1794, result.length);
+        assertNotEquals(result[0], result[1]);
+    }
 
 }
