@@ -17,6 +17,7 @@ public class ProyectoNavidadTest {
     public ProyectoNavidadTest() {
     }
 
+    //Verifica si l'array de guanyadors s'omple correctament i no hi ha numeros repetits
     @Test
     public void testGanadores() {
         int[] result = ProyectoNavidad.ganadores();
