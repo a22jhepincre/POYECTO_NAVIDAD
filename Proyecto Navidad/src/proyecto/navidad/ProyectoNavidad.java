@@ -10,22 +10,28 @@ public class ProyectoNavidad {
     public static final String ANSI_RESET = "\u001B[0m";
     public static Scanner s = new Scanner(System.in);
     public static Random rnd = new Random();
-    public static final int MAX_PREMIOSGORDOS = 13;
-    public static final int MAX_1000 = 1794;
+    public static final int MAX_PREMIOSGORDOS = 13; // VARIABLE QUE ALMACENA LOS 13 PREMIOS MAYORES
+    public static final int MAX_1000 = 1794; // VARIABLE QUE ALMACENA LOS 1794 PREMIOS DE 1000
 
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
         int[] premios1000 = ganadores1000();
         menu(premiosGordos, premios1000);
     }
-
+    /**
+     * MENU COMPUES DE TRES OPCIONES
+     * @param premiosGordos VARIABLE QUE ALMACENARA LOS 13 PREMIOS MAYORES
+     * @param premios1000  VARIABLE QUE ALMACENARA LOS 1794 PREMIOS DE 1000
+     */
     static void menu(int[] premiosGordos, int[] premios1000) {
         boolean salir = false;
         boolean sorteig = false;
+        // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCINES INVALIDAS
         do {
 
             System.out.println("1. Realizar sorteo.\n2. Comprobar mi numero.\n3. Salir\n");
             int opcion = escanearEntero("Selecciona una opcion: ");
+            // UN "switch" PARA TRATAR LAS DIFERENTES OPCIONES
             switch (opcion) {
                 case 1 -> {
                     sorteig(premiosGordos, premios1000);
@@ -47,7 +53,11 @@ public class ProyectoNavidad {
             }
         } while (!salir);
     }
-
+    /**
+     * VALIDADOR DE ENTRADA DE UN ENTERO
+     * @param mtj MENSAJE QUE DEVOLVEMOS EN CASO DE NO INTRODUCIR UN ENTERO (NUMERO)
+     * @return num, DEVOLVEMOS EL NUMERO INTRODUCIDO 
+     */
     static int escanearEntero(String mtj) {
         int num;
         System.out.print(mtj);
@@ -59,7 +69,11 @@ public class ProyectoNavidad {
         num = s.nextInt();
         return num;
     }
-
+    /**
+     * 13 PREMIOS GANADORES
+     * BUCLE "FOR" QUE LLENARA EL VECTOR "premiosGordos" MEDIANTE UN RANDOM
+     * @return premiosGordos,devolvera los 13 numeros ganadores 
+     */
     static int[] ganadores() {
         int[] premiosGordos = new int[MAX_PREMIOSGORDOS];
 
@@ -73,26 +87,35 @@ public class ProyectoNavidad {
         }
         return premiosGordos;
     }
-    
+    /**
+     * 1794 PREMIOS GANADORES
+     * BUCLE "FOR" QUE LLENARA EL VECTOR "premios1000" MEDIANTE UN RANDOM
+     * @return premios1000, devolvera los 1794 numeros ganadores
+     */
     static int[] ganadores1000() {
-        int[] premiosGordos = new int[MAX_1000];
+        int[] premios1000 = new int[MAX_1000];
 
         for (int i = 0; i < MAX_1000; i++) {
-            premiosGordos[i] = rnd.nextInt(100000);
+            premios1000[i] = rnd.nextInt(100000);
             for (int j = 0; j < i; j++) {
-                while (premiosGordos[i] == premiosGordos[j]) {
-                    premiosGordos[i] = rnd.nextInt(100000);
+                while (premios1000[i] == premios1000[j]) {
+                    premios1000[i] = rnd.nextInt(100000);
                 }
             }
         }
-        return premiosGordos;
+        return premios1000;
     }
-    
+    /**
+     * SORTEO DE LOS 5 PRIMEROS PREMIOS MAYORES
+     * MEDIANTE UN BUCLE "FOR" MOSTRAREMOS LOS NUMEROS GANADORES CON SUS PREMIOS
+     * @param premiosGordos, 
+     * @param premios1000 
+     */
     static void sorteig(int[] premiosGordos, int[] premios1000) {
-
+        // VECTOR QUE CONTENDRA 8 NUMEROS GANADORES DEL QUINTO PREMIO 
         int[] quintoPremio = new int[8];
         int aux = 0;
-
+        
         for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
             if (i == 0) {
                 int primerPremio = premiosGordos[i];
@@ -107,7 +130,9 @@ public class ProyectoNavidad {
                 System.out.println(ANSI_GREEN+ "Tercer Premio: 500.000 --> " + premiosGordos[i]+ ANSI_RESET);
             }
             if (i == 3) {
+                // VECTOR QUE CONTENDRA LOS DOS NUMEROS GANADORES DEL CUARTO PREMIO
                 int[] cuartoPremio = new int[2];
+                
                 cuartoPremio[0] = premiosGordos[i];
                 cuartoPremio[1] = premiosGordos[i + 1];
                 System.out.println(ANSI_GREEN+ "Cuarto premio : 200.000 --> " + cuartoPremio[0] + ", " + cuartoPremio[1]+ ANSI_RESET);
@@ -127,7 +152,11 @@ public class ProyectoNavidad {
         System.out.println(ANSI_GREEN+ quintoPremio[quintoPremio.length - 1]+ ANSI_RESET);
         System.out.print("\n");
     }
-
+    /**
+     * COMPROBAR NUMERO
+     * @param premiosGordos
+     * @param premios1000 
+     */
     static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
         int cantidad = 0;
         int numero = escanearEntero("Introduce el número a comprobar: ");
