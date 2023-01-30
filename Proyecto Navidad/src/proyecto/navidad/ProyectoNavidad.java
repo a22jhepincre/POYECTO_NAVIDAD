@@ -39,7 +39,7 @@ public class ProyectoNavidad {
                 }
                 case 2 -> {
                     if (!sorteig) {
-                        System.out.println("El sorteo todavía no se ha realizado");
+                        System.out.println("El sorteo todavia no se ha realizado");
                     } else {
                         comprobarNumero(premiosGordos, premios1000);
                     }
@@ -118,15 +118,12 @@ public class ProyectoNavidad {
         
         for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
             if (i == 0) {
-                int primerPremio = premiosGordos[i];
                 System.out.println(ANSI_GREEN+ "Premio Gordo: 4.000.000 --> " + premiosGordos[i]+ ANSI_RESET);
             }
             if (i == 1) {
-                int segundoPremio = premiosGordos[i];
                 System.out.println( ANSI_GREEN+ "Segundo premio: 1.250.000 --> " + premiosGordos[i]+ ANSI_RESET);
             }
             if (i == 2) {
-                int tercerPremio = premiosGordos[i];
                 System.out.println(ANSI_GREEN+ "Tercer Premio: 500.000 --> " + premiosGordos[i]+ ANSI_RESET);
             }
             if (i == 3) {
