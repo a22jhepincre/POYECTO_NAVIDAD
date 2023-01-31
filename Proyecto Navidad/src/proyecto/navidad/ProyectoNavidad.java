@@ -2,17 +2,19 @@ package proyecto.navidad;
 
 import java.util.Scanner;
 import java.util.Random;
-
+/**
+ * Sorte de loteria de España
+ * @author Jheremy, Andres, Pablo, Geovanny
+ */
 public class ProyectoNavidad {
+    static final String ANSI_RED = "\033[0;31m";
+    static final String ANSI_GREEN = "\u001B[32m";
+    static final String ANSI_RESET = "\u001B[0m";
+    static Scanner s = new Scanner(System.in);
+    static Random rnd = new Random();
+    static final int MAX_PREMIOSGORDOS = 13;
+    static final int MAX_1000 = 1794;
     
-    public static final String ANSI_RED = "\033[0;31m";     
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static Scanner s = new Scanner(System.in);
-    public static Random rnd = new Random();
-    public static final int MAX_PREMIOSGORDOS = 13; 
-    public static final int MAX_1000 = 1794; 
-
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
         int[] premios1000 = ganadores1000(premiosGordos);
@@ -20,10 +22,11 @@ public class ProyectoNavidad {
     }
     /**
      * MENU COMPUESTO DE TRES OPCIONES
+     *
      * @param premiosGordos VARIABLE QUE ALMACENARA LOS 13 PREMIOS MAYORES
-     * @param premios1000  VARIABLE QUE ALMACENARA LOS 1794 PREMIOS DE 1000
+     * @param premios1000 VARIABLE QUE ALMACENARA LOS 1794 PREMIOS DE 1000
      */
-    static void menu(int[] premiosGordos, int[] premios1000) {
+    public static void menu(int[] premiosGordos, int[] premios1000) {
         boolean salir = false;
         boolean sorteig = false;
         // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCIONES INVALIDAS
@@ -53,12 +56,15 @@ public class ProyectoNavidad {
             }
         } while (!salir);
     }
+
     /**
      * VALIDADOR DE ENTRADA DE UN ENTERO
-     * @param mtj MENSAJE QUE DEVOLVEMOS EN CASO DE NO INTRODUCIR UN ENTERO (NUMERO)
-     * @return num, DEVOLVEMOS EL NUMERO INTRODUCIDO 
+     *
+     * @param mtj MENSAJE QUE DEVOLVEMOS EN CASO DE NO INTRODUCIR UN ENTERO
+     * (NUMERO)
+     * @return num, DEVOLVEMOS EL NUMERO INTRODUCIDO
      */
-    static int escanearEntero(String mtj) {
+    public static int escanearEntero(String mtj) {
         int num;
         System.out.print(mtj);
         while (!s.hasNextInt()) {
@@ -69,12 +75,14 @@ public class ProyectoNavidad {
         num = s.nextInt();
         return num;
     }
+
     /**
-     * 13 PREMIOS GANADORES
-     * BUCLE "FOR" QUE LLENARA EL VECTOR "premiosGordos" MEDIANTE UN RANDOM
-     * @return premiosGordos,devolvera los 13 numeros ganadores 
+     * 13 PREMIOS GANADORES BUCLE "FOR" QUE LLENARA EL VECTOR "premiosGordos"
+     * MEDIANTE UN RANDOM
+     *
+     * @return premiosGordos,devolvera los 13 numeros ganadores
      */
-    static int[] ganadores() {
+    public static int[] ganadores() {
         int[] premiosGordos = new int[MAX_PREMIOSGORDOS];
 
         for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
@@ -87,12 +95,14 @@ public class ProyectoNavidad {
         }
         return premiosGordos;
     }
+
     /**
-     * 1794 PREMIOS GANADORES
-     * BUCLE "FOR" QUE LLENARA EL VECTOR "premios1000" MEDIANTE UN RANDOM
+     * 1794 PREMIOS GANADORES BUCLE "FOR" QUE LLENARA EL VECTOR "premios1000"
+     * MEDIANTE UN RANDOM
+     *
      * @return premios1000, devolvera los 1794 numeros ganadores
      */
-    static int[] ganadores1000( int[] premiosGordos) {
+    public static int[] ganadores1000(int[] premiosGordos) {
         int[] premios1000 = new int[MAX_1000];
 
         for (int i = 0; i < MAX_1000; i++) {
@@ -103,44 +113,46 @@ public class ProyectoNavidad {
                 }
             }
         }
-        
+
         for (int i = 0; i < MAX_1000; i++) {
             for (int j = 0; j < MAX_PREMIOSGORDOS; j++) {
-                if(premiosGordos[j] == premios1000[i]){
+                if (premiosGordos[j] == premios1000[i]) {
                     premios1000[i] = rnd.nextInt(100000);
-                }    
-            }   
+                }
+            }
         }
         return premios1000;
     }
+
     /**
-     * SORTEO DE LOS 5 PRIMEROS PREMIOS MAYORES
-     * MEDIANTE UN BUCLE "FOR" MOSTRAREMOS LOS NUMEROS GANADORES CON SUS PREMIOS
+     * SORTEO DE LOS 5 PRIMEROS PREMIOS MAYORES MEDIANTE UN BUCLE "FOR"
+     * MOSTRAREMOS LOS NUMEROS GANADORES CON SUS PREMIOS
+     *
      * @param premiosGordos RECIBE EL VECTOR LLENO DE LOS "premiosGordos"
      * @param premios1000 RECIBE EL VECTOR LLENO DE LOS "premios100"
      */
-    static void sorteig(int[] premiosGordos, int[] premios1000) {
+    public static void sorteig(int[] premiosGordos, int[] premios1000) {
         // VECTOR QUE CONTENDRA 8 NUMEROS GANADORES DEL QUINTO PREMIO 
         int[] quintoPremio = new int[8];
         int aux = 0;
-        
+
         for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
             if (i == 0) {
-                System.out.println(ANSI_GREEN+ "Premio Gordo: 4.000.000 --> " + String.format("%05d", premiosGordos[i])+ ANSI_RESET);
+                System.out.println(ANSI_GREEN + "Premio Gordo: 4.000.000 --> " + String.format("%05d", premiosGordos[i]) + ANSI_RESET);
             }
             if (i == 1) {
-                System.out.println( ANSI_GREEN+ "Segundo premio: 1.250.000 --> " + String.format("%05d", premiosGordos[i])+ ANSI_RESET);
+                System.out.println(ANSI_GREEN + "Segundo premio: 1.250.000 --> " + String.format("%05d", premiosGordos[i]) + ANSI_RESET);
             }
             if (i == 2) {
-                System.out.println(ANSI_GREEN+ "Tercer Premio: 500.000 --> " + String.format("%05d", premiosGordos[i])+ ANSI_RESET);
+                System.out.println(ANSI_GREEN + "Tercer Premio: 500.000 --> " + String.format("%05d", premiosGordos[i]) + ANSI_RESET);
             }
             if (i == 3) {
                 // VECTOR QUE CONTENDRA LOS DOS NUMEROS GANADORES DEL CUARTO PREMIO
                 int[] cuartoPremio = new int[2];
-                
+
                 cuartoPremio[0] = premiosGordos[i];
                 cuartoPremio[1] = premiosGordos[i + 1];
-                System.out.println(ANSI_GREEN+ "Cuarto premio : 200.000 --> " + String.format("%05d", cuartoPremio[0]) + ", " + String.format("%05d", cuartoPremio[1])+ ANSI_RESET);
+                System.out.println(ANSI_GREEN + "Cuarto premio : 200.000 --> " + String.format("%05d", cuartoPremio[0]) + ", " + String.format("%05d", cuartoPremio[1]) + ANSI_RESET);
             }
             if (i > 4) {
                 {
@@ -150,83 +162,98 @@ public class ProyectoNavidad {
 
             }
         }
-        System.out.print(ANSI_GREEN+ "Quinto premio : 60.000 --> "+ ANSI_RESET);
+        System.out.print(ANSI_GREEN + "Quinto premio : 60.000 --> " + ANSI_RESET);
         for (int k = 0; k < quintoPremio.length - 1; k++) {
-            System.out.print(ANSI_GREEN+ String.format("%05d", quintoPremio[k]) + ", "+ ANSI_RESET);
+            System.out.print(ANSI_GREEN + String.format("%05d", quintoPremio[k]) + ", " + ANSI_RESET);
         }
-        System.out.println(ANSI_GREEN+ String.format("%05d", quintoPremio[quintoPremio.length - 1]) + ANSI_RESET);
+        System.out.println(ANSI_GREEN + String.format("%05d", quintoPremio[quintoPremio.length - 1]) + ANSI_RESET);
         System.out.print("\n");
     }
+
     /**
-     * COMPROBAR NUMERO
-     * COMPRUEBA EL NUMERO DEL BOLETO INTRODUCIDO CON EL SORTEO REALIZADO Y COMPRUEBA EL PREMIO GANADOR DEPENDIENDO LAS CONDICIONES ESTABLECIDAS
+     * COMPROBAR NUMERO COMPRUEBA EL NUMERO DEL BOLETO INTRODUCIDO CON EL SORTEO
+     * REALIZADO Y COMPRUEBA EL PREMIO GANADOR DEPENDIENDO LAS CONDICIONES
+     * ESTABLECIDAS
+     *
      * @param premiosGordos RECIBE EL VECTOR LLENO DE LOS "premiosGordos"
      * @param premios1000 RECIBE EL VECTOR LLENO DE LOS "premios100"
      */
-    static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
+    public static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
         int cantidad = 0;
+        boolean aproximacion = false;
+        boolean premioGordo = false;
         int numero = escanearEntero("Introduce el número a comprobar: ");
         for (int i = 0; i < premiosGordos.length; i++) {
             if (numero == premiosGordos[i]) {
                 if (i == 0) {
                     cantidad += 4000000;
+                    premioGordo = true;
                 }
                 if (i == 1) {
                     cantidad += 1250000;
+                    premioGordo = true;
                 }
                 if (i == 2) {
                     cantidad += 500000;
+                    premioGordo = true;
                 }
                 if (i == 3 || i == 4) {
                     cantidad += 200000;
+                    premioGordo = true;
                 }
                 if (i > 4) {
                     cantidad += 60000;
+                    premioGordo = true;
                 }
             }
 
         }
-        
+
         //COMPROBAR LAS APROXIMACIONES DEL 1R, 2N Y 3R PREMIO GORDO
-        if(premiosGordos[0]+1 == numero || premiosGordos[0]-1 == numero)
+        if (premiosGordos[0] + 1 == numero || premiosGordos[0] - 1 == numero) {
             cantidad += 20000;
-        if(premiosGordos[1]+1 == numero ||premiosGordos[1]-1 == numero)
+            aproximacion = true;
+        }
+        if (premiosGordos[1] + 1 == numero || premiosGordos[1] - 1 == numero) {
             cantidad += 12500;
-        if(premiosGordos[2]+1 == numero ||premiosGordos[2]-1 == numero)
+            aproximacion = true;
+        }
+        if (premiosGordos[2] + 1 == numero || premiosGordos[2] - 1 == numero) {
             cantidad += 9600;
-        
+            aproximacion = true;
+        }
         //COMPROBAR LAS CENTENAS DEL 1R, 2N, 3R, Y 4R PREMIO
         boolean centena = false;
 
-        if (premiosGordos[0] / 100 == numero / 100) {
+        if (!aproximacion && !premioGordo && premiosGordos[0] / 100 == numero / 100) {
             cantidad += 1000;
             centena = true;
         } else if (numero == premiosGordos[0]) {
             cantidad += 0;
         }
 
-        if (premiosGordos[1] / 100 == numero / 100) {
+        if (!aproximacion && !premioGordo && premiosGordos[1] / 100 == numero / 100) {
             cantidad += 1000;
             centena = true;
         } else if (numero == premiosGordos[1]) {
             cantidad += 0;
         }
 
-        if (premiosGordos[2] / 100 == numero / 100) {
+        if (!aproximacion && !premioGordo && premiosGordos[2] / 100 == numero / 100) {
             cantidad += 1000;
             centena = true;
         } else if (numero == premiosGordos[2]) {
             cantidad += 0;
         }
 
-        if (premiosGordos[3] / 100 == numero / 100) {
+        if (!aproximacion && !premioGordo && premiosGordos[3] / 100 == numero / 100) {
             cantidad += 1000;
             centena = true;
         } else if (numero == premiosGordos[3]) {
             cantidad += 0;
         }
 
-        if (premiosGordos[4] / 100 == numero / 100) {
+        if (!aproximacion && !premioGordo && premiosGordos[4] / 100 == numero / 100) {
             cantidad += 1000;
             centena = true;
         } else if (numero == premiosGordos[4]) {
@@ -237,20 +264,20 @@ public class ProyectoNavidad {
         //COMPROBAMOS QUE SI YA HA OBTENIDO EL PREMIO DE LA CENTENA NO PUEDE TENER ESTE
         boolean dosultims = false;
 
-        if (premiosGordos[0] % 100 == numero % 100 && !centena) {
+        if (premiosGordos[0] % 100 == numero % 100 && (!centena && !premioGordo && !aproximacion)) {
             cantidad += 1000;
             dosultims = true;
         } else if (numero == premiosGordos[0]) {
             cantidad += 0;
         }
-        if (premiosGordos[1] % 100 == numero % 100 && !centena) {
+        if (premiosGordos[1] % 100 == numero % 100 && (!aproximacion && !centena && !premioGordo)) {
             cantidad += 1000;
             dosultims = true;
         } else if (numero == premiosGordos[1]) {
             cantidad += 0;
 
         }
-        if (premiosGordos[2] % 100 == numero % 100 && !centena) {
+        if (premiosGordos[2] % 100 == numero % 100 && (!aproximacion && !centena && !premioGordo)) {
             cantidad += 1000;
             dosultims = true;
         } else if (numero == premiosGordos[2]) {
@@ -259,10 +286,9 @@ public class ProyectoNavidad {
         }
 
         //COMPROBAMOS SI EL ULTIMO NUMERO ES IGUAL DEL PRIMER PREMIO
-        if ((premiosGordos[0] % 10 == numero % 10) && (!centena && !dosultims)) {
+        if ((premiosGordos[0] % 10 == numero % 10) && (!aproximacion && !centena && !dosultims && !premioGordo)) {
             cantidad += 200;
-        }
-        else if (numero == premiosGordos[0]) {
+        } else if (numero == premiosGordos[0]) {
             cantidad += 0;
 
         }
@@ -274,13 +300,11 @@ public class ProyectoNavidad {
             }
         }
         // MOSTRAMOS POR PANTALLA EL NUMERO CON LA CANTIDAD GANADA
-        if(cantidad==0){
-            System.out.println(ANSI_RED+ "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
+        if (cantidad == 0) {
+            System.out.println(ANSI_RED + "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
+        } else {
+            System.out.println(ANSI_GREEN + "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
         }
-        else {
-            System.out.println(ANSI_GREEN+ "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
-        }
-        
-    }
 
+    }
 }
