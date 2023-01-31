@@ -10,12 +10,12 @@ public class ProyectoNavidad {
     public static final String ANSI_RESET = "\u001B[0m";
     public static Scanner s = new Scanner(System.in);
     public static Random rnd = new Random();
-    public static final int MAX_PREMIOSGORDOS = 13; // VARIABLE QUE ALMACENA LOS 13 PREMIOS MAYORES
-    public static final int MAX_1000 = 1794; // VARIABLE QUE ALMACENA LOS 1794 PREMIOS DE 1000
+    public static final int MAX_PREMIOSGORDOS = 13; 
+    public static final int MAX_1000 = 1794; 
 
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
-        int[] premios1000 = ganadores1000();
+        int[] premios1000 = ganadores1000(premiosGordos);
         menu(premiosGordos, premios1000);
     }
     /**
@@ -92,7 +92,7 @@ public class ProyectoNavidad {
      * BUCLE "FOR" QUE LLENARA EL VECTOR "premios1000" MEDIANTE UN RANDOM
      * @return premios1000, devolvera los 1794 numeros ganadores
      */
-    static int[] ganadores1000() {
+    static int[] ganadores1000( int[] premiosGordos) {
         int[] premios1000 = new int[MAX_1000];
 
         for (int i = 0; i < MAX_1000; i++) {
@@ -103,13 +103,21 @@ public class ProyectoNavidad {
                 }
             }
         }
+        
+        for (int i = 0; i < MAX_1000; i++) {
+            for (int j = 0; j < MAX_PREMIOSGORDOS; j++) {
+                if(premiosGordos[j] == premios1000[i]){
+                    premios1000[i] = rnd.nextInt(100000);
+                }    
+            }   
+        }
         return premios1000;
     }
     /**
      * SORTEO DE LOS 5 PRIMEROS PREMIOS MAYORES
      * MEDIANTE UN BUCLE "FOR" MOSTRAREMOS LOS NUMEROS GANADORES CON SUS PREMIOS
-     * @param premiosGordos, 
-     * @param premios1000 
+     * @param premiosGordos RECIBE EL VECTOR LLENO DE LOS "premiosGordos"
+     * @param premios1000 RECIBE EL VECTOR LLENO DE LOS "premios100"
      */
     static void sorteig(int[] premiosGordos, int[] premios1000) {
         // VECTOR QUE CONTENDRA 8 NUMEROS GANADORES DEL QUINTO PREMIO 
@@ -151,8 +159,9 @@ public class ProyectoNavidad {
     }
     /**
      * COMPROBAR NUMERO
-     * @param premiosGordos
-     * @param premios1000 
+     * COMPRUEBA EL NUMERO DEL BOLETO INTRODUCIDO CON EL SORTEO REALIZADO Y COMPRUEBA EL PREMIO GANADOR DEPENDIENDO LAS CONDICIONES ESTABLECIDAS
+     * @param premiosGordos RECIBE EL VECTOR LLENO DE LOS "premiosGordos"
+     * @param premios1000 RECIBE EL VECTOR LLENO DE LOS "premios100"
      */
     static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
         int cantidad = 0;
@@ -186,7 +195,7 @@ public class ProyectoNavidad {
         if(premiosGordos[2]+1 == numero ||premiosGordos[2]-1 == numero)
             cantidad += 9600;
         
-        //COMPROBAR LAS CENTENAS DEL 1R, 2N, 3, Y 4R PREMIO
+        //COMPROBAR LAS CENTENAS DEL 1R, 2N, 3R, Y 4R PREMIO
         boolean centena = false;
 
         if (premiosGordos[0] / 100 == numero / 100) {
@@ -225,7 +234,7 @@ public class ProyectoNavidad {
         }
 
         //COMPROBAR LOS DOS ULTIMOS NUMEROS DEL 1R, 2N i 3R PREMIO
-        //Comprobem que si ja ha obtingut el premi de la centena no pot obtenir aquest
+        //COMPROBAMOS QUE SI YA HA OBTENIDO EL PREMIO DE LA CENTENA NO PUEDE TENER ESTE
         boolean dosultims = false;
 
         if (premiosGordos[0] % 100 == numero % 100 && !centena) {
@@ -249,7 +258,7 @@ public class ProyectoNavidad {
 
         }
 
-        //Comprobem si l'ultim numero es igual al del primer premi
+        //COMPROBAMOS SI EL ULTIMO NUMERO ES IGUAL DEL PRIMER PREMIO
         if ((premiosGordos[0] % 10 == numero % 10) && (!centena && !dosultims)) {
             cantidad += 200;
         }
@@ -264,6 +273,7 @@ public class ProyectoNavidad {
                 cantidad += 1000;
             }
         }
+        // MOSTRAMOS POR PANTALLA EL NUMERO CON LA CANTIDAD GANADA
         if(cantidad==0){
             System.out.println(ANSI_RED+ "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
         }

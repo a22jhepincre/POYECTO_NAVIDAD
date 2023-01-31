@@ -60,7 +60,8 @@ public class ProyectoNavidadTest {
      @Test
     public void testGanadores1000() {
         System.out.println("Probando que no se repitan los ganadores de 1000...");
-        int[] result = ProyectoNavidad.ganadores1000();
+        int[] premiosGordos = ProyectoNavidad.ganadores();
+        int[] result = ProyectoNavidad.ganadores1000(premiosGordos);
         boolean unic = true;
         final int NUMEROS_GANADORES_1000 = 1794;
         for (int i = 0; i < result.length; i++) {
@@ -81,7 +82,7 @@ public class ProyectoNavidadTest {
     public void testSorteig() {
         System.out.println("Probando que no se repitan los ganadores del sorteo...");
         int[] premiosGordos = ProyectoNavidad.ganadores();
-        int[] premios1000 = ProyectoNavidad.ganadores1000();
+        int[] premios1000 = ProyectoNavidad.ganadores1000(premiosGordos);
         boolean iguales = false;
         for (int i = 0; i < premiosGordos.length; i++) {
             for (int j = 0; j < premios1000.length; j++) {
@@ -104,7 +105,8 @@ public class ProyectoNavidadTest {
         System.out.println("Probando comprobarNumero1000...");             
         int cantidad=0;
         final int PREMIO_1000 = 1000;
-        int[] premios1000 = ProyectoNavidad.ganadores1000();
+        int[] premiosGordos = ProyectoNavidad.ganadores();
+        int[] premios1000 = ProyectoNavidad.ganadores1000(premiosGordos);
         int numero = premios1000[0];
         for (int i = 0; i < premios1000.length; i++) {
             if(numero==premios1000[i]){
