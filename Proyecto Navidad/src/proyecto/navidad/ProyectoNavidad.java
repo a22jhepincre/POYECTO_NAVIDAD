@@ -19,14 +19,14 @@ public class ProyectoNavidad {
         menu(premiosGordos, premios1000);
     }
     /**
-     * MENU COMPUES DE TRES OPCIONES
+     * MENU COMPUESTO DE TRES OPCIONES
      * @param premiosGordos VARIABLE QUE ALMACENARA LOS 13 PREMIOS MAYORES
      * @param premios1000  VARIABLE QUE ALMACENARA LOS 1794 PREMIOS DE 1000
      */
     static void menu(int[] premiosGordos, int[] premios1000) {
         boolean salir = false;
         boolean sorteig = false;
-        // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCINES INVALIDAS
+        // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCIONES INVALIDAS
         do {
 
             System.out.println("1. Realizar sorteo.\n2. Comprobar mi numero.\n3. Salir\n");
@@ -118,13 +118,13 @@ public class ProyectoNavidad {
         
         for (int i = 0; i < MAX_PREMIOSGORDOS; i++) {
             if (i == 0) {
-                System.out.println(ANSI_GREEN+ "Premio Gordo: 4.000.000 --> " + premiosGordos[i]+ ANSI_RESET);
+                System.out.println(ANSI_GREEN+ "Premio Gordo: 4.000.000 --> " + String.format("%05d", premiosGordos[i])+ ANSI_RESET);
             }
             if (i == 1) {
-                System.out.println( ANSI_GREEN+ "Segundo premio: 1.250.000 --> " + premiosGordos[i]+ ANSI_RESET);
+                System.out.println( ANSI_GREEN+ "Segundo premio: 1.250.000 --> " + String.format("%05d", premiosGordos[i])+ ANSI_RESET);
             }
             if (i == 2) {
-                System.out.println(ANSI_GREEN+ "Tercer Premio: 500.000 --> " + premiosGordos[i]+ ANSI_RESET);
+                System.out.println(ANSI_GREEN+ "Tercer Premio: 500.000 --> " + String.format("%05d", premiosGordos[i])+ ANSI_RESET);
             }
             if (i == 3) {
                 // VECTOR QUE CONTENDRA LOS DOS NUMEROS GANADORES DEL CUARTO PREMIO
@@ -132,7 +132,7 @@ public class ProyectoNavidad {
                 
                 cuartoPremio[0] = premiosGordos[i];
                 cuartoPremio[1] = premiosGordos[i + 1];
-                System.out.println(ANSI_GREEN+ "Cuarto premio : 200.000 --> " + cuartoPremio[0] + ", " + cuartoPremio[1]+ ANSI_RESET);
+                System.out.println(ANSI_GREEN+ "Cuarto premio : 200.000 --> " + String.format("%05d", cuartoPremio[0]) + ", " + String.format("%05d", cuartoPremio[1])+ ANSI_RESET);
             }
             if (i > 4) {
                 {
@@ -144,9 +144,9 @@ public class ProyectoNavidad {
         }
         System.out.print(ANSI_GREEN+ "Quinto premio : 60.000 --> "+ ANSI_RESET);
         for (int k = 0; k < quintoPremio.length - 1; k++) {
-            System.out.print(ANSI_GREEN+ quintoPremio[k] + ", "+ ANSI_RESET);
+            System.out.print(ANSI_GREEN+ String.format("%05d", quintoPremio[k]) + ", "+ ANSI_RESET);
         }
-        System.out.println(ANSI_GREEN+ quintoPremio[quintoPremio.length - 1]+ ANSI_RESET);
+        System.out.println(ANSI_GREEN+ String.format("%05d", quintoPremio[quintoPremio.length - 1]) + ANSI_RESET);
         System.out.print("\n");
     }
     /**
@@ -265,10 +265,10 @@ public class ProyectoNavidad {
             }
         }
         if(cantidad==0){
-            System.out.println(ANSI_RED+ "El numero " + numero + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
+            System.out.println(ANSI_RED+ "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
         }
         else {
-            System.out.println(ANSI_GREEN+ "El numero " + numero + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
+            System.out.println(ANSI_GREEN+ "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
         }
         
     }
