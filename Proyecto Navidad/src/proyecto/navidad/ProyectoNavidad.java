@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.Random;
 /**
  * Sorte de loteria de España
- * @author Jheremy, Andres, Pablo, Geovanny
+ * @author Jheremy, Andres, Pablo y Geovanny
  */
 public class ProyectoNavidad {
     static final String ANSI_RED = "\033[0;31m";
