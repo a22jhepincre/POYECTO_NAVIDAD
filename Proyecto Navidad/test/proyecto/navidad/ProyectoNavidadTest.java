@@ -59,7 +59,7 @@ public class ProyectoNavidadTest {
      */
      @Test
     public void testGanadores1000() {
-        System.out.println("Probando que no se repitan los números ganadores de 1000 euros...");
+        System.out.println("Probando que no se repitan los ganadores de 1000...");
         int[] premiosGordos = ProyectoNavidad.ganadores();
         int[] result = ProyectoNavidad.ganadores1000(premiosGordos);
         boolean unic = true;
@@ -80,7 +80,7 @@ public class ProyectoNavidadTest {
      */
     @Test
     public void testSorteig() {
-        System.out.println("Probando que no se repitan los números ganadores del sorteo...");
+        System.out.println("Probando que no se repitan los ganadores del sorteo...");
         int[] premiosGordos = ProyectoNavidad.ganadores();
         int[] premios1000 = ProyectoNavidad.ganadores1000(premiosGordos);
         boolean iguales = false;
@@ -102,7 +102,7 @@ public class ProyectoNavidadTest {
     
     @Test
     public void testComprobarNumero1000() {
-        System.out.println("Probando que los números premiados con mil euros den el dinero correspondiente...");             
+        System.out.println("Probando comprobarNumero1000...");             
         int cantidad=0;
         final int PREMIO_1000 = 1000;
         int[] premiosGordos = ProyectoNavidad.ganadores();
@@ -118,7 +118,7 @@ public class ProyectoNavidadTest {
     }
     @Test
     public void testComprobarNumeroGordo() {
-        System.out.println("Probando que el número gordo de el dinero correspondiente...");             
+        System.out.println("Probando comprobarNumeroGanadores...");             
         int cantidad=0;
         final int PREMIO_GORDO = 4000000;
         int[] premiosGordos = ProyectoNavidad.ganadores();
@@ -133,7 +133,7 @@ public class ProyectoNavidadTest {
     }
     @Test
     public void testComprobarNumeroSegundoPremio() {
-        System.out.println("Probando que el segundo número de el dinero correspondiente...");             
+        System.out.println("Probando comprobarNumeroGanadores...");             
         int cantidad=0;
         final int PREMIO_SEGUNDO = 1250000;
         int[] premiosGordos = ProyectoNavidad.ganadores();
@@ -148,7 +148,7 @@ public class ProyectoNavidadTest {
     }
     @Test
     public void testComprobarNumeroTercerPremio() {
-        System.out.println("Probando que el tercer número de el dinero correspondiente...");            
+        System.out.println("Probando comprobarNumeroGanadores...");             
         int cantidad=0;
         final int PREMIO_TERCERO = 500000;
         int[] premiosGordos = ProyectoNavidad.ganadores();
@@ -163,7 +163,7 @@ public class ProyectoNavidadTest {
     }
     @Test
     public void testComprobarNumeroCuartoPremio() {
-        System.out.println("Probando que los dos cuartos premios den el dinero correspondiente...");            
+        System.out.println("Probando comprobarNumeroGanadores...");             
         int cantidad=0;
         final int PREMIO_CUARTO = 200000;
         int[] premiosGordos = ProyectoNavidad.ganadores(); 
@@ -178,7 +178,7 @@ public class ProyectoNavidadTest {
     }
     @Test
     public void testComprobarNumeroQuintoPremio() {
-        System.out.println("Probando que los 8 quintos premios den el dinero correspondiente...");             
+        System.out.println("Probando comprobarNumeroGanadores...");             
         int cantidad=0;
         final int PREMIO_QUINTO = 60000;
         int[] premiosGordos = ProyectoNavidad.ganadores();
