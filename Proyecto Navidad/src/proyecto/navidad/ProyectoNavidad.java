@@ -8,8 +8,7 @@ public class ProyectoNavidad {
     static final String ANSI_RED = "\033[0;31m";
     static final String ANSI_GREEN = "\u001B[32m";
     static final String ANSI_RESET = "\u001B[0m";
-    static Scanner s = new Scanner(System.in);
-    static Random rnd = new Random();
+    
     static final int MAX_PREMIOSGORDOS = 13;
     static final int MAX_1000 = 1794;
     static final int PRIMER_PREMIO = 4000000;
@@ -18,6 +17,9 @@ public class ProyectoNavidad {
     static final int CUARTO_PREMIO = 200000;
     static final int QUINTO_PREMIO = 60000;
     static final int PREMIO_1000 = 1000;
+    
+    static Scanner s = new Scanner(System.in);
+    static Random rnd = new Random();
 
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
@@ -104,12 +106,13 @@ public class ProyectoNavidad {
     /**
      * 1794 PREMIOS GANADORES BUCLE "FOR" QUE LLENARA EL VECTOR "premios1000"
      * MEDIANTE UN RANDOM
-     * @param premiosGordos
+     * @param premiosGordos PASAMOS POR PARAMETRO EL ARRAY DE PREMIOS GORDOS PARA VERIFICAR QUE NO SE REPITAN ENTRE ELLOS
      * @return premios1000, devolvera los 1794 numeros ganadores
      */
     public static int[] ganadores1000(int[] premiosGordos) {
         int[] premios1000 = new int[MAX_1000];
-
+        
+        //BUCLE FOR PARA ASIGNAR LOS GANADORES DE 1000 EUROS Y VERIFICAR QUE NO SE REPITAN
         for (int i = 0; i < MAX_1000; i++) {
             premios1000[i] = rnd.nextInt(100000);
             for (int j = 0; j < i; j++) {
@@ -118,7 +121,8 @@ public class ProyectoNavidad {
                 }
             }
         }
-
+        
+        //BUCLES FOR PARA VERIFICAR QUE NO SE REPITAN LOS NUMEROS DE LOS PREMIOS GORDOS CON LOS GANADORES DE LOS PREMIOS DE 1000 EUROS
         for (int i = 0; i < MAX_1000; i++) {
             for (int j = 0; j < MAX_PREMIOSGORDOS; j++) {
                 if (premiosGordos[j] == premios1000[i]) {
@@ -174,7 +178,13 @@ public class ProyectoNavidad {
         System.out.println(ANSI_GREEN + String.format("%05d", quintoPremio[quintoPremio.length - 1]) + ANSI_RESET);
         System.out.print("\n");
     }
-
+    
+    /**
+     * FUNCION QUE COMPRUEBA SI HAS GANADO ALGUN PREMIO GORDO
+     * @param premiosGordos PASAMOS EL ARRAY QUE CONTENGAN LOS GANADORES DE PREMIOS GORDOS
+     * @param numero PASAMOS EL NUMERO QUE QUEREMOS COMPROBAR
+     * @return DEVOLVEREMOS LA CANTIDAD QUE HAYA GANADO O 0 EN CASO DE QUE NO HAYA GANADO NADA
+     */
     public static int comprobarPremioGordo(int[] premiosGordos, int numero) {
         int cantidad = 0;
 
@@ -203,6 +213,12 @@ public class ProyectoNavidad {
     }
 
     //COMPROBAR GANADOR DE 1000 1794 GANADORES
+    /**
+     * FUNCION QUE COMPRUEBA SI ERES GANADOR DE 1000 EUROS (1794 GANADORES)
+     * @param premios1000 PASAMOS POR PARAMETRO EL ARRAY QUE CONTENGA LOS GANADORES DE 1000 EUROS
+     * @param numero PASAMOS EL NUMERO QUE QUEREMOS COMPROBAR
+     * @return DEVOLVEREMOS LA CANTIDAD QUE HAYA GANADO O 0 EN CASO DE QUE NO HAYA GANADO NADA
+     */
     public static int comprobarPremioMil(int[] premios1000, int numero) {
         int cantidad = 0;
         for (int i = 0; i < MAX_1000; i++) {
@@ -213,7 +229,13 @@ public class ProyectoNavidad {
 
         return cantidad;
     }
-
+    
+    /**
+     * FUNCION QUE COMPRUEBA SI ERES GANADOR DE ALGUNA APROXIMACION, ES DECIR, SI TIENES EL SIGUIENTE O EL ANTERIOR DE ALGUN PREMIO GORDO
+     * @param premiosGordos PASAMOS EL ARRAY QUE CONTENGAN LOS GANADORES DE PREMIOS GORDOS
+     * @param numero PASAMOS EL NUMERO QUE QUEREMOS COMPROBAR
+     * @return DEVOLVEREMOS LA CANTIDAD QUE HAYA GANADO O 0 EN CASO DE QUE NO HAYA GANADO NADA
+     */
     public static int comprobarAproximaciones(int[] premiosGordos, int numero) {
         int cantidad = 0;
 
@@ -235,6 +257,12 @@ public class ProyectoNavidad {
     }
 
     //COMPROBAR LAS CENTENAS DEL 1R, 2N, 3R, Y 4R PREMIO
+    /**
+     * FUNCION QUE COMPRUEBA SI ERES GANADOR DE CENTENA, ES DECIR, SI TIENES AL CENTENA(3 PRIMEROS DIGITOS) DE ALGUN PREMIO GORDO
+     * @param premiosGordos PASAMOS EL ARRAY QUE CONTENGAN LOS GANADORES DE PREMIOS GORDOS
+     * @param numero PASAMOS EL NUMERO QUE QUEREMOS COMPROBAR
+     * @return DEVOLVEREMOS LA CANTIDAD QUE HAYA GANADO O 0 EN CASO DE QUE NO HAYA GANADO NADA
+     */
     public static int comprobarCentena(int[] premiosGordos, int numero) {
         int cantidad = 0;
 
@@ -277,6 +305,12 @@ public class ProyectoNavidad {
     }
 
     //COMPROBAR LOS DOS ULTIMOS NUMEROS DEL 1R, 2N i 3R PREMIO
+    /**
+     * FUNCION QUE COMPRUEBA SI ERES GANADOR DE LOS 2 ULTIMOS DIGITOS, ES DECIR, SI TIENES LOS 2 ULTIMOS DIGITOS DE ALGUN PREMIO GORDO
+     * @param premiosGordos PASAMOS EL ARRAY QUE CONTENGAN LOS GANADORES DE PREMIOS GORDOS
+     * @param numero PASAMOS EL NUMERO QUE QUEREMOS COMPROBAR
+     * @return DEVOLVEREMOS LA CANTIDAD QUE HAYA GANADO O 0 EN CASO DE QUE NO HAYA GANADO NADA
+     */
     public static int comprobarDosUltimos(int[] premiosGordos, int numero) {
         int cantidad = 0;
 
@@ -303,7 +337,13 @@ public class ProyectoNavidad {
         
         return cantidad;
     }
-
+    
+    /**
+     * FUNCION QUE COMPRUEBA SI ERES GANADOR DEL ULTIMO DIGITO, ES DECIR, SI TIENES EL ULTIMO DIGITO DEL 1R PREMIO GORDO
+     * @param premiosGordos PASAMOS EL ARRAY QUE CONTENGAN LOS GANADORES DE PREMIOS GORDOS
+     * @param numero PASAMOS EL NUMERO QUE QUEREMOS COMPROBAR
+     * @return DEVOLVEREMOS LA CANTIDAD QUE HAYA GANADO O 0 EN CASO DE QUE NO HAYA GANADO NADA
+     */
     public static int comprobarUltimo(int[] premiosGordos, int numero) {
         int cantidad = 0;
         //COMPROBAMOS SI EL ULTIMO NUMERO ES IGUAL DEL PRIMER PREMIO
