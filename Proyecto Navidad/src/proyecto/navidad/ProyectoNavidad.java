@@ -20,7 +20,7 @@ public class ProyectoNavidad {
     static final int TERCER_PREMIO = 500000;
     static final int CUARTO_PREMIO = 200000;
     static final int QUINTO_PREMIO = 60000;
-    
+    static final int PREMIO_1000 = 1000;
     
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
@@ -303,7 +303,7 @@ public class ProyectoNavidad {
         //COMPROBAR GANADOR DE 1000 1794 GANADORES
         for (int i = 0; i < MAX_1000; i++) {
             if (numero == premios1000[i]) {
-                cantidad += 1000;
+                cantidad += PREMIO_1000;
             }
         }
         // MOSTRAMOS POR PANTALLA EL NUMERO CON LA CANTIDAD GANADA
