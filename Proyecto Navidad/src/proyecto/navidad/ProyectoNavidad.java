@@ -15,6 +15,13 @@ public class ProyectoNavidad {
     static final int MAX_PREMIOSGORDOS = 13;
     static final int MAX_1000 = 1794;
     
+    static final int PRIMER_PREMIO = 4000000;
+    static final int SEGUNDO_PREMIO = 1250000;
+    static final int TERCER_PREMIO = 500000;
+    static final int CUARTO_PREMIO = 200000;
+    static final int QUINTO_PREMIO = 60000;
+    
+    
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
         int[] premios1000 = ganadores1000(premiosGordos);
@@ -186,23 +193,23 @@ public class ProyectoNavidad {
         for (int i = 0; i < premiosGordos.length; i++) {
             if (numero == premiosGordos[i]) {
                 if (i == 0) {
-                    cantidad += 4000000;
+                    cantidad += PRIMER_PREMIO;
                     premioGordo = true;
                 }
                 if (i == 1) {
-                    cantidad += 1250000;
+                    cantidad += SEGUNDO_PREMIO;
                     premioGordo = true;
                 }
                 if (i == 2) {
-                    cantidad += 500000;
+                    cantidad += TERCER_PREMIO;
                     premioGordo = true;
                 }
                 if (i == 3 || i == 4) {
-                    cantidad += 200000;
+                    cantidad += CUARTO_PREMIO;
                     premioGordo = true;
                 }
                 if (i > 4) {
-                    cantidad += 60000;
+                    cantidad += QUINTO_PREMIO;
                     premioGordo = true;
                 }
             }
