@@ -398,11 +398,11 @@ public class ProyectoNavidad {
         if (cantidad == 0) {
             cantidad += comprobarAproximaciones(premiosGordos, numero);
             if (cantidad == 0) {
-                cantidad += comprobarDosUltimos(premiosGordos, numero);
+                cantidad += comprobarCentena(premiosGordos, numero);
                 if (cantidad == 0) {
-                    cantidad += comprobarUltimo(premiosGordos, numero);
+                    cantidad += comprobarDosUltimos(premiosGordos, numero);
                     if (cantidad == 0) {
-                        cantidad += comprobarCentena(premiosGordos, numero);
+                        cantidad += comprobarUltimo(premiosGordos, numero);
                     }
                 }
             }
