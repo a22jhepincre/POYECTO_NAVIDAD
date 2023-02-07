@@ -17,6 +17,13 @@ public class ProyectoNavidad {
     static final int CUARTO_PREMIO = 200000;
     static final int QUINTO_PREMIO = 60000;
     static final int PREMIO_1000 = 1000;
+    static final int PREMIO_CENTENA = 1000;
+    static final int PREMIO_DOSULTIMOS = 1000;
+    static final int PREMIO_ULTIMONUM = 200;
+    static final int PREMIO_APROXPRIMER = 20000;
+    static final int PREMIO_APROXSEGUNDO = 12500;
+    static final int PREMIO_APROXTERCERO = 9600;
+
 
     static Scanner s = new Scanner(System.in);
     static Random rnd = new Random();
@@ -253,15 +260,15 @@ public class ProyectoNavidad {
 
         //COMPROBAR LAS APROXIMACIONES DEL 1R, 2N Y 3R PREMIO GORDO
         if (premiosGordos[0] + 1 == numero || premiosGordos[0] - 1 == numero) {
-            cantidad += 20000;
+            cantidad += PREMIO_APROXPRIMER;
 
         }
         if (premiosGordos[1] + 1 == numero || premiosGordos[1] - 1 == numero) {
-            cantidad += 12500;
+            cantidad += PREMIO_APROXSEGUNDO;
 
         }
         if (premiosGordos[2] + 1 == numero || premiosGordos[2] - 1 == numero) {
-            cantidad += 9600;
+            cantidad += PREMIO_APROXTERCERO;
 
         }
 
@@ -283,35 +290,35 @@ public class ProyectoNavidad {
         int cantidad = 0;
 
         if (premiosGordos[0] / 100 == numero / 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_CENTENA;
 
         } else if (numero == premiosGordos[0]) {
             cantidad += 0;
         }
 
         if (premiosGordos[1] / 100 == numero / 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_CENTENA;
 
         } else if (numero == premiosGordos[1]) {
             cantidad += 0;
         }
 
         if (premiosGordos[2] / 100 == numero / 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_CENTENA;
 
         } else if (numero == premiosGordos[2]) {
             cantidad += 0;
         }
 
         if (premiosGordos[3] / 100 == numero / 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_CENTENA;
 
         } else if (numero == premiosGordos[3]) {
             cantidad += 0;
         }
 
         if (premiosGordos[4] / 100 == numero / 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_CENTENA;
 
         } else if (numero == premiosGordos[4]) {
             cantidad += 0;
@@ -335,20 +342,20 @@ public class ProyectoNavidad {
         int cantidad = 0;
 
         if (premiosGordos[0] % 100 == numero % 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_DOSULTIMOS;
 
         } else if (numero == premiosGordos[0]) {
             cantidad += 0;
         }
         if (premiosGordos[1] % 100 == numero % 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_DOSULTIMOS;
 
         } else if (numero == premiosGordos[1]) {
             cantidad += 0;
 
         }
         if (premiosGordos[2] % 100 == numero % 100) {
-            cantidad += 1000;
+            cantidad += PREMIO_DOSULTIMOS;
 
         } else if (numero == premiosGordos[2]) {
             cantidad += 0;
@@ -372,7 +379,7 @@ public class ProyectoNavidad {
         int cantidad = 0;
         //COMPROBAMOS SI EL ULTIMO NUMERO ES IGUAL DEL PRIMER PREMIO
         if ((premiosGordos[0] % 10 == numero % 10)) {
-            cantidad += 200;
+            cantidad += PREMIO_ULTIMONUM;
         } else if (numero == premiosGordos[0]) {
             cantidad += 0;
 
