@@ -1,7 +1,13 @@
 package proyecto.navidad;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProyectoNavidad {
 
@@ -23,7 +29,6 @@ public class ProyectoNavidad {
     static final int PREMIO_APROXPRIMER = 20000;
     static final int PREMIO_APROXSEGUNDO = 12500;
     static final int PREMIO_APROXTERCERO = 9600;
-
 
     static Scanner s = new Scanner(System.in);
     static Random rnd = new Random();
@@ -387,44 +392,90 @@ public class ProyectoNavidad {
 
         return cantidad;
     }
+    
+    public static class Persona{
+        String nombre;
+        int numero;
+        int dinero;
+    }
+    
+    public static Persona[] pedirPersona(int numGrup) {
+        Persona[] grupo = new Persona[numGrup];
+        
+        for (int i = 0; i < numGrup; i++) {
+            Persona p = new Persona();
+            System.out.print("Nombre: ");p.nombre = s.next();
+            p.numero = escanearEntero("Escribe tu numero de loteria: ");
+            boolean salir = false;
+            do {
+                p.dinero = escanearEntero("Escribe la cantidad de dinero que quieres aportar [5-60]: ");
+                if (p.dinero >= 5 && p.dinero <= 60 && p.dinero % 5 == 0 ) {
+                    salir = true;
+                } else {
+                    System.out.println("¡Tiene que estar entre 5-60 y ser multiplo de 5!");
+                }
+            } while (!salir);
+            grupo[i] = p;
+        }
 
-    /**
-     * COMPROBAR NUMERO COMPRUEBA EL NUMERO DEL BOLETO INTRODUCIDO CON EL SORTEO
-     * REALIZADO Y COMPRUEBA EL PREMIO GANADOR DEPENDIENDO LAS CONDICIONES
-     * ESTABLECIDAS
-     *
-     * @param premiosGordos RECIBE EL VECTOR LLENO DE LOS "premiosGordos"
-     * @param premios1000 RECIBE EL VECTOR LLENO DE LOS "premios100"
-     */
+        return grupo;
+    }
+    
     public static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
+        int numPersonas = escanearEntero("¿Cuantos sois en vuestro grupo?");
+        Persona[] p = pedirPersona(numPersonas);
+        
         int cantidad = 0;
-        int numero = escanearEntero("Introduce tu numero para comprobarlo: ");
 
-        cantidad += comprobarPremioGordo(premiosGordos, numero);
+        for (int i = 0; i < numPersonas; i++) {
+            cantidad += comprobarPremioGordo(premiosGordos, p[i].numero);
 
-        if (cantidad == 0) {
-            cantidad += comprobarAproximaciones(premiosGordos, numero);
             if (cantidad == 0) {
-                cantidad += comprobarCentena(premiosGordos, numero);
+                cantidad += comprobarAproximaciones(premiosGordos, p[i].numero);
                 if (cantidad == 0) {
-                    cantidad += comprobarDosUltimos(premiosGordos, numero);
+                    cantidad += comprobarCentena(premiosGordos, p[i].numero);
                     if (cantidad == 0) {
-                        cantidad += comprobarUltimo(premiosGordos, numero);
+                        cantidad += comprobarDosUltimos(premiosGordos, p[i].numero);
+                        if (cantidad == 0) {
+                            cantidad += comprobarUltimo(premiosGordos, p[i].numero);
+                        }
                     }
                 }
+
+                cantidad += comprobarPremioMil(premios1000, p[i].numero);
+
             }
-
-            cantidad += comprobarPremioMil(premios1000, numero);
-
         }
-
-        // MOSTRAMOS POR PANTALLA EL NUMERO CON LA CANTIDAD GANADA
-        if (cantidad == 0) {
-            System.out.println(ANSI_RED + "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
-        } else {
-            System.out.println(ANSI_GREEN + "El numero " + String.format("%05d", numero) + " ha ganado " + cantidad + " EUROS \n" + ANSI_RESET);
-        }
-
+        String result = formatearGrupo(p, cantidad);
+        escribirFichero(result);
+        System.out.println(result);
     }
-
+    
+    public static String formatearGrupo(Persona[] p, int cantidad){
+        String result = "";
+        
+        for(int i = 0; i < p.length; i++){
+            result += p[i].nombre + " " + p[i].numero + " " + p[i].dinero + "\n";
+        }
+        
+        return result;
+    }
+    
+    public static void escribirFichero(String linea){
+        FileWriter fw = null;
+        try {
+            File f = new File("C:\\ficheros/loteria.txt");
+            fw = new FileWriter(f, true);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.print(linea);
+        } catch (IOException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }
