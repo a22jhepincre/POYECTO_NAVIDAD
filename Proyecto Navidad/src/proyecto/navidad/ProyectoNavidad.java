@@ -36,7 +36,7 @@ public class ProyectoNavidad {
     public static void main(String[] args) {
         int[] premiosGordos = ganadores();
         int[] premios1000 = ganadores1000(premiosGordos);
-        menu(premiosGordos, premios1000);
+        menuComprobarNumero(premiosGordos, premios1000);
     }
 
     /**
@@ -63,7 +63,7 @@ public class ProyectoNavidad {
                     if (!sorteig) {
                         System.out.println("El sorteo todavia no se ha realizado");
                     } else {
-                        comprobarNumero(premiosGordos, premios1000);
+                        
                     }
                 }
                 case 3 -> {
@@ -392,76 +392,91 @@ public class ProyectoNavidad {
 
         return cantidad;
     }
-    
-    public static class Persona{
+
+    public static class Persona {
+
         String nombre;
         int numero;
         int dinero;
+        String grupo;
     }
-    
-    public static Persona[] pedirPersona(int numGrup) {
-        Persona[] grupo = new Persona[numGrup];
-        
-        for (int i = 0; i < numGrup; i++) {
-            Persona p = new Persona();
-            System.out.print("Nombre: ");p.nombre = s.next();
-            p.numero = escanearEntero("Escribe tu numero de loteria: ");
-            boolean salir = false;
-            do {
-                p.dinero = escanearEntero("Escribe la cantidad de dinero que quieres aportar [5-60]: ");
-                if (p.dinero >= 5 && p.dinero <= 60 && p.dinero % 5 == 0 ) {
-                    salir = true;
-                } else {
-                    System.out.println("¡Tiene que estar entre 5-60 y ser multiplo de 5!");
-                }
-            } while (!salir);
-            grupo[i] = p;
-        }
 
-        return grupo;
-    }
-    
-    public static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
-        int numPersonas = escanearEntero("¿Cuantos sois en vuestro grupo?");
-        Persona[] p = pedirPersona(numPersonas);
+    public static Persona pedirPersona() {
+        Persona p = new Persona();
+        System.out.print("Nombre: ");
+        p.nombre = s.next();
+        p.numero = escanearEntero("Escribe tu numero de loteria: ");
+        boolean salir = false;
+        do {
+            p.dinero = escanearEntero("Escribe la cantidad de dinero que quieres aportar [5-60]: ");
+            if (p.dinero >= 5 && p.dinero <= 60 && p.dinero % 5 == 0) {
+                salir = true;
+            } else {
+                System.out.println("¡Tiene que estar entre 5-60 y ser multiplo de 5!");
+            }
+        } while (!salir);
         
+
+        return p;
+    }
+
+    public static void comprobarNumero(int[] premiosGordos, int[] premios1000, Persona[][] p) {
         int cantidad = 0;
-
-        for (int i = 0; i < numPersonas; i++) {
-            cantidad += comprobarPremioGordo(premiosGordos, p[i].numero);
+        int fila = escanearEntero("Que colla quieres comprobar?");
+        for (int i = 0; i < p[fila].length; i++) {
+            cantidad += comprobarPremioGordo(premiosGordos, p[fila][i].numero);
 
             if (cantidad == 0) {
-                cantidad += comprobarAproximaciones(premiosGordos, p[i].numero);
+                cantidad += comprobarAproximaciones(premiosGordos, p[fila][i].numero);
                 if (cantidad == 0) {
-                    cantidad += comprobarCentena(premiosGordos, p[i].numero);
+                    cantidad += comprobarCentena(premiosGordos, p[fila][i].numero);
                     if (cantidad == 0) {
-                        cantidad += comprobarDosUltimos(premiosGordos, p[i].numero);
+                        cantidad += comprobarDosUltimos(premiosGordos, p[fila][i].numero);
                         if (cantidad == 0) {
-                            cantidad += comprobarUltimo(premiosGordos, p[i].numero);
+                            cantidad += comprobarUltimo(premiosGordos, p[fila][i].numero);
                         }
                     }
                 }
 
-                cantidad += comprobarPremioMil(premios1000, p[i].numero);
+                cantidad += comprobarPremioMil(premios1000, p[fila][i].numero);
 
             }
         }
-        String result = formatearGrupo(p, cantidad);
+
+        String result = formatearGrupo(p);
         escribirFichero(result);
         System.out.println(result);
     }
-    
-    public static String formatearGrupo(Persona[] p, int cantidad){
-        String result = "";
-        
-        for(int i = 0; i < p.length; i++){
-            result += p[i].nombre + " " + p[i].numero + " " + p[i].dinero + "\n";
+
+    public static void comprobarNumeroSolitario(int[] premiosGordos, int[] premios1000) {
+        int numPersonas = 1;
+        Persona p = pedirPersona();
+
+        int cantidad = 0;
+
+        for (int i = 0; i < numPersonas; i++) {
+            cantidad += comprobarPremioGordo(premiosGordos, p.numero);
+
+            if (cantidad == 0) {
+                cantidad += comprobarAproximaciones(premiosGordos, p.numero);
+                if (cantidad == 0) {
+                    cantidad += comprobarCentena(premiosGordos, p.numero);
+                    if (cantidad == 0) {
+                        cantidad += comprobarDosUltimos(premiosGordos, p.numero);
+                        if (cantidad == 0) {
+                            cantidad += comprobarUltimo(premiosGordos, p.numero);
+                        }
+                    }
+                }
+
+                cantidad += comprobarPremioMil(premios1000, p.numero);
+
+            }
         }
         
-        return result;
     }
-    
-    public static void escribirFichero(String linea){
+
+    public static void escribirFichero(String linea) {
         FileWriter fw = null;
         try {
             File f = new File("C:\\ficheros/loteria.txt");
@@ -477,5 +492,78 @@ public class ProyectoNavidad {
                 Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public static void menuComprobarNumero(int[] premiosGordos, int[] premios1000) {
+        boolean salir = false;
+        Persona[][] matriuColla = crearMatriuColla();
+        do {
+            System.out.println("1. Solitario\n2. Colla\n");
+            int opcion = escanearEntero("Elige una opción: ");
+            switch (opcion) {
+                case 1 ->
+                    comprobarNumeroSolitario(premiosGordos, premios1000);
+                case 2 ->
+                    comprobarNumero(premiosGordos, premios1000, matriuColla);
+                default ->
+                    System.out.println("¡Escoge una de las opciones!");
+            }
+
+        } while (!salir);
+    }
+    
+     public static String formatearGrupo(Persona[][] p) {
+        String result = "";
+        for (int i = 0; i < p.length; i++) {
+            for(int j = 0; j < p[0].length; j++){
+                if(p[i][j] != null)
+                    result += p[i][j].nombre + " " + p[i][j].numero + " " + p[i][j].dinero + "\n";
+            }
+            result += "\n";
+        }
+        return result;
+    }
+    
+    public static Persona[][] añadirPersonaAColla(Persona[][] colla, int fila) {
+        Persona p = pedirPersona();
+        Persona[][] collaNueva = new Persona[colla.length][colla[0].length+1];
+        
+        for(int i = 0; i < colla.length; i++){
+            for(int j = 0; j < colla[0].length; j++){
+                collaNueva[i][j] = colla[i][j];
+            }
+        }
+        
+        collaNueva[fila][colla[fila].length] = p;
+        
+        return collaNueva;
+    }
+    
+    public static Persona[][] añadirColla(Persona[][] colla){
+        Persona[][] matriuCollaNueva = new Persona[colla.length+1][colla[0].length];
+
+        for(int i = 0; i < colla.length; i++){
+            for(int j = 0; j < colla[0].length; j++){
+                matriuCollaNueva[i][j] = colla[i][j];
+            }
+        }
+        
+        return matriuCollaNueva;
+    }
+    
+    public static Persona[][] crearMatriuColla(){
+        
+        int personas = escanearEntero("Cuantas personas sois en tu colla?");
+        Persona[][]matrizCollas = new Persona[1][personas];
+        
+        for(int i = 0; i < matrizCollas.length; i++){
+            for(int j = 0; j < matrizCollas[0].length; j++){
+                Persona p = pedirPersona();
+                matrizCollas[i][j] = p;
+            }
+        }
+        
+        
+        return matrizCollas;
     }
 }
