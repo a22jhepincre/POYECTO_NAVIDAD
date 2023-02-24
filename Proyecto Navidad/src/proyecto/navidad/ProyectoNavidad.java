@@ -1,9 +1,6 @@
 package proyecto.navidad;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 import java.util.Random;
 import java.util.logging.Level;
@@ -11,10 +8,12 @@ import java.util.logging.Logger;
 
 public class ProyectoNavidad {
 
+    static final String RUTA = ("sorteos/");
     static final String ANSI_RED = "\033[0;31m";
     static final String ANSI_GREEN = "\u001B[32m";
     static final String ANSI_RESET = "\u001B[0m";
-
+    static final String EXTENSION_TXT = ".txt";
+    static final String EXTENSION_BIN = ".dat";
     static final int MAX_PREMIOSGORDOS = 13;
     static final int MAX_1000 = 1794;
     static final int PRIMER_PREMIO = 4000000;
@@ -33,10 +32,10 @@ public class ProyectoNavidad {
     static Scanner s = new Scanner(System.in);
     static Random rnd = new Random();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int[] premiosGordos = ganadores();
         int[] premios1000 = ganadores1000(premiosGordos);
-        menuComprobarNumero(premiosGordos, premios1000);
+        menu(premiosGordos, premios1000);
     }
 
     /**
@@ -45,7 +44,8 @@ public class ProyectoNavidad {
      * @param premiosGordos VARIABLE QUE ALMACENARA LOS 13 PREMIOS MAYORES
      * @param premios1000 VARIABLE QUE ALMACENARA LOS 1794 PREMIOS DE 1000
      */
-    public static void menu(int[] premiosGordos, int[] premios1000) {
+    public static void menu(int[] premiosGordos, int[] premios1000) throws IOException {
+
         boolean salir = false;
         boolean sorteig = false;
         // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCIONES INVALIDAS
@@ -56,14 +56,24 @@ public class ProyectoNavidad {
             // UN "switch" PARA TRATAR LAS DIFERENTES OPCIONES
             switch (opcion) {
                 case 1 -> {
-                    sorteig(premiosGordos, premios1000);
-                    sorteig = true;
+                    int anyo = escanearEntero("Que año?");
+                    if (!ExisteAnyo(String.valueOf(anyo))) {
+                        sorteig(premiosGordos, premios1000);
+                        String linea = formatearSorteo(premiosGordos);
+                        linea += "\n" + formatearSorteo(premios1000);
+                        escribirFicheroTexto(String.valueOf(anyo), "anyo");
+                        escribirFicheroBinario(linea, String.valueOf(anyo));
+                        sorteig = true;
+                    } else {
+                        System.out.println("El año ya existe brother");
+                        LeerFicheroAnyo(String.valueOf(anyo),premiosGordos,premios1000);
+                    }
                 }
                 case 2 -> {
                     if (!sorteig) {
                         System.out.println("El sorteo todavia no se ha realizado");
                     } else {
-                        
+
                     }
                 }
                 case 3 -> {
@@ -415,7 +425,6 @@ public class ProyectoNavidad {
                 System.out.println("¡Tiene que estar entre 5-60 y ser multiplo de 5!");
             }
         } while (!salir);
-        
 
         return p;
     }
@@ -444,7 +453,7 @@ public class ProyectoNavidad {
         }
 
         String result = formatearGrupo(p);
-        escribirFichero(result);
+        //escribirFicheroTexto(result);
         System.out.println(result);
     }
 
@@ -473,16 +482,18 @@ public class ProyectoNavidad {
 
             }
         }
-        
+
     }
 
-    public static void escribirFichero(String linea) {
+    public static void escribirFicheroTexto(String linea, String nombreFichero) {
         FileWriter fw = null;
         try {
-            File f = new File("loteria.txt");
+            File f = new File(RUTA + nombreFichero + EXTENSION_TXT);
             fw = new FileWriter(f, true);
             PrintWriter pw = new PrintWriter(fw);
-            pw.print(linea);
+            pw.println(linea);
+            pw.flush();
+            pw.close();
         } catch (IOException ex) {
             Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -494,10 +505,31 @@ public class ProyectoNavidad {
         }
     }
 
+    public static void escribirFicheroBinario(String linea, String nombreFichero) {
+        FileOutputStream fos = null;
+        try {
+            File f = new File(RUTA + nombreFichero + EXTENSION_BIN);
+            fos = new FileOutputStream(f, true);
+            DataOutputStream dos = new DataOutputStream(fos);
+            dos.writeUTF(linea);
+            dos.flush();
+            dos.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     public static void menuComprobarNumero(int[] premiosGordos, int[] premios1000) {
         boolean salir = false;
         Persona[][] matriuColla = crearMatriuColla();
         do {
+            System.out.println("¿Cómo juegas?");
             System.out.println("1. Solitario\n2. Colla\n");
             int opcion = escanearEntero("Elige una opción: ");
             switch (opcion) {
@@ -511,59 +543,110 @@ public class ProyectoNavidad {
 
         } while (!salir);
     }
-    
-     public static String formatearGrupo(Persona[][] p) {
+
+    public static String formatearGrupo(Persona[][] p) {
         String result = "";
         for (int i = 0; i < p.length; i++) {
-            for(int j = 0; j < p[0].length; j++){
-                if(p[i][j] != null)
+            for (int j = 0; j < p[0].length; j++) {
+                if (p[i][j] != null) {
                     result += p[i][j].nombre + " " + p[i][j].numero + " " + p[i][j].dinero + "\n";
+                }
             }
             result += "\n";
         }
         return result;
     }
-    
+
+    public static String formatearSorteo(int[] enteros) {
+        String result = "";
+        for (int i = 0; i < enteros.length; i++) {
+            result += enteros[i] + " ";
+        }
+
+        return result;
+    }
+
     public static Persona[][] añadirPersonaAColla(Persona[][] colla, int fila) {
         Persona p = pedirPersona();
-        Persona[][] collaNueva = new Persona[colla.length][colla[0].length+1];
-        
-        for(int i = 0; i < colla.length; i++){
-            for(int j = 0; j < colla[0].length; j++){
+        Persona[][] collaNueva = new Persona[colla.length][colla[0].length + 1];
+
+        for (int i = 0; i < colla.length; i++) {
+            for (int j = 0; j < colla[0].length; j++) {
                 collaNueva[i][j] = colla[i][j];
             }
         }
-        
+
         collaNueva[fila][colla[fila].length] = p;
-        
+
         return collaNueva;
     }
-    
-    public static Persona[][] añadirColla(Persona[][] colla){
-        Persona[][] matriuCollaNueva = new Persona[colla.length+1][colla[0].length];
 
-        for(int i = 0; i < colla.length; i++){
-            for(int j = 0; j < colla[0].length; j++){
+    public static Persona[][] añadirColla(Persona[][] colla) {
+        Persona[][] matriuCollaNueva = new Persona[colla.length + 1][colla[0].length];
+
+        for (int i = 0; i < colla.length; i++) {
+            for (int j = 0; j < colla[0].length; j++) {
                 matriuCollaNueva[i][j] = colla[i][j];
             }
         }
-        
+
         return matriuCollaNueva;
     }
-    
-    public static Persona[][] crearMatriuColla(){
-        
+
+    public static Persona[][] crearMatriuColla() {
+
         int personas = escanearEntero("Cuantas personas sois en tu colla?");
-        Persona[][]matrizCollas = new Persona[1][personas];
-        
-        for(int i = 0; i < matrizCollas.length; i++){
-            for(int j = 0; j < matrizCollas[0].length; j++){
+        Persona[][] matrizCollas = new Persona[1][personas];
+
+        for (int i = 0; i < matrizCollas.length; i++) {
+            for (int j = 0; j < matrizCollas[0].length; j++) {
                 Persona p = pedirPersona();
                 matrizCollas[i][j] = p;
             }
         }
-        
-        
+
         return matrizCollas;
     }
+
+    public static boolean ExisteAnyo(String anyo) throws FileNotFoundException, IOException {
+        boolean result = false;
+        File f = new File(RUTA + "anyo" + EXTENSION_TXT);
+        String linea;
+        FileReader reader = new FileReader(f);
+        BufferedReader buffer = new BufferedReader(reader);
+        linea = buffer.readLine();
+        while (linea != null) {
+            if (linea.equals(anyo)) {
+                result = true;
+            }
+            linea = buffer.readLine();
+        }
+        return result;
+    }
+    
+    public static void LeerFicheroAnyo(String anyo, int[] premiosGordos, int[] premios1000) throws FileNotFoundException, IOException {
+        File f = new File(RUTA + anyo + EXTENSION_TXT);
+        String linea;
+        FileReader reader = new FileReader(f);
+        BufferedReader buffer = new BufferedReader(reader);
+        linea = buffer.readLine();
+        int aux = 0;
+        for (int i = 0; i < linea.length(); i++) {
+            String numero = "";
+            if(linea.substring(i).equals(" ")){
+                premiosGordos[aux] = Integer.parseInt(numero);
+                aux++;
+                numero = "";
+            } else {
+                numero += linea.substring(i);
+            }
+            
+            
+        }
+        while (linea != null) {
+
+            linea = buffer.readLine();
+        }
+
+    } 
 }
