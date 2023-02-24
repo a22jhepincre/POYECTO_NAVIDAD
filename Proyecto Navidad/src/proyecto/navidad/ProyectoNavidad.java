@@ -479,7 +479,7 @@ public class ProyectoNavidad {
     public static void escribirFichero(String linea) {
         FileWriter fw = null;
         try {
-            File f = new File("C:\\ficheros/loteria.txt");
+            File f = new File("loteria.txt");
             fw = new FileWriter(f, true);
             PrintWriter pw = new PrintWriter(fw);
             pw.print(linea);
