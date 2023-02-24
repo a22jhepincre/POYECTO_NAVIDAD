@@ -45,7 +45,6 @@ public class ProyectoNavidad {
      * @param premios1000 VARIABLE QUE ALMACENARA LOS 1794 PREMIOS DE 1000
      */
     public static void menu(int[] premiosGordos, int[] premios1000) throws IOException {
-
         boolean salir = false;
         boolean sorteig = false;
         // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCIONES INVALIDAS
@@ -63,17 +62,21 @@ public class ProyectoNavidad {
                         linea += "\n" + formatearSorteo(premios1000);
                         escribirFicheroTexto(String.valueOf(anyo), "anyo");
                         escribirFicheroBinario(linea, String.valueOf(anyo));
+                        escribirFicheroTexto(linea, String.valueOf(anyo));
                         sorteig = true;
                     } else {
                         System.out.println("El año ya existe brother");
-                        LeerFicheroAnyo(String.valueOf(anyo),premiosGordos,premios1000);
+                        actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
+                        actualizarPremios1000(String.valueOf(anyo), premios1000);
                     }
                 }
                 case 2 -> {
                     if (!sorteig) {
                         System.out.println("El sorteo todavia no se ha realizado");
                     } else {
-
+                        Persona[][] matriuCollas = null;
+                        String[] nombreCollas = null;
+                        menuCollasSolitario(matriuCollas, nombreCollas, premiosGordos, premios1000);
                     }
                 }
                 case 3 -> {
@@ -408,7 +411,6 @@ public class ProyectoNavidad {
         String nombre;
         int numero;
         int dinero;
-        String grupo;
     }
 
     public static Persona pedirPersona() {
@@ -429,60 +431,58 @@ public class ProyectoNavidad {
         return p;
     }
 
-    public static void comprobarNumero(int[] premiosGordos, int[] premios1000, Persona[][] p) {
+    public static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
         int cantidad = 0;
-        int fila = escanearEntero("Que colla quieres comprobar?");
-        for (int i = 0; i < p[fila].length; i++) {
-            cantidad += comprobarPremioGordo(premiosGordos, p[fila][i].numero);
+        int numero = escanearEntero("Introduce tu numero para comprobarlo: ");
 
+        cantidad += comprobarPremioGordo(premiosGordos, numero);
+        if (cantidad == 0) {
+            cantidad += comprobarAproximaciones(premiosGordos, numero);
             if (cantidad == 0) {
-                cantidad += comprobarAproximaciones(premiosGordos, p[fila][i].numero);
+                cantidad += comprobarDosUltimos(premiosGordos, numero);
                 if (cantidad == 0) {
-                    cantidad += comprobarCentena(premiosGordos, p[fila][i].numero);
+                    cantidad += comprobarUltimo(premiosGordos, numero);
                     if (cantidad == 0) {
-                        cantidad += comprobarDosUltimos(premiosGordos, p[fila][i].numero);
-                        if (cantidad == 0) {
-                            cantidad += comprobarUltimo(premiosGordos, p[fila][i].numero);
-                        }
+                        cantidad += comprobarCentena(premiosGordos, numero);
                     }
                 }
-
-                cantidad += comprobarPremioMil(premios1000, p[fila][i].numero);
-
             }
         }
+        cantidad += comprobarPremioMil(premios1000, numero);
 
-        String result = formatearGrupo(p);
-        //escribirFicheroTexto(result);
-        System.out.println(result);
+        if (cantidad == 0) {
+            System.out.println(ANSI_RED + "No has ganado nada" + ANSI_RESET);
+        } else {
+            System.out.println(ANSI_GREEN + "Cantidad: " + cantidad + ANSI_RESET);
+        }
     }
 
-    public static void comprobarNumeroSolitario(int[] premiosGordos, int[] premios1000) {
-        int numPersonas = 1;
-        Persona p = pedirPersona();
-
+    public static void comprobarNumeroColla(int[] premiosGordos, int[] premios1000, int colla, Persona[][] matriuCollas) {
         int cantidad = 0;
 
-        for (int i = 0; i < numPersonas; i++) {
-            cantidad += comprobarPremioGordo(premiosGordos, p.numero);
-
+        for (int i = 0; i < matriuCollas[colla-1].length; i++) {
+            cantidad += comprobarPremioGordo(premiosGordos, matriuCollas[colla-1][i].numero);
             if (cantidad == 0) {
-                cantidad += comprobarAproximaciones(premiosGordos, p.numero);
+                cantidad += comprobarAproximaciones(premiosGordos, matriuCollas[colla-1][i].numero);
                 if (cantidad == 0) {
-                    cantidad += comprobarCentena(premiosGordos, p.numero);
+                    cantidad += comprobarDosUltimos(premiosGordos, matriuCollas[colla-1][i].numero);
                     if (cantidad == 0) {
-                        cantidad += comprobarDosUltimos(premiosGordos, p.numero);
+                        cantidad += comprobarUltimo(premiosGordos, matriuCollas[colla-1][i].numero);
                         if (cantidad == 0) {
-                            cantidad += comprobarUltimo(premiosGordos, p.numero);
+                            cantidad += comprobarCentena(premiosGordos, matriuCollas[colla-1][i].numero);
                         }
                     }
                 }
-
-                cantidad += comprobarPremioMil(premios1000, p.numero);
-
             }
+            cantidad += comprobarPremioMil(premios1000, matriuCollas[colla-1][i].numero);
+
         }
 
+        if (cantidad == 0) {
+            System.out.println(ANSI_RED + "No has ganado nada" + ANSI_RESET);
+        } else {
+            System.out.println(ANSI_GREEN + "Cantidad: " + cantidad + ANSI_RESET);
+        }
     }
 
     public static void escribirFicheroTexto(String linea, String nombreFichero) {
@@ -494,13 +494,17 @@ public class ProyectoNavidad {
             pw.println(linea);
             pw.flush();
             pw.close();
+
         } catch (IOException ex) {
-            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProyectoNavidad.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 fw.close();
+
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProyectoNavidad.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -514,34 +518,19 @@ public class ProyectoNavidad {
             dos.writeUTF(linea);
             dos.flush();
             dos.close();
+
         } catch (IOException ex) {
-            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProyectoNavidad.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 fos.close();
+
             } catch (IOException ex) {
-                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProyectoNavidad.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-
-    public static void menuComprobarNumero(int[] premiosGordos, int[] premios1000) {
-        boolean salir = false;
-        Persona[][] matriuColla = crearMatriuColla();
-        do {
-            System.out.println("¿Cómo juegas?");
-            System.out.println("1. Solitario\n2. Colla\n");
-            int opcion = escanearEntero("Elige una opción: ");
-            switch (opcion) {
-                case 1 ->
-                    comprobarNumeroSolitario(premiosGordos, premios1000);
-                case 2 ->
-                    comprobarNumero(premiosGordos, premios1000, matriuColla);
-                default ->
-                    System.out.println("¡Escoge una de las opciones!");
-            }
-
-        } while (!salir);
     }
 
     public static String formatearGrupo(Persona[][] p) {
@@ -564,6 +553,86 @@ public class ProyectoNavidad {
         }
 
         return result;
+    }
+
+    public static void menuCollasSolitario(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000) throws IOException {
+
+        boolean salir = false;
+        while (!salir) {
+            System.out.print("\nMenu:\n1. Solitario\n2. Colla\n3. Salir\n");
+            int opcion = escanearEntero("Elige una opcion: ");
+            switch (opcion) {
+                case 1 -> {
+                    int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
+                    actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
+                    actualizarPremios1000(String.valueOf(anyo), premios1000);
+                    comprobarNumero(premiosGordos, premios1000);
+                }
+                case 2 -> {
+                    if (matriuCollas == null) {
+                        nombreCollas = new String[1];
+                        System.out.print("Nombre colla: ");
+                        nombreCollas[0] = s.next();
+                        matriuCollas = crearMatriuColla();
+                    }
+                    menuCollas(matriuCollas, nombreCollas, premiosGordos, premios1000);
+                }
+                case 3 ->
+                    salir = true;
+                default ->
+                    System.out.println("Escoge una opcion");
+            }
+        }
+    }
+
+    public static void menuCollas(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000) throws IOException {
+
+        boolean salir = false;
+        while (!salir) {
+            System.out.print("\nMenu collas:\n1. Crear colla\n2. Añadir persona a colla\n3. Comprobar numeros colla\n4. Printear collas\n5. Salir\n");
+            int opcion = escanearEntero("Elige una opcion: ");
+            switch (opcion) {
+                case 1 -> {
+                    matriuCollas = añadirColla(matriuCollas);
+                    nombreCollas = añadirNombreCollas(nombreCollas);
+                }
+                case 2 ->
+                    matriuCollas = añadirPersonaAColla(matriuCollas, menuCollasNoms(nombreCollas) - 1);
+                case 3 -> {
+                    int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
+                    actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
+                    actualizarPremios1000(String.valueOf(anyo), premios1000);
+                    comprobarNumeroColla(premiosGordos, premios1000, menuCollasNoms(nombreCollas), matriuCollas);
+                }
+                case 4 ->
+                    System.out.println(formatearGrupo(matriuCollas));
+                case 5 ->
+                    salir = true;
+                default ->
+                    System.out.println("Escoge una opcion");
+            }
+        }
+    }
+
+    public static String[] añadirNombreCollas(String[] nCollas) {
+        String[] nuevoNomCollas = new String[nCollas.length + 1];
+
+        for (int i = 0; i < nCollas.length; i++) {
+            nuevoNomCollas[i] = nCollas[i];
+        }
+
+        System.out.print("Nombre colla: ");
+        nuevoNomCollas[nCollas.length] = s.next();
+
+        return nuevoNomCollas;
+    }
+
+    public static int menuCollasNoms(String[] nombreCollas) {
+        for (int i = 0; i < nombreCollas.length; i++) {
+            System.out.println((i + 1) + ". " + nombreCollas[i]);
+        }
+        int opcion = escanearEntero("Elige una opcion: ");
+        return opcion;
     }
 
     public static Persona[][] añadirPersonaAColla(Persona[][] colla, int fila) {
@@ -623,30 +692,91 @@ public class ProyectoNavidad {
         }
         return result;
     }
-    
-    public static void LeerFicheroAnyo(String anyo, int[] premiosGordos, int[] premios1000) throws FileNotFoundException, IOException {
-        File f = new File(RUTA + anyo + EXTENSION_TXT);
-        String linea;
-        FileReader reader = new FileReader(f);
-        BufferedReader buffer = new BufferedReader(reader);
-        linea = buffer.readLine();
-        int aux = 0;
-        for (int i = 0; i < linea.length(); i++) {
+
+    public static void actualizarPremiosGordos(String anyo, int[] premiosGordos) throws IOException {
+        FileReader reader = null;
+        try {
+            File f = new File(RUTA + anyo + EXTENSION_TXT);
+            reader = new FileReader(f);
+            BufferedReader buffer = new BufferedReader(reader);
+            String linea = buffer.readLine();
             String numero = "";
-            if(linea.substring(i).equals(" ")){
-                premiosGordos[aux] = Integer.parseInt(numero);
-                aux++;
-                numero = "";
-            } else {
-                numero += linea.substring(i);
+            int aux = 0;
+            for (int i = 0; i < linea.length(); i++) {
+                if (linea.charAt(i) != ' ') {
+                    numero += linea.charAt(i);
+                } else {
+                    premiosGordos[aux] = Integer.parseInt(numero);
+                    aux++;
+                    numero = "";
+
+                }
             }
-            
-            
-        }
-        while (linea != null) {
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                reader.close();
 
-            linea = buffer.readLine();
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
-    } 
+    }
+
+    public static void actualizarPremios1000(String anyo, int[] premios1000) {
+        FileReader reader = null;
+        try {
+            File f = new File(RUTA + anyo + EXTENSION_TXT);
+            reader = new FileReader(f);
+            BufferedReader buffer = new BufferedReader(reader);
+            String linea = "";
+            try {
+                linea = buffer.readLine();
+
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+            while (linea != null) {
+                try {
+                    linea = buffer.readLine();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(ProyectoNavidad.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+                String numero = "";
+                int aux = 0;
+                if (linea != null) {
+                    for (int i = 0; i < linea.length(); i++) {
+                        if (linea.charAt(i) != ' ') {
+                            numero += linea.charAt(i);
+                        } else {
+                            premios1000[aux] = Integer.parseInt(numero);
+                            aux++;
+                            numero = "";
+
+                        }
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                reader.close();
+
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }
