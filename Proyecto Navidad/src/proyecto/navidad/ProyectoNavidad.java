@@ -46,7 +46,6 @@ public class ProyectoNavidad {
      */
     public static void menu(int[] premiosGordos, int[] premios1000) throws IOException {
         boolean salir = false;
-        boolean sorteig = false;
         // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCIONES INVALIDAS
         do {
 
@@ -63,7 +62,6 @@ public class ProyectoNavidad {
                         escribirFicheroTexto(String.valueOf(anyo), "anyo");
                         escribirFicheroBinario(linea, String.valueOf(anyo));
                         escribirFicheroTexto(linea, String.valueOf(anyo));
-                        sorteig = true;
                     } else {
                         System.out.println("El año ya existe brother");
                         actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
@@ -71,8 +69,8 @@ public class ProyectoNavidad {
                     }
                 }
                 case 2 -> {
-                    if (!sorteig) {
-                        System.out.println("El sorteo todavia no se ha realizado");
+                    if (anyosArchivados()) {
+                        System.out.println("No hay sorteos archivados.");
                     } else {
                         Persona[][] matriuCollas = null;
                         String[] nombreCollas = null;
@@ -415,10 +413,21 @@ public class ProyectoNavidad {
 
     public static Persona pedirPersona() {
         Persona p = new Persona();
-        System.out.print("Nombre: ");
-        p.nombre = s.next();
-        p.numero = escanearEntero("Escribe tu numero de loteria: ");
         boolean salir = false;
+        do {
+            System.out.print("Nombre: ");
+            p.nombre = s.next();
+            if (p.nombre.length() < 15) {
+                salir = true;
+                for (int i = 15 - p.nombre.length(); i > 0; i--) {
+                    p.nombre += " ";
+                }
+            } else {
+                System.out.println("Tiene que tener menos de quince caracteres.");
+            }
+        } while (!salir);
+        p.numero = escanearEntero("Escribe tu numero de loteria: ");
+        salir = false;
         do {
             p.dinero = escanearEntero("Escribe la cantidad de dinero que quieres aportar [5-60]: ");
             if (p.dinero >= 5 && p.dinero <= 60 && p.dinero % 5 == 0) {
@@ -457,31 +466,36 @@ public class ProyectoNavidad {
         }
     }
 
-    public static void comprobarNumeroColla(int[] premiosGordos, int[] premios1000, int colla, Persona[][] matriuCollas) {
+    public static void comprobarNumeroColla(int[] premiosGordos, int[] premios1000, int colla, Persona[][] matriuCollas, int anyoComprobacion) {
         int cantidad = 0;
 
-        for (int i = 0; i < matriuCollas[colla-1].length; i++) {
-            cantidad += comprobarPremioGordo(premiosGordos, matriuCollas[colla-1][i].numero);
+        for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
+            cantidad += comprobarPremioGordo(premiosGordos, matriuCollas[colla - 1][i].numero);
             if (cantidad == 0) {
-                cantidad += comprobarAproximaciones(premiosGordos, matriuCollas[colla-1][i].numero);
+                cantidad += comprobarAproximaciones(premiosGordos, matriuCollas[colla - 1][i].numero);
                 if (cantidad == 0) {
-                    cantidad += comprobarDosUltimos(premiosGordos, matriuCollas[colla-1][i].numero);
+                    cantidad += comprobarDosUltimos(premiosGordos, matriuCollas[colla - 1][i].numero);
                     if (cantidad == 0) {
-                        cantidad += comprobarUltimo(premiosGordos, matriuCollas[colla-1][i].numero);
+                        cantidad += comprobarUltimo(premiosGordos, matriuCollas[colla - 1][i].numero);
                         if (cantidad == 0) {
-                            cantidad += comprobarCentena(premiosGordos, matriuCollas[colla-1][i].numero);
+                            cantidad += comprobarCentena(premiosGordos, matriuCollas[colla - 1][i].numero);
                         }
                     }
                 }
             }
-            cantidad += comprobarPremioMil(premios1000, matriuCollas[colla-1][i].numero);
+            cantidad += comprobarPremioMil(premios1000, matriuCollas[colla - 1][i].numero);
 
         }
 
         if (cantidad == 0) {
             System.out.println(ANSI_RED + "No has ganado nada" + ANSI_RESET);
         } else {
-            System.out.println(ANSI_GREEN + "Cantidad: " + cantidad + ANSI_RESET);
+            System.out.println("| ANY | MEMBRES | DINERS | PREMI |");
+            System.out.println("| " + anyoComprobacion + " | " + matriuCollas[colla - 1].length + " | " + cantidad + " |");
+            System.out.println("| NOMBRE | NUMERO | DINERO | PREMI |");
+            for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
+                System.out.println("| " + matriuCollas[colla - 1][i].nombre + " | " + matriuCollas[colla - 1][i].numero + " | " + matriuCollas[colla - 1][i].dinero + " | " + ((cantidad / 100) * matriuCollas[colla - 1][i].dinero));
+            }
         }
     }
 
@@ -531,6 +545,36 @@ public class ProyectoNavidad {
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public static void escribirCollasBinario(Persona[][] matriuCollas) {
+        FileOutputStream fos = null;
+        try {
+            File f = new File(RUTA + "clientes" + EXTENSION_BIN);
+            if(!f.exists())
+                f.createNewFile();
+            fos = new FileOutputStream(f, false);
+            DataOutputStream dos = new DataOutputStream(fos);
+            for (int i = 0; i < matriuCollas.length; i++) {
+                for (int j = 0; j < matriuCollas[0].length; j++) {
+                    dos.writeUTF(matriuCollas[i][j].nombre);
+                    dos.writeInt(matriuCollas[i][j].numero);
+                    dos.writeInt(matriuCollas[i][j].dinero);
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
     public static String formatearGrupo(Persona[][] p) {
@@ -595,14 +639,18 @@ public class ProyectoNavidad {
                 case 1 -> {
                     matriuCollas = añadirColla(matriuCollas);
                     nombreCollas = añadirNombreCollas(nombreCollas);
+                    escribirCollasBinario(matriuCollas);
                 }
-                case 2 ->
+                case 2 ->{
                     matriuCollas = añadirPersonaAColla(matriuCollas, menuCollasNoms(nombreCollas) - 1);
+                    escribirCollasBinario(matriuCollas);
+                }
                 case 3 -> {
+                    anyosExistentes();
                     int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
                     actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
                     actualizarPremios1000(String.valueOf(anyo), premios1000);
-                    comprobarNumeroColla(premiosGordos, premios1000, menuCollasNoms(nombreCollas), matriuCollas);
+                    comprobarNumeroColla(premiosGordos, premios1000, menuCollasNoms(nombreCollas), matriuCollas, anyo);
                 }
                 case 4 ->
                     System.out.println(formatearGrupo(matriuCollas));
@@ -778,5 +826,60 @@ public class ProyectoNavidad {
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public static void anyosExistentes() {
+        FileReader reader = null;
+        try {
+            File f = new File(RUTA + "anyo" + EXTENSION_TXT);
+            String linea;
+            reader = new FileReader(f);
+            BufferedReader buffer = new BufferedReader(reader);
+            linea = buffer.readLine();
+            System.out.println("Anyos: ");
+            while (linea != null) {
+                System.out.println(linea);
+                linea = buffer.readLine();
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public static boolean anyosArchivados() {
+        FileReader reader = null;
+        boolean vacio = false;
+        try {
+
+            File f = new File(RUTA + "anyo" + EXTENSION_TXT);
+            String linea;
+            reader = new FileReader(f);
+            BufferedReader buffer = new BufferedReader(reader);
+            linea = buffer.readLine();
+            if (linea == null) {
+                vacio = true;
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return vacio;
     }
 }
