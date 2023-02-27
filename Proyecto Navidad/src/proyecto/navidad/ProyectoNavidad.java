@@ -468,7 +468,7 @@ public class ProyectoNavidad {
 
     public static void comprobarNumeroColla(int[] premiosGordos, int[] premios1000, int colla, Persona[][] matriuCollas, int anyoComprobacion) {
         int cantidad = 0;
-
+        
         for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
             cantidad += comprobarPremioGordo(premiosGordos, matriuCollas[colla - 1][i].numero);
             if (cantidad == 0) {
@@ -491,7 +491,11 @@ public class ProyectoNavidad {
             System.out.println(ANSI_RED + "No has ganado nada" + ANSI_RESET);
         } else {
             System.out.println("| ANY | MEMBRES | DINERS | PREMI |");
-            System.out.println("| " + anyoComprobacion + " | " + matriuCollas[colla - 1].length + " | " + cantidad + " |");
+            int dineroTot = 0;
+            for (int i = 0; i < matriuCollas[colla-1].length; i++) {
+                dineroTot += matriuCollas[colla-1][i].dinero;
+            }
+            System.out.println("| " + anyoComprobacion + " | " + matriuCollas[colla - 1].length + " | " + dineroTot + " | " + cantidad + " |");
             System.out.println("| NOMBRE | NUMERO | DINERO | PREMI |");
             for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
                 System.out.println("| " + matriuCollas[colla - 1][i].nombre + " | " + matriuCollas[colla - 1][i].numero + " | " + matriuCollas[colla - 1][i].dinero + " | " + ((cantidad / 100) * matriuCollas[colla - 1][i].dinero));
@@ -551,8 +555,9 @@ public class ProyectoNavidad {
         FileOutputStream fos = null;
         try {
             File f = new File(RUTA + "clientes" + EXTENSION_BIN);
-            if(!f.exists())
+            if (!f.exists()) {
                 f.createNewFile();
+            }
             fos = new FileOutputStream(f, false);
             DataOutputStream dos = new DataOutputStream(fos);
             for (int i = 0; i < matriuCollas.length; i++) {
@@ -608,9 +613,14 @@ public class ProyectoNavidad {
             switch (opcion) {
                 case 1 -> {
                     int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
-                    actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
-                    actualizarPremios1000(String.valueOf(anyo), premios1000);
-                    comprobarNumero(premiosGordos, premios1000);
+                    if (ExisteAnyo(String.valueOf(anyo))) {
+                        actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
+                        actualizarPremios1000(String.valueOf(anyo), premios1000);
+                        comprobarNumero(premiosGordos, premios1000);
+                    }
+                    else {
+                        System.out.println("Anyo no existe tt");
+                    }
                 }
                 case 2 -> {
                     if (matriuCollas == null) {
@@ -641,16 +651,21 @@ public class ProyectoNavidad {
                     nombreCollas = añadirNombreCollas(nombreCollas);
                     escribirCollasBinario(matriuCollas);
                 }
-                case 2 ->{
+                case 2 -> {
                     matriuCollas = añadirPersonaAColla(matriuCollas, menuCollasNoms(nombreCollas) - 1);
                     escribirCollasBinario(matriuCollas);
                 }
                 case 3 -> {
                     anyosExistentes();
                     int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
-                    actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
-                    actualizarPremios1000(String.valueOf(anyo), premios1000);
-                    comprobarNumeroColla(premiosGordos, premios1000, menuCollasNoms(nombreCollas), matriuCollas, anyo);
+                    if (ExisteAnyo(String.valueOf(anyo))) {
+                        actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
+                        actualizarPremios1000(String.valueOf(anyo), premios1000);
+                        comprobarNumeroColla(premiosGordos, premios1000, menuCollasNoms(nombreCollas), matriuCollas, anyo);
+                    }
+                    else {
+                        System.out.println("Anyo no existe tt");
+                    }
                 }
                 case 4 ->
                     System.out.println(formatearGrupo(matriuCollas));
