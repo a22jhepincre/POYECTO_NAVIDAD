@@ -869,9 +869,10 @@ public class ProyectoNavidad {
         }
     }
 
-    public static boolean anyosArchivados() {
+    public static boolean anyosArchivados() throws IOException {
         FileReader reader = null;
         boolean vacio = false;
+        crearFileAnyo();
         try {
 
             File f = new File(RUTA + "anyo" + EXTENSION_TXT);
@@ -896,5 +897,11 @@ public class ProyectoNavidad {
         }
 
         return vacio;
+    }
+     public static void crearFileAnyo() throws IOException{
+        File f = new File(RUTA+"anyo"+EXTENSION_TXT);
+        if(!f.exists()){
+            f.createNewFile();
+        }
     }
 }
