@@ -468,7 +468,7 @@ public class ProyectoNavidad {
 
     public static void comprobarNumeroColla(int[] premiosGordos, int[] premios1000, int colla, Persona[][] matriuCollas, int anyoComprobacion) {
         int cantidad = 0;
-        
+
         for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
             cantidad += comprobarPremioGordo(premiosGordos, matriuCollas[colla - 1][i].numero);
             if (cantidad == 0) {
@@ -492,8 +492,8 @@ public class ProyectoNavidad {
         } else {
             System.out.println("| ANY | MEMBRES | DINERS | PREMI |");
             int dineroTot = 0;
-            for (int i = 0; i < matriuCollas[colla-1].length; i++) {
-                dineroTot += matriuCollas[colla-1][i].dinero;
+            for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
+                dineroTot += matriuCollas[colla - 1][i].dinero;
             }
             System.out.println("| " + anyoComprobacion + " | " + matriuCollas[colla - 1].length + " | " + dineroTot + " | " + cantidad + " |");
             System.out.println("| NOMBRE | NUMERO | DINERO | PREMI |");
@@ -554,7 +554,7 @@ public class ProyectoNavidad {
     public static void escribirCollasBinario(Persona[][] matriuCollas) {
         FileOutputStream fos = null;
         try {
-            File f = new File(RUTA + "clientes" + EXTENSION_BIN);
+            File f = new File(RUTA + "collas" + EXTENSION_BIN);
             if (!f.exists()) {
                 f.createNewFile();
             }
@@ -562,10 +562,14 @@ public class ProyectoNavidad {
             DataOutputStream dos = new DataOutputStream(fos);
             for (int i = 0; i < matriuCollas.length; i++) {
                 for (int j = 0; j < matriuCollas[0].length; j++) {
-                    dos.writeUTF(matriuCollas[i][j].nombre);
-                    dos.writeInt(matriuCollas[i][j].numero);
-                    dos.writeInt(matriuCollas[i][j].dinero);
+                    if (matriuCollas[i][j] != null) {
+                        dos.writeUTF(matriuCollas[i][j].nombre);
+                        dos.writeInt(matriuCollas[i][j].numero);
+                        dos.writeInt(matriuCollas[i][j].dinero);
+                    }
+
                 }
+                dos.writeUTF("\n");
             }
 
         } catch (FileNotFoundException ex) {
@@ -604,6 +608,21 @@ public class ProyectoNavidad {
         return result;
     }
 
+    public static boolean comprobarFicheroColla() throws IOException {
+        File f = new File(RUTA + "collas" + EXTENSION_BIN);
+        boolean vacio = false;
+        if (!f.exists() || f.length() == 0) {
+            f.createNewFile();
+            vacio = true;
+        }
+        return vacio;
+    }
+    public static int ContadorNombres () throws FileNotFoundException, IOException{
+        RandomAccessFile raf = new RandomAccessFile(RUTA + "colla2"+ EXTENSION_BIN,"rw");
+        int resultado= (int) raf.length()/12;
+        return resultado;
+    }
+
     public static void menuCollasSolitario(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000) throws IOException {
 
         boolean salir = false;
@@ -617,17 +636,20 @@ public class ProyectoNavidad {
                         actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
                         actualizarPremios1000(String.valueOf(anyo), premios1000);
                         comprobarNumero(premiosGordos, premios1000);
-                    }
-                    else {
+                    } else {
                         System.out.println("Anyo no existe tt");
                     }
                 }
                 case 2 -> {
-                    if (matriuCollas == null) {
+                    if (comprobarFicheroColla()) {
                         nombreCollas = new String[1];
-                        System.out.print("Nombre colla: ");
-                        nombreCollas[0] = s.next();
+                        nombreCollas[0] = pedirNombre();
                         matriuCollas = crearMatriuColla();
+                        escribirCollasBinario(matriuCollas);
+                        escribirNombresFichero(nombreCollas);
+                    } else {
+                        matriuCollas = actualizarMatriuCollas(contadFilas());
+                        nombreCollas = nCollas(ContadorNombres());
                     }
                     menuCollas(matriuCollas, nombreCollas, premiosGordos, premios1000);
                 }
@@ -637,6 +659,20 @@ public class ProyectoNavidad {
                     System.out.println("Escoge una opcion");
             }
         }
+    }
+    public static void escribirNombresFichero(String [] nCollas) throws FileNotFoundException, IOException{
+        
+        File f = new File(RUTA + "colla2" + EXTENSION_BIN);
+        if(!f.exists()){
+            f.createNewFile();
+        }
+        FileOutputStream fos = new FileOutputStream(f);
+        DataOutputStream dos = new DataOutputStream(fos);
+        for (int i = 0; i < nCollas.length; i++) {
+            dos.writeUTF(nCollas[i]);
+            
+        }
+        
     }
 
     public static void menuCollas(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000) throws IOException {
@@ -650,11 +686,13 @@ public class ProyectoNavidad {
                     matriuCollas = añadirColla(matriuCollas);
                     nombreCollas = añadirNombreCollas(nombreCollas);
                     escribirCollasBinario(matriuCollas);
+                    escribirNombresFichero(nombreCollas);
                 }
                 case 2 -> {
                     matriuCollas = añadirPersonaAColla(matriuCollas, menuCollasNoms(nombreCollas) - 1);
                     escribirCollasBinario(matriuCollas);
                 }
+
                 case 3 -> {
                     anyosExistentes();
                     int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
@@ -662,8 +700,7 @@ public class ProyectoNavidad {
                         actualizarPremiosGordos(String.valueOf(anyo), premiosGordos);
                         actualizarPremios1000(String.valueOf(anyo), premios1000);
                         comprobarNumeroColla(premiosGordos, premios1000, menuCollasNoms(nombreCollas), matriuCollas, anyo);
-                    }
-                    else {
+                    } else {
                         System.out.println("Anyo no existe tt");
                     }
                 }
@@ -677,15 +714,57 @@ public class ProyectoNavidad {
         }
     }
 
+    public static String pedirNombre() {
+        String nombreColla;
+        boolean salir = false;
+
+        do {
+            System.out.print("Nombre colla: ");
+            nombreColla = s.next();
+
+            if (nombreColla.length() < 10) {
+                salir = true;
+                for (int i = 10 - nombreColla.length(); i > 0; i--) {
+                    nombreColla += " ";
+                }
+            } else {
+                System.out.println("Debe de ser de menos de diez caraceteres.");
+            }
+        } while (!salir);
+
+        return nombreColla;
+    }
+
+    public static String[] nCollas(int numNombres) throws IOException {
+        String[] nombres = new String[numNombres];
+        try {
+
+            RandomAccessFile raf = new RandomAccessFile(RUTA + "colla2" + EXTENSION_BIN, "r");
+            int aux = 0;
+            for (int pos = 0; pos < raf.length(); pos += 12) {
+                raf.seek(pos);    
+                String nombre = raf.readUTF();
+                nombres[aux] = nombre;
+                aux++;
+            }
+            for (int i = 0; i < nombres.length; i++) {
+                System.out.println(nombres[i]);
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return nombres;
+
+    }
+
     public static String[] añadirNombreCollas(String[] nCollas) {
         String[] nuevoNomCollas = new String[nCollas.length + 1];
 
         for (int i = 0; i < nCollas.length; i++) {
             nuevoNomCollas[i] = nCollas[i];
         }
-
-        System.out.print("Nombre colla: ");
-        nuevoNomCollas[nCollas.length] = s.next();
+        nuevoNomCollas[nCollas.length] = pedirNombre();
 
         return nuevoNomCollas;
     }
@@ -700,18 +779,43 @@ public class ProyectoNavidad {
 
     public static Persona[][] añadirPersonaAColla(Persona[][] colla, int fila) {
         Persona p = pedirPersona();
-        Persona[][] collaNueva = new Persona[colla.length][colla[0].length + 1];
+        Persona[][] collaNueva;
+        boolean salir = false;
+        boolean encontrado = false;
+        int columna = 0;
+        int col = 0;
+        while (!salir) {
+            if (colla[fila][col] == null) {
+                columna = col;
+                encontrado = true;
+                salir = true;
+            } else {
+                col++;
+            }
 
-        for (int i = 0; i < colla.length; i++) {
-            for (int j = 0; j < colla[0].length; j++) {
-                collaNueva[i][j] = colla[i][j];
+            if (col > colla[fila].length - 1) {
+                salir = true;
             }
         }
 
-        collaNueva[fila][colla[fila].length] = p;
+        if (!encontrado) {
+            collaNueva = new Persona[colla.length][colla[fila].length + 1];
+
+            for (int i = 0; i < colla.length; i++) {
+                for (int j = 0; j < colla[0].length; j++) {
+                    collaNueva[i][j] = colla[i][j];
+                }
+            }
+
+            collaNueva[fila][colla[fila].length] = p;
+        } else {
+            collaNueva = colla;
+            collaNueva[fila][columna] = p;
+        }
 
         return collaNueva;
     }
+
 
     public static Persona[][] añadirColla(Persona[][] colla) {
         Persona[][] matriuCollaNueva = new Persona[colla.length + 1][colla[0].length];
@@ -869,10 +973,9 @@ public class ProyectoNavidad {
         }
     }
 
-    public static boolean anyosArchivados() throws IOException {
+    public static boolean anyosArchivados() {
         FileReader reader = null;
         boolean vacio = false;
-        crearFileAnyo();
         try {
 
             File f = new File(RUTA + "anyo" + EXTENSION_TXT);
@@ -898,10 +1001,117 @@ public class ProyectoNavidad {
 
         return vacio;
     }
-     public static void crearFileAnyo() throws IOException{
-        File f = new File(RUTA+"anyo"+EXTENSION_TXT);
-        if(!f.exists()){
-            f.createNewFile();
+
+    public static int contadFilas() {
+        int filas = 0;
+        try {
+            int pos = 0;
+            boolean salir = false;
+            RandomAccessFile raf = new RandomAccessFile(RUTA + "collas" + EXTENSION_BIN, "r");
+
+            while (!salir) {
+                raf.seek(pos);
+                if (raf.readUTF().equals("\n")) {
+                    filas++;
+                }
+
+                pos += 25;
+
+                if (pos > raf.length()) {
+                    salir = true;
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return filas;
     }
+
+    public static Persona[][] añadirPersonaFAColla(Persona[][] colla, int fila, Persona p) {
+        Persona[][] collaNueva;
+        boolean salir = false;
+        boolean encontrado = false;
+        int columna = 0;
+        int col = 0;
+        while (!salir) {
+            if (colla[fila][col] == null) {
+                columna = col;
+                encontrado = true;
+                salir = true;
+            } else {
+                col++;
+            }
+
+            if (col > colla[fila].length - 1) {
+                salir = true;
+            }
+        }
+
+        if (!encontrado) {
+            collaNueva = new Persona[colla.length][colla[fila].length + 1];
+
+            for (int i = 0; i < colla.length; i++) {
+                for (int j = 0; j < colla[0].length; j++) {
+                    collaNueva[i][j] = colla[i][j];
+                }
+            }
+
+            collaNueva[fila][colla[fila].length] = p;
+        } else {
+            collaNueva = colla;
+            collaNueva[fila][columna] = p;
+        }
+
+        return collaNueva;
+    }
+
+    public static Persona[][] actualizarMatriuCollas(int filas) {
+        Persona[][] matriuCollas = new Persona[filas + 1][1];
+        try {
+            RandomAccessFile raf = new RandomAccessFile(RUTA + "collas" + EXTENSION_BIN, "r");
+            int fila = 0;
+            int pos = 0;
+            boolean salir = false;
+
+            raf.seek(pos);
+            while (!salir) {
+                boolean salto = false;
+                Persona p = new Persona();
+                String nom = raf.readUTF();
+                if (!nom.equals("\n")) {
+                    int numero = raf.readInt();
+                    int dinero = raf.readInt();
+                    p.nombre = nom;
+                    p.numero = numero;
+                    p.dinero = dinero;
+
+                    matriuCollas = añadirPersonaFAColla(matriuCollas, fila, p);
+
+                } else {
+                    pos += 3;
+                    fila++;
+                    salto = true;
+                }
+                if (!salto) {
+                    pos += 25;
+                }
+
+                if (pos > raf.length() - 25) {
+                    salir = true;
+                }
+
+                raf.seek(pos);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return matriuCollas;
+    }
+
 }
