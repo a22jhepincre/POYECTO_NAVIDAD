@@ -253,7 +253,7 @@ public class ProyectoNavidad {
             }
             if (i == 2) {
                 System.out.print(ANSI_GREEN);
-                print(idioma, "Tercer Premio: 500.000 --> ");
+                print(idioma, "Tercer Premio: 500.000 -->  ");
                 System.out.println(" " + String.format("%05d", premiosGordos[i]) + ANSI_RESET);
             }
             if (i == 3) {
@@ -993,7 +993,7 @@ public class ProyectoNavidad {
      * PEDIR NOMBRE
      *
      * FUNCIÓN QUE PIDE EL NOMBRE DE LA COLLA
-     *
+     * 
      * @param idioma
      * @return nombreColla, DEVUELVE EL NOMBRE INTRODUCIDO
      * @throws java.io.IOException
@@ -1020,7 +1020,9 @@ public class ProyectoNavidad {
     }
 
     /**
-     *
+     *ACTUALIZAR EL NOMBRE DE LAS COLLAS
+     * 
+     * 
      * @param numNombres
      * @return
      * @throws IOException
@@ -1044,6 +1046,16 @@ public class ProyectoNavidad {
 
     }
 
+    /**
+     * AÑADIR NOMBRE DE COLLAS
+     * 
+     * FUNCION QUE SOLICITA EL NUEVO NOMBRE DE LAS COLLAS
+     * 
+     * @param nCollas, RECIBE EL VECTOR DE LAS COLLAS
+     * @param idioma, RECIBE EL IDIOMA SOLICITADO POR EL USUARIO
+     * @return, DEVUELVE EL NUEVO NOMBRE DE LAS COLLAS
+     * @throws IOException 
+     */
     public static String[] añadirNombreCollas(String[] nCollas, String idioma) throws IOException {
         String[] nuevoNomCollas = new String[nCollas.length + 1];
 
@@ -1055,6 +1067,16 @@ public class ProyectoNavidad {
         return nuevoNomCollas;
     }
 
+    /**
+     * MENU COLLAS
+     * 
+     * ESTA FUNCIÓN MUESTRA EL NUMERO DE COLLAS PARA QUE EL USUARIO ELIJA CON CUAL CONTINUAR
+     * 
+     * @param nombreCollas, RECIBE EL NOMBRE DE LAS COLLAS PARA POSTERIORMENTE MOSTRARLAS
+     * @param idioma, RECIBE EL IDIOMA SELECIONADO POR EL USUARIO
+     * @return opcion, DEVUELVE LA OPCION SELCCIONADA POR EL USUAIRIO
+     * @throws IOException 
+     */
     public static int menuCollasNoms(String[] nombreCollas, String idioma) throws IOException {
         for (int i = 0; i < nombreCollas.length; i++) {
             System.out.println((i + 1) + ". " + nombreCollas[i]);
@@ -1063,6 +1085,17 @@ public class ProyectoNavidad {
         return opcion;
     }
 
+    /**
+     * AÑADIR PERSONA COLLA
+     * 
+     * FUNCIÓN QUE AÑADE A UNA PERSONA A UNA COLLA CREADA
+     * 
+     * @param colla
+     * @param fila
+     * @param idioma
+     * @return
+     * @throws IOException 
+     */
     public static Persona[][] añadirPersonaAColla(Persona[][] colla, int fila, String idioma) throws IOException {
         Persona p = pedirPersona(idioma);
         Persona[][] collaNueva;
@@ -1070,6 +1103,9 @@ public class ProyectoNavidad {
         boolean encontrado = false;
         int columna = 0;
         int col = 0;
+        /*SE UTILIZA UN BUCLE WHILE PARA BUSCAR LA PRIMERA CELDA VACIA EN LA FILA DE LA MATRIZ,
+        SI SE ENCUENTRA UNA CELDA VACÍA , SE ALMACENA SU INDICE EN LA VARIABLE COLUMNA,
+        SI NO SE ENCUENTRA NINGUNA CELDA VACIA , SE SALE DEL BUCLE*/
         while (!salir) {
             if (colla[fila][col] == null) {
                 columna = col;
@@ -1102,6 +1138,14 @@ public class ProyectoNavidad {
         return collaNueva;
     }
 
+    /**
+     * AÑADIR COLLA
+     * 
+     * FUNCIÓN QUE SE UTILIZA PARA AÑADIR UNA FILA VACÍA A UNA MATRIZ DE OBJETOS DE LA CLASE PERSONA
+     * 
+     * @param colla, RECIBE LA MATRIZ
+     * @return matriuCollaNueva, devuelve la nueva matriz de collas
+     */
     public static Persona[][] añadirColla(Persona[][] colla) {
         Persona[][] matriuCollaNueva = new Persona[colla.length + 1][colla[0].length];
 
@@ -1113,7 +1157,17 @@ public class ProyectoNavidad {
 
         return matriuCollaNueva;
     }
-
+    
+    /**
+     * CREAR MATRIZ DE COLLAS
+     * 
+     * FUNCIÓN QUE CREA LA MATRIZ DE LAS COLLAS DE OBJETOS DE LA CLASE PERSONA
+     * DONDE CADA COLUMNA REPRESENTA A UNA PERSONA DE LA COLLA Y CADA FILA REPRESENTA UNA POSICIÓN DE LA COLLA
+     * 
+     * @param idioma, RECIBE EL IDIOMA SELECCIONADO POR EL USUARIO
+     * @return matrizCollas, DEVUELVE LA MATRIZ CON TODAS LAS PERSONAS INTRODUCIDAS POR EL USUARIO
+     * @throws IOException 
+     */
     public static Persona[][] crearMatriuColla(String idioma) throws IOException {
 
         int personas = escanearEntero("Cuantas personas sois en tu colla?", idioma);
@@ -1129,6 +1183,16 @@ public class ProyectoNavidad {
         return matrizCollas;
     }
 
+    /**
+     * AÑO EXISTENTE
+     * 
+     * FUNCIÓN QUE VERIFICA LA EXISTENCIA DE UN AÑO EN UN ARCHIVO DE TEXTO
+     * 
+     * @param anyo, RECIBE EL AÑO DEL SORTEO
+     * @return result, DEVUELVE SI EL AÑO EXISTE O NO 
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static boolean ExisteAnyo(String anyo) throws FileNotFoundException, IOException {
         boolean result = false;
         File f = new File(RUTA + "anyo" + EXTENSION_TXT);
@@ -1145,6 +1209,16 @@ public class ProyectoNavidad {
         return result;
     }
 
+    /**
+     * ACTUALIZAR PREMIOS GORDOS
+     * 
+     * FUNCIÓN QUE SE ENCARGA DE LEER LOS PREMIOSGORDOS DE LA LOTERÍA DEL ARCHIVO DE TEXTO CORRESPONDIENTE 
+     * A UN AÑO ESPECÍFICO Y LOS ALMACENA EN UN VECTOR DE ENTEROS
+     * 
+     * @param anyo, RECIBE EL AÑO DEL SORTEO
+     * @param premiosGordos, RECIBE LOS PREMIOSGORDOS PARA ACTUALIZARLOS
+     * @throws IOException 
+     */
     public static void actualizarPremiosGordos(String anyo, int[] premiosGordos) throws IOException {
         FileReader reader = null;
         File f = new File(RUTA + anyo + EXTENSION_TXT);
@@ -1165,7 +1239,17 @@ public class ProyectoNavidad {
         }
 
     }
-
+    
+    /**
+     * ACTUALIZAR PREMIOS GORDOS
+     * 
+     * FUNCIÓN QUE SE ENCARGA DE LEER LOS PREMIOS1000 DE LA LOTERÍA DEL ARCHIVO DE TEXTO CORRESPONDIENTE 
+     * A UN AÑO ESPECÍFICO Y LOS ALMACENA EN UN VECTOR DE ENTEROS
+     * 
+     * @param anyo, RECIBE EL AÑO DEL SORTEO
+     * @param premios1000, RECIBE LOS PREMIOS1000 PARA ACTUALIZARLOS
+     * @throws IOException 
+     */
     public static void actualizarPremios1000(String anyo, int[] premios1000) throws FileNotFoundException, IOException {
         FileReader reader = null;
         File f = new File(RUTA + anyo + EXTENSION_TXT);
@@ -1195,6 +1279,15 @@ public class ProyectoNavidad {
 
     }
 
+    /**
+     * MOSTRAR AÑOS
+     * 
+     * ESTA FUNCIÓN NOS MUESTRA LOS AÑOS DE LOS SORTEOS REALIZADOS
+     * 
+     * @param idioma, RECIBE EL IDIOMA SELECCIONADO POR EL USUARIO
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static void printearAnyos(String idioma) throws FileNotFoundException, IOException {
         FileReader reader = null;
         File f = new File(RUTA + "anyo" + EXTENSION_TXT);
@@ -1209,7 +1302,16 @@ public class ProyectoNavidad {
         }
 
     }
-
+    
+    /**
+     * VERRIFICAR AÑOS
+     * 
+     * ESTA FUNCIÓN COMPRUEBA LOS AÑOS EXISTENTES Y SI ESTAN VACIOS, 
+     * SI NO EXISTE EL AÑO INTRODUCIDO CREA UN NUEVO FICHERO CON ESE AÑO DE SORTEO
+     * 
+     * @return vacio, DEVUELVE SI EL FICHERO ESTA VACIO O NO
+     * @throws IOException 
+     */
     public static boolean verificarFicheroAnyos() throws IOException {
         FileReader reader = null;
         boolean vacio = false;
@@ -1231,6 +1333,12 @@ public class ProyectoNavidad {
         return vacio;
     }
 
+    /**
+     * 
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static int contadFilas() throws FileNotFoundException, IOException {
         int filas = 0;
         int pos = 0;
@@ -1254,6 +1362,18 @@ public class ProyectoNavidad {
         return filas;
     }
 
+    /**
+     * AÑADIR PERSONA 
+     * 
+     * LA FUNCIÓN BUSCA LA PRIMERA POSICIÓN VACÍA EN LA FILA INDICADA Y AGREGA LA PERSONA EN ESA POSICIÓN.
+     * SI NO ENCUENTRA UNA POSICIÓN VACÍA, CREA UNA NUEVA MATRIZ CON UNA COLUMNA ADICIONAL Y COPIA 
+     * LOS DATOS DE LA MATRIZ ORIGINAL EN LA NUEVA MATRIZ ANTES DE AGREGAR LA PERSONA EN LA POSICIÓN VACÍA
+     * 
+     * @param colla, RECIBE LA MATRIZ
+     * @param fila, RECIBE LA POSICION
+     * @param p, RECIBE LAS PERSONAS
+     * @return collaNueva, DEVUELVE LA COLLA ACTUALIZADA
+     */
     public static Persona[][] añadirPersonaFAColla(Persona[][] colla, int fila, Persona p) {
         Persona[][] collaNueva;
         boolean salir = false, encontrado = false;
@@ -1290,6 +1410,13 @@ public class ProyectoNavidad {
         return collaNueva;
     }
 
+    /**
+     * 
+     * @param filas
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static Persona[][] actualizarMatriuCollas(int filas) throws FileNotFoundException, IOException {
         Persona[][] matriuCollas = new Persona[filas + 1][1];
         RandomAccessFile raf = new RandomAccessFile(RUTA + "collas" + EXTENSION_BIN, "r");
@@ -1345,7 +1472,18 @@ public class ProyectoNavidad {
 
         return cont;
     }
-
+    
+    /**
+     * MULTILENGUAJE
+     * 
+     * ESTA FUNCIÓN BUSCA LA LÍNEA EN EL ARCHIVO EN ESPAÑOL Y LUEGO SALTA LAS LÍNEAS NECESARIAS 
+     * EN EL ARCHIVO DEL IDIOMA ESPECIFICADO ANTES DE IMPRIMIR LA LÍNEA TRADUCIDA
+     * 
+     * @param idioma, RECIBE EL IDIOMA ESPECIFICADO POR EL USUARIO
+     * @param linea, RECIBE LA LINEA DE TEXTO
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static void print(String idioma, String linea) throws FileNotFoundException, IOException {
         FileReader reader = null;
 
