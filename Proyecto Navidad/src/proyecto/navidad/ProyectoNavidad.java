@@ -35,9 +35,45 @@ public class ProyectoNavidad {
     public static void main(String[] args) throws IOException {
         int[] premiosGordos = ganadores();
         int[] premios1000 = ganadores1000(premiosGordos);
+        eleccionIdioma();
         menu(premiosGordos, premios1000);
     }
+    /**
+     * ELECCIÓN DE IDIOMA
+     *
+     * ESTA FUNCIÓN NOS MUESTRA TRES IDIOMAS A ELEGIR DEPENDIENTO CUAL ELIJA EL PROGRAMA SE MOSTRARA EN EL IDIOMA INDICADO 
+     * POR EL USUARIO
+     */
+    public static String eleccionIdioma() {
+        Scanner scanner = new Scanner(System.in);
+        String idioma;
+        boolean seleccionado = false;
 
+        do {
+            System.out.println("1. Español");
+            System.out.println("2. Català");
+            System.out.println("3. English");
+
+            idioma = scanner.nextLine();
+
+            switch(idioma) {
+                case "Español" -> {
+                    System.out.println("Ha seleccionado Español.\n");
+                    seleccionado = true;
+                }
+                case "Català" -> {
+                    System.out.println("Ha seleccionat Català.\n");
+                    seleccionado = true;
+                }
+                case "English" -> {
+                    System.out.println("You have selected English.\n");
+                    seleccionado = true;
+                }
+                default -> System.out.println("Selección incorrecta, por favor intente de nuevo.\nSelecció incorrecta, per favor intente de nou.\nWrong selection, please try again.");
+            }
+        } while (!seleccionado);
+        return idioma;
+    }
     /**
      * MENU COMPUESTO DE TRES OPCIONES
      *
@@ -410,7 +446,12 @@ public class ProyectoNavidad {
         int numero;
         int dinero;
     }
-
+    /**
+     * DATOS DE LAS PESONAS
+     *
+     * PROCEDIMIENTO QUE SOLICITA LOS DATOS DE LAS PERSONAS Y COMPRUEBA SI LOS DATOS INTRODUCIDOS SON CORRECTOS
+     * @return, DEVEULEVE EL OBJETO PERSONA
+     */
     public static Persona pedirPersona() {
         Persona p = new Persona();
         boolean salir = false;
@@ -439,7 +480,14 @@ public class ProyectoNavidad {
 
         return p;
     }
-
+    /**
+     * COMPRUEBA EL NUMERO INTRODUCIDO
+     *
+     * SI EL NUMERO INGRESADO COINCIDE CON ALGUN NUMERO GAANDOR DEL PREMIO
+     * SE ACTULIZA LA VARIABLE "cantidad" CON EL VALOR CORRESPONDIENTE
+     * @param premiosGordos
+     * @param premios1000
+     */
     public static void comprobarNumero(int[] premiosGordos, int[] premios1000) {
         int cantidad = 0;
         int numero = escanearEntero("Introduce tu numero para comprobarlo: ");
@@ -465,7 +513,17 @@ public class ProyectoNavidad {
             System.out.println(ANSI_GREEN + "Cantidad: " + cantidad + ANSI_RESET);
         }
     }
-
+    /**
+     * COMPROBAR NUMERO DE LAS COLLAS
+     *
+     * LA FUNCIÓN RECCORE LA MATRIZ DE PERSONAS DE LA C0LLA Y POR CADA PERSONA COMPUEBA
+     * SI HA GANDO ALGÚN PERMIO
+     * @param premiosGordos, RECIBE PARAMETROS DE PREMIOS GORDOS PARA COMPROBAR
+     * @param premios1000, RECIBE PARAMETROS DE PREMIOS 1000 PARA COMPROBAR
+     * @param colla, RECIBE LAS COLLAS
+     * @param matriuCollas, UNA MATRIZ DE PERSONAS QUE REPRESENTA A LOS MIEMBROS DE LA COLLA
+     * @param anyoComprobacion, RECIBE EL AÑO DE REALIZACIÓN DEL SORTEO
+     */
     public static void comprobarNumeroColla(int[] premiosGordos, int[] premios1000, int colla, Persona[][] matriuCollas, int anyoComprobacion) {
         int cantidad = 0;
 
@@ -489,6 +547,8 @@ public class ProyectoNavidad {
 
         if (cantidad == 0) {
             System.out.println(ANSI_RED + "No has ganado nada" + ANSI_RESET);
+            /*SE MUESTRA UNA TABLA CON LA INFORMACIÓN DE LOS MIEMBROS DE LA COLLA Y LOS PREMIOS, 
+          ADEMAS DEL AÑO, EL NUMERO DE CADA MIEMBRO Y EL DINERO APORTADO*/
         } else {
             System.out.println("| ANY | MEMBRES | DINERS | PREMI |");
             int dineroTot = 0;
@@ -502,7 +562,13 @@ public class ProyectoNavidad {
             }
         }
     }
-
+    /**
+     * INTRODUCIR DATOS EN UN FICHERO TXT
+     *
+     * FUNCIÓN QUE SE ENCARGA DE ESCIRBIR UNA LINEA EN UN FICHERO DE TEXTO ESPECIFICANDO LA RUTA, EL NOMBRE Y LA EXTENSIÓN
+     * @param linea,RECIBE UNA CADENA DE TEXTO A ESCRIBIR
+     * @param nombreFichero, NOMBRE DEL FICHERO EN EL QUE SE DEBE ESCRIBIR LA LINEA
+     */
     public static void escribirFicheroTexto(String linea, String nombreFichero) {
         FileWriter fw = null;
         try {
@@ -526,7 +592,13 @@ public class ProyectoNavidad {
             }
         }
     }
-
+    /**
+     * INTRODUCIR DATOS EN UN FICHERO BINARIO
+     *
+     * FUNCIÓN QUE SE ENCARGA DE ESCIRBIR UNA LINEA EN UN FICHERO BINARIO ESPECIFICANDO LA RUTA, EL NOMBRE Y LA EXTENSIÓN
+     * @param linea,RECIBE UNA CADENA DE TEXTO A ESCRIBIR
+     * @param nombreFichero, NOMBRE DEL FICHERO EN EL QUE SE DEBE ESCRIBIR LA LINEA
+     */
     public static void escribirFicheroBinario(String linea, String nombreFichero) {
         FileOutputStream fos = null;
         try {
@@ -550,16 +622,23 @@ public class ProyectoNavidad {
             }
         }
     }
-
+    /**
+     * INTRODUCIR OBJETOS PERSONA EN UN FICHERO BINARIO
+     *
+     * FUNCIÓN QUE SE ENCARGA DE ESCRIBIR UNA MATRIZ DE OBJETOS DE LA CLASE PERSONA EN UN FICHERO BINARIO
+     * @param matriuCollas, RECIBE LA MATRIZ PARA INTRODUCIR LOS DATOS
+     */
     public static void escribirCollasBinario(Persona[][] matriuCollas) {
         FileOutputStream fos = null;
         try {
             File f = new File(RUTA + "collas" + EXTENSION_BIN);
+            //SE CREA EL FICHERO POR SI NO EXISTE
             if (!f.exists()) {
                 f.createNewFile();
             }
             fos = new FileOutputStream(f, false);
             DataOutputStream dos = new DataOutputStream(fos);
+            //SI EL OBJETO DE LA POSICION DE LA MATRIZ NO ES NULL, SE ESCRIBEN LOS DATOS DE LAS PERSONAS
             for (int i = 0; i < matriuCollas.length; i++) {
                 for (int j = 0; j < matriuCollas[0].length; j++) {
                     if (matriuCollas[i][j] != null) {
@@ -569,8 +648,9 @@ public class ProyectoNavidad {
                     }
 
                 }
-                dos.writeUTF("\n");
-            }
+                    // SE REALIZA UN SALTO DE LINEA PARA SEPARLAS EN EL FICHERO
+                    dos.writeUTF("\n");
+                }
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
@@ -585,7 +665,13 @@ public class ProyectoNavidad {
         }
 
     }
-
+    /**
+     * FORMATEAR GRUPOS
+     *
+     * FUNCION QUE SE ENCARGA DE FORMATEAR LA MATRIZ PARA MOSTRAR DE UNA MANERA LEGIBLE EN FORMA DE CADENA DE TEXTO
+     * @param p, RECIBE LA MATRIZ DE LAS PERSONAS
+     * @return
+     */
     public static String formatearGrupo(Persona[][] p) {
         String result = "";
         for (int i = 0; i < p.length; i++) {
@@ -594,11 +680,18 @@ public class ProyectoNavidad {
                     result += p[i][j].nombre + " " + p[i][j].numero + " " + p[i][j].dinero + "\n";
                 }
             }
+            //AÑADE UN SALTO DE LINEA PARA SEPARA LOS GRUPOS EN LA CADENA RESULTANTE
             result += "\n";
         }
         return result;
     }
-
+    /**
+     * FORMATEAR SORTEO
+     *
+     * ESTA FUNCIÓN FORMATEA UN VECTOR DE ENTEROS EN UNA CADENA DE TEXTO PARA SU POSTERIOR VISUALIZACIÓN
+     * @param enteros, RECIBE UN VECTOR DE ENTEROS
+     * @return DEVUELVE UNA CADENA FORMATEADA
+     */
     public static String formatearSorteo(int[] enteros) {
         String result = "";
         for (int i = 0; i < enteros.length; i++) {
@@ -607,7 +700,13 @@ public class ProyectoNavidad {
 
         return result;
     }
-
+    /**
+     * COMPROBAR EL FICHERO DE LAS COLLAS 
+     *
+     * LA FUNCIÓN TIENE COMO OBJETIVO COMPROBAR SI EXISTE O NO UN FICHERO BINARIO DE NOMBRE "COLLAS" EN LA RUTA ESPECIFICADA
+     * @return vacio, DEVULEVE UN VALOR QUE INDICA SI EL ARCHIVO ESTA VACÍO O NO
+     * @throws IOException
+     */
     public static boolean comprobarFicheroColla() throws IOException {
         File f = new File(RUTA + "collas" + EXTENSION_BIN);
         boolean vacio = false;
@@ -617,12 +716,32 @@ public class ProyectoNavidad {
         }
         return vacio;
     }
+    /**
+     * CONTADOR DE NOMBRES
+     *
+     * ESTA FUNCIÓN CUENTA LA CANTIDAD DE NOMBRES QUE HAY EN EL ARCHIVO BINARIO LLAMADO "COLLA2"
+     * @return resultado, DEVUELVE LA DIVICIÓN QUE ES LA CANTIDAD DE NOMBRES EN EL ARCHIVO
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static int ContadorNombres () throws FileNotFoundException, IOException{
         RandomAccessFile raf = new RandomAccessFile(RUTA + "colla2"+ EXTENSION_BIN,"rw");
+        /*DIVIDIMOS LA LONGITUD POR 12, YA QUE CADA REGISTRO EN EL ARCHIVO OCUPA 12 BYTES 
+        (4 bytes para el nombre y 2 bytes para cada uno de los enteros)*/
         int resultado= (int) raf.length()/12;
         return resultado;
     }
-
+    /**
+     * MENU JUGADOR SOLITARIO O EN UNA COLLA
+     *
+     * MOSTRAMOS TRES OPCIONES A ELEGIR DE MANERA SOLITARIA, EN COLLA O SI DESEA SALIR DEL JUEGO
+     *
+     * @param matriuCollas, RECIBE LA MATRIZ DE LA COLLAS
+     * @param nombreCollas, RECIBE EL NOMBRE DE LAS COLLAS PARA LA COMPROBACIÓN
+     * @param premiosGordos, RECIBE EL VECTOS DE PREMIOSGORDOS PARA COMPROBAR LOS NUMEROS GANADORES
+     * @param premios1000,RECIBE EL VECTOS DE PREMIOS1000 PARA COMPROBAR LOS NUMEROS GANADORES
+     * @throws IOException
+     */
     public static void menuCollasSolitario(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000) throws IOException {
 
         boolean salir = false;
@@ -630,6 +749,8 @@ public class ProyectoNavidad {
             System.out.print("\nMenu:\n1. Solitario\n2. Colla\n3. Salir\n");
             int opcion = escanearEntero("Elige una opcion: ");
             switch (opcion) {
+                /*SI ELIGE ESTA OPCIÓN, SE PIDE EL AÑO DEL SORTEO Y SE COMPRUEBA SI EXISTE 
+                SI ES ASI, SE ACTUALIZAN LOS PRERMIOS Y SE COMPRUEBA SI EL NUMERO COINCIDE CON ALGUN PREMIO*/
                 case 1 -> {
                     int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
                     if (ExisteAnyo(String.valueOf(anyo))) {
@@ -640,6 +761,10 @@ public class ProyectoNavidad {
                         System.out.println("Anyo no existe tt");
                     }
                 }
+                /*SI ELIGE ESTA OPCIÓN, SE COMPRUEBA SI HAY UN FICHERO DE COLLAS EXISTENTE, SI NO EXISTE SE PIDE EL NOMBRE DE LA COLLA
+                Y SE CREA UN NUEVO FICHERO DE COLLAS CON UNA MATRIZ VACIA SI EXISTE SE ACTUALIZA LA MATRIZ CON LOS DATOS EXISTENTES
+                A CONTINUACIÓN MUESTRA EL MENU DE LAS COLLAS QUE PERMITE REALIZAR VARIAS OPERACIONES COMO AÑADIR O ELIMINAR MIEMBRO DE LA COLLA 
+                ADEMAS DE COMPROBAR SI LA COLLA HA GANDO ALGUN PREMIO*/
                 case 2 -> {
                     if (comprobarFicheroColla()) {
                         nombreCollas = new String[1];
@@ -660,8 +785,16 @@ public class ProyectoNavidad {
             }
         }
     }
+    /**
+     * ESCRIBIR LOS NOMBRES EN EL FICHERO
+     *
+     * ESTA FUNCIÓN SE ENCARGA DE ESCRIBUR LOS NOMBRES EN UN ARCHIVO BINARIOS
+     * @param nCollas, RECIBE LOS NOMBRES DE LAS COLLAS
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static void escribirNombresFichero(String [] nCollas) throws FileNotFoundException, IOException{
-        
+
         File f = new File(RUTA + "colla2" + EXTENSION_BIN);
         if(!f.exists()){
             f.createNewFile();
@@ -670,11 +803,20 @@ public class ProyectoNavidad {
         DataOutputStream dos = new DataOutputStream(fos);
         for (int i = 0; i < nCollas.length; i++) {
             dos.writeUTF(nCollas[i]);
-            
-        }
-        
-    }
 
+        }
+
+    }
+    /**
+     * MENU DE COLLAS
+     *
+     * ESTA FUNCIÓN NOS MUESTRA LAS DIFERENTES OPCIONES PARA LAS COLLAS
+     * @param matriuCollas, RECIBE LA MATRIZ DE LA COLLAS
+     * @param nombreCollas, RECIBE EL NOMBRE DE LAS COLLAS PARA LA COMPROBACIÓN
+     * @param premiosGordos, RECIBE EL VECTOS DE PREMIOSGORDOS PARA COMPROBAR LOS NUMEROS GANADORES
+     * @param premios1000,RECIBE EL VECTOS DE PREMIOS1000 PARA COMPROBAR LOS NUMEROS GANADORES
+     * @throws IOException
+     */
     public static void menuCollas(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000) throws IOException {
 
         boolean salir = false;
@@ -682,17 +824,21 @@ public class ProyectoNavidad {
             System.out.print("\nMenu collas:\n1. Crear colla\n2. Añadir persona a colla\n3. Comprobar numeros colla\n4. Printear collas\n5. Salir\n");
             int opcion = escanearEntero("Elige una opcion: ");
             switch (opcion) {
+                /*ESTA OPCIÓN PERMITE AL USUARIO CREAR UNA COLLA NUEVA, AÑADIENDO UNA MATRIZ NUEVA
+                Y UN NOMBRE DE LA COLLA AL ARCHIVO BINARIO*/
                 case 1 -> {
                     matriuCollas = añadirColla(matriuCollas);
                     nombreCollas = añadirNombreCollas(nombreCollas);
                     escribirCollasBinario(matriuCollas);
                     escribirNombresFichero(nombreCollas);
                 }
+                /*ESTA OPCIÓN PERMITE AL USUARIO AÑADOR UNA NUEVA PERSONA A UNA COLLA EXISTENTE,
+                SELECCIONANDO LA COLLA POR SU NOMBRE*/
                 case 2 -> {
                     matriuCollas = añadirPersonaAColla(matriuCollas, menuCollasNoms(nombreCollas) - 1);
                     escribirCollasBinario(matriuCollas);
                 }
-
+                /*ESTA OPCIÓN PERMITE AL USUARIO COMPROBAR SI LA COLLA SELECCIONADA HA GANADO ALGÚN PREMIO EN UN AÑO DETERMINADO*/
                 case 3 -> {
                     anyosExistentes();
                     int anyo = escanearEntero("Dime que anyo de loteria quieres: ");
@@ -704,8 +850,10 @@ public class ProyectoNavidad {
                         System.out.println("Anyo no existe tt");
                     }
                 }
+                /*ESTA OPCIÓN PERMITE AL USUARIO IMPRIMIR TODAS LAS COLLAS EXISTENTES EN EL ARCHIVO BINARIOS*/
                 case 4 ->
                     System.out.println(formatearGrupo(matriuCollas));
+                /*ESTA OPCIÓN PERMITE AL USUARIO SALIR DEL MENU*/
                 case 5 ->
                     salir = true;
                 default ->
@@ -713,7 +861,12 @@ public class ProyectoNavidad {
             }
         }
     }
-
+    /**
+     * PEDIR NOMBRE
+     *
+     * FUNCIÓN QUE PIDE EL NOMBRE DE LA COLLA
+     * @return nombreColla, DEVUELVE EL NOMBRE INTRODUCIDO
+     */
     public static String pedirNombre() {
         String nombreColla;
         boolean salir = false;
@@ -734,7 +887,12 @@ public class ProyectoNavidad {
 
         return nombreColla;
     }
-
+    /**
+     *
+     * @param numNombres
+     * @return
+     * @throws IOException
+     */
     public static String[] nCollas(int numNombres) throws IOException {
         String[] nombres = new String[numNombres];
         try {
@@ -742,7 +900,7 @@ public class ProyectoNavidad {
             RandomAccessFile raf = new RandomAccessFile(RUTA + "colla2" + EXTENSION_BIN, "r");
             int aux = 0;
             for (int pos = 0; pos < raf.length(); pos += 12) {
-                raf.seek(pos);    
+                raf.seek(pos);
                 String nombre = raf.readUTF();
                 nombres[aux] = nombre;
                 aux++;
