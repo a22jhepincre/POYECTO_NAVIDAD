@@ -1,0 +1,53 @@
+1. Realizar Sorteo.
+2. Comprobar mi numero.
+3. Salir.
+Selecciona una opcion: 
+Que año? 
+El año ya existe brother
+No hay sorteos archivados.
+Opcion invalida. Prueba de nuevo
+Tiene que ser entero.
+Premio Gordo: 4.000.000 --> 
+Segundo premio: 1.250.000 --> 
+Tercer Premio: 500.000 --> 
+Cuarto premio : 200.000 --> 
+Quinto premio : 60.000 --> 
+Tiene que tener menos de quince caracteres.
+Escribe tu numero de loteria: 
+Escribe la cantidad de dinero que quieres aportar [5-60]: 
+¡Tiene que estar entre 5-60 y ser multiplo de 5!
+Introduce tu numero para comprobarlo: 
+No has ganado nada
+Cantidad: 
+No has ganado nada
+| AÑO        | MIEMBROS | DINERO |     PREMIO    |
+| NOMBRE          | NUMERO | DINERO |   PREMIO   |
+Menu:
+1. Solitario: 
+2. Colla: 
+3. Salir: 
+Elige una opcion: 
+Dime que año de loteria quieres: 
+Año no existe tt
+Nombre colla: 
+Escoge una opcion: 
+Menu collas:
+1. Crear colla: 
+2. Añadir persona a colla: 
+3. Comprobar numeros colla: 
+4. Printear collas: 
+5. Salir
+"Elige una opcion: 
+Dime que año de loteria quieres: 
+Año no existe tt
+Escoge una opcion
+Nombre colla: 
+Elige una opcion: 
+Cuantas personas sois en tu colla? 
+Directorio creado
+Error al crear directorio
+Nombre: 
+Selecciona tu idioma: 
+Años: 
+Se han importado las collas y los nombres de las collas.
+Debe de ser de menos de diez caraceteres.

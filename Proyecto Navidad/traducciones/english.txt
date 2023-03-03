@@ -1,0 +1,53 @@
+1. Make the draw.
+2. Check my number.
+3. Exit
+Select an option:
+What year?
+The year already exists brother
+There are no archived draws.
+Invalid option. Try again
+It has to be a whole number.
+Jackpot: 4,000,000 -->
+Second prize: 1,250,000 -->
+Third Prize: 500,000 -->
+Fourth prize: 200,000 -->
+Fifth prize: 60,000 -->
+It has to be less than fifteen characters.
+Write your lottery number: 
+Write the amount of money you want to contribute [5-60]: 
+It has to be between 5-60 and be a multiple of 5!
+Enter your number to check: 
+you haven't won anything
+Amount: 
+you haven't won anything
+| YEAR       | MEMBERS  | MONEY  |     PRIZE     |
+| NAME            | NUMBER | MONEY  |   PRIZE    |
+Menu:
+1. Alone
+2. Group
+3. Exit
+Choose an option: 
+What year of lottery do you want:
+Year does not exist tt
+Group name:
+Choose an option:
+Menu lists:
+1. Create group
+2. Add person to group
+3. Check group numbers
+4. Print groups
+5. Exit
+"Choose an option: 
+What year of lottery do you want:
+Year does not exist tt
+Choose an option: 
+Group name:
+Choose an option:
+How many people are in your group?
+Directory created
+Error creating directory
+Name: 
+Select your language: 
+Years: 
+Groups and groups names have been imported.
+It has to be less than ten characters.

@@ -1,0 +1,53 @@
+1. Realitzar sorteig.
+2. Comprovar el meu número.
+3. Sortir
+Selecciona una opció: 
+Quin any? 
+L'any ja existeix brother
+No hi ha sortejos arxivats.
+Opció invàlida. Prova de nou
+Ha de ser sencer.
+Premi Gros: 4.000.000 -->
+Segon premi: 1.250.000 -->
+Tercer Premi: 500.000 -->
+Quart premi : 200.000 -->
+Cinquè premi: 60.000 -->
+Ha de tenir menys de quinze caràcters.
+Escriu el teu número de loteria: 
+Escriu la quantitat de diners que vols aportar [5-60]: 
+Ha d'estar entre 5-60 i ser mulple de 5!
+Introdueix el teu número per comprovar-ho: 
+No has guanyat res
+Quantitat: 
+No has guanyat res
+| ANY        | MEMBRES  | DINERS |     PREMI     |
+| NOM             | NUMERO | DINERS |   PREMI    |
+Menu:
+1. Solitari
+2. Colla
+3. Sortir
+Tria una opció:
+Digues-me que any de loteria vols: 
+Any no existeix tt
+Nom colla: 
+Escull una opció: 
+Menu colles:
+1. Crear colla
+2. Afegir persona a colla
+3. Comprovar números colla
+4. Printar colles
+5. Sortir
+"Escull una opció: 
+Digues-me que any de loteria vols: 
+Any no existeix tt
+Escull una opció: 
+Nom colla: 
+Tria una opció: 
+Quantes persones sou a la teva colla?
+Directori creat
+Error al crear el directori
+Nom: 
+Selecciona el teu llenguatge: 
+Anys: 
+Les colles y els noms de les colles han sigut importades.
+Ha de ser de menys de 10 caracters.
