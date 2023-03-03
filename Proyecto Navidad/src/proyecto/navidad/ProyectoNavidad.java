@@ -98,6 +98,15 @@ public class ProyectoNavidad {
         return idioma;
     }
 
+    public static void opcionsMenu(String idioma) throws IOException {
+        print(idioma, "1. Realizar Sorteo.");
+        System.out.println();
+        print(idioma, "2. Comprobar mi numero.");
+        System.out.println();
+        print(idioma, "3. Salir.");
+        System.out.println();
+    }
+
     /**
      * MENU COMPUESTO DE TRES OPCIONES
      *
@@ -112,13 +121,7 @@ public class ProyectoNavidad {
         boolean salir = false;
         // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCIONES INVALIDAS
         do {
-            print(idioma, "1. Realizar Sorteo.");
-            System.out.println();
-            print(idioma, "2. Comprobar mi numero.");
-            System.out.println();
-            print(idioma, "3. Salir.");
-            System.out.println();
-
+            opcionsMenu(idioma);
             int opcion = escanearEntero("Selecciona una opcion: ", idioma);
             // UN "switch" PARA TRATAR LAS DIFERENTES OPCIONES
             switch (opcion) {
@@ -140,7 +143,8 @@ public class ProyectoNavidad {
                 }
                 case 2 -> {
                     if (verificarFicheroAnyos()) {
-                        print(idioma, "No hay sorteos archivados.");System.out.println();
+                        print(idioma, "No hay sorteos archivados.");
+                        System.out.println();
                     } else {
                         Persona[][] matriuCollas = null;
                         String[] nombreCollas = null;
@@ -1315,12 +1319,13 @@ public class ProyectoNavidad {
 
     }
 
-    public static void crearFicheroAnyo() throws IOException{
+    public static void crearFicheroAnyo() throws IOException {
         File f = new File(RUTA + NOM_FICHERO_ANYOS + EXTENSION_TXT);
         if (!f.exists()) {
             f.createNewFile();
         }
     }
+
     /**
      * VERRIFICAR AÑOS
      *
@@ -1442,7 +1447,6 @@ public class ProyectoNavidad {
         int fila = 0;
         int pos = 0;
         boolean salir = false;
-        
 
         raf.seek(pos);
         while (!salir) {
