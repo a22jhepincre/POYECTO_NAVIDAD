@@ -3,8 +3,6 @@ package proyecto.navidad;
 import java.io.*;
 import java.util.Scanner;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ProyectoNavidad {
 
@@ -494,7 +492,9 @@ public class ProyectoNavidad {
 
         return cantidad;
     }
-
+    /**
+     * CREAMOS LA CLASE PERSONA CON SUS RESPECTIVOS ATRIBUTOS, NOMBRE, NÚMERO Y DINERO
+     */
     public static class Persona {
 
         String nombre;
@@ -695,6 +695,7 @@ public class ProyectoNavidad {
      * @param linea,RECIBE UNA CADENA DE TEXTO A ESCRIBIR
      * @param nombreFichero, NOMBRE DEL FICHERO EN EL QUE SE DEBE ESCRIBIR LA
      * LINEA
+     * @throws java.io.FileNotFoundException
      */
     public static void escribirFicheroBinario(String linea, String nombreFichero) throws FileNotFoundException, IOException {
         FileOutputStream fos = null;
@@ -823,7 +824,12 @@ public class ProyectoNavidad {
         int resultado = (int) raf.length() / 12;
         return resultado;
     }
-
+    /**
+     * FUNCIÓN PARA VISUALIZAR EL MENÚ Y ELEGIR CUALQUIERA DE LAS OPCIONES PARA DESPUÉS COMPROBAR UN NÚMERO.
+     * LAS OPCIONES SON EN SOLITARIO O EN COLLA
+     * @param idioma
+     * @throws IOException 
+     */
     public static void opcionesMenuCollasSolitario(String idioma) throws IOException {
         print(idioma, "Menu:");
         System.out.println();
@@ -921,7 +927,12 @@ public class ProyectoNavidad {
         }
 
     }
-
+    /**
+     * MENÚ COLLAS
+     * FUNCIÓN PARA MOSTRAR EL MENÚ DISPONIBLE DE LAS COLLAS.
+     * @param idioma EL IDIOMA ELEGIDO
+     * @throws IOException 
+     */
     public static void opcionsMenuCollas(String idioma) throws IOException {
         print(idioma, "Menu collas:");
         System.out.println();
@@ -1030,10 +1041,11 @@ public class ProyectoNavidad {
 
     /**
      * ACTUALIZAR EL NOMBRE DE LAS COLLAS
-     *
-     *
-     * @param numNombres
-     * @return
+     * 
+     * FUNCIÓN QUE RECIBE COMO PARÁMETRO UNA CANTIDAD DE NOMBRES
+     * ACCEDE A UN FICHERO DE ACCESO DIRECTO, LEE LA TABLA DE NOMBRES Y LA DEVUELVE ACTUALIZADA.
+     * @param numNombres CANTIDAD DE NOMBRES
+     * @return DEVUELVE EL NOMBRE DE LA COLLA ACTUALIZADO
      * @throws java.io.FileNotFoundException
      * @throws IOException
      */
@@ -1050,7 +1062,6 @@ public class ProyectoNavidad {
         }
 
         return nombres;
-
     }
 
     /**
@@ -1099,10 +1110,10 @@ public class ProyectoNavidad {
      *
      * FUNCIÓN QUE AÑADE A UNA PERSONA A UNA COLLA CREADA
      *
-     * @param colla
-     * @param fila
-     * @param idioma
-     * @return
+     * @param colla REGISTRO DE COLLA
+     * @param fila FILA DE LA MATRIZ DE REGISTRO
+     * @param idioma UN IDIOMA, PUEDE SER CUALQUIERA DE LOS 3 SELECCIONABLES
+     * @return DEVUELVE EL REGISTRO CON LA PERSONA INGRESADA
      * @throws IOException
      */
     public static Persona[][] añadirPersonaAColla(Persona[][] colla, int fila, String idioma) throws IOException {
@@ -1318,7 +1329,12 @@ public class ProyectoNavidad {
         }
 
     }
-
+    /**
+     * CREAR FICHERO DE AÑO
+     * 
+     * FUNCIÓN QUE COMPRUEBA SI UN FICHERO DE UN AÑO EN ESPECÍFICO EXISTE. SI NO EXISTE, LO CREA.
+     * @throws IOException 
+     */
     public static void crearFicheroAnyo() throws IOException {
         File f = new File(RUTA + NOM_FICHERO_ANYOS + EXTENSION_TXT);
         if (!f.exists()) {
@@ -1327,7 +1343,7 @@ public class ProyectoNavidad {
     }
 
     /**
-     * VERRIFICAR AÑOS
+     * VERIFICAR AÑOS
      *
      * ESTA FUNCIÓN COMPRUEBA LOS AÑOS EXISTENTES Y SI ESTAN VACIOS, SI NO
      * EXISTE EL AÑO INTRODUCIDO CREA UN NUEVO FICHERO CON ESE AÑO DE SORTEO
@@ -1354,7 +1370,11 @@ public class ProyectoNavidad {
     }
 
     /**
-     *
+     * FUNCIÓN CONTARFILAS
+     * 
+     * ACCEDEMOS A NUESTRO FICHERO DE COLLA DE MANERA DIRECTA,LEEMOS LÍNEA A LÍNEA
+     * Y VAMOS CONTANDO LAS FILAS CADA VEZ QUE HAGAMOS UN SALTO DE LÍNEA.
+     * DE ESTA MANERA SABEMOS CUÁNTOS REGISTROS TENEMOS.
      * @return @throws FileNotFoundException
      * @throws IOException
      */
@@ -1433,9 +1453,13 @@ public class ProyectoNavidad {
     }
 
     /**
-     *
+     * ACTUALIZAR MATRIZ DE COLLAS
+     * 
+     * FUNCIÓN A LA QUE SE LE PASA COMO PARÁMETRO LAS FILAS DE LA MATRIZ DE COLLAS, SE ACCEDE
+     * AL FICHERO DE MANERA DIRECTA (RANDOM ACCESS FILE) Y COMPRUEBA SI EXISTE DENTRO DEL FICHERO, ACTUALIZÁNDOLO EN CASO DE NO EXISTIR.
+     * CADA REGISTRO OCUPA UNA LÍNEA DEL FICHERO, Y CADA REGISTRO OCUPA 25 BYTES EN UN FICHERO BINARIO.
      * @param filas
-     * @return
+     * @return DEVUELVE LA MATRIZ DE REGISTRO ACTUALIZADA
      * @throws FileNotFoundException
      * @throws IOException
      */
