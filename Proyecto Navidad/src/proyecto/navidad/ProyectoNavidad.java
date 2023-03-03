@@ -1504,7 +1504,16 @@ public class ProyectoNavidad {
 
         return matriuCollas;
     }
-
+    
+    /**
+    * CONTADOR DE LINEAS
+    *
+    * ESTA FUNCIÓN BUSCA UNA LINEA ESPECIFICA EN LOS ARCHIVOS DE TEXTO DE LOS IDIOMAS
+    *
+    * @param idioma, RECIBE EL IDIOMA ESPECIFICADO POR EL USUARIO
+    * @param linea, RECIBE LA LINEA DE TEXTO
+    * @return cont, DEVUELVE EL NÚMERO DE LÍNEAS QUE SE HAN LEÍDO DESDE EL ARCHIVO HASTA QUE SE HA ENCONTRADO LA LÍNEA QUE SE BUSCABA 
+    */
     public static int contador(String idioma, String linea) throws FileNotFoundException, IOException {
         int cont = 0;
         FileReader reader = null;
