@@ -10,6 +10,9 @@ public class ProyectoNavidad {
 
     static final String RUTA = "sorteos/";
     static final String RUTA_IDIOMAS = "traducciones/";
+    static final String NOM_FICHERO_COLLAS = "collas";
+    static final String NOM_FICHERO_NOMBRE_COLLAS = "colla2";
+    static final String NOM_FICHERO_ANYOS = "anyo";
     static final String ANSI_RED = "\033[0;31m";
     static final String ANSI_GREEN = "\u001B[32m";
     static final String ANSI_RESET = "\u001B[0m";
@@ -69,7 +72,7 @@ public class ProyectoNavidad {
             System.out.println("1. Spanish");
             System.out.println("2. Catalan");
             System.out.println("3. English");
-            
+
             opcion = escanearEntero("Selecciona tu idioma: ", "english");
 
             switch (opcion) {
@@ -105,6 +108,7 @@ public class ProyectoNavidad {
      */
     public static void menu(int[] premiosGordos, int[] premios1000, String idioma) throws IOException {
         crearDirectorio();
+        crearFicheroAnyo();
         boolean salir = false;
         // MEDIANTE UN BUCLE "DO-WHILE" CONTROLAMOS LAS OPCIONES INVALIDAS
         do {
@@ -136,7 +140,7 @@ public class ProyectoNavidad {
                 }
                 case 2 -> {
                     if (verificarFicheroAnyos()) {
-                        print(idioma, "No hay sorteos archivados.");
+                        print(idioma, "No hay sorteos archivados.");System.out.println();
                     } else {
                         Persona[][] matriuCollas = null;
                         String[] nombreCollas = null;
@@ -167,7 +171,8 @@ public class ProyectoNavidad {
         print(idioma, mtj);
         while (!s.hasNextInt()) {
             s.next();
-            print(idioma, "Tiene que ser entero.");System.out.println();
+            print(idioma, "Tiene que ser entero.");
+            System.out.println();
             print(idioma, mtj);
         }
         num = s.nextInt();
@@ -253,7 +258,7 @@ public class ProyectoNavidad {
             }
             if (i == 2) {
                 System.out.print(ANSI_GREEN);
-                print(idioma, "Tercer Premio: 500.000 -->  ");
+                print(idioma, "Tercer Premio: 500.000 --> ");
                 System.out.println(" " + String.format("%05d", premiosGordos[i]) + ANSI_RESET);
             }
             if (i == 3) {
@@ -505,13 +510,14 @@ public class ProyectoNavidad {
      */
     public static Persona pedirPersona(String idioma) throws IOException {
         Persona p = new Persona();
+        final int MAX_CAR = 15;
         boolean salir = false;
         do {
             print(idioma, "Nombre: ");
             p.nombre = s.next();
-            if (p.nombre.length() < 15) {
+            if (p.nombre.length() < MAX_CAR) {
                 salir = true;
-                for (int i = 15 - p.nombre.length(); i > 0; i--) {
+                for (int i = MAX_CAR - p.nombre.length(); i > 0; i--) {
                     p.nombre += " ";
                 }
             } else {
@@ -520,9 +526,11 @@ public class ProyectoNavidad {
         } while (!salir);
         p.numero = escanearEntero("Escribe tu numero de loteria: ", idioma);
         salir = false;
+        final int MIN_DINERO = 5;
+        final int MAX_DINERO = 60;
         do {
             p.dinero = escanearEntero("Escribe la cantidad de dinero que quieres aportar [5-60]: ", idioma);
-            if (p.dinero >= 5 && p.dinero <= 60 && p.dinero % 5 == 0) {
+            if (p.dinero >= MIN_DINERO && p.dinero <= MAX_DINERO && p.dinero % MIN_DINERO == 0) {
                 salir = true;
             } else {
                 print(idioma, "¡Tiene que estar entre 5-60 y ser multiplo de 5!");
@@ -592,20 +600,22 @@ public class ProyectoNavidad {
         int cantidad = 0;
 
         for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
-            cantidad += comprobarPremioGordo(premiosGordos, matriuCollas[colla - 1][i].numero);
-            if (cantidad == 0) {
-                cantidad += comprobarAproximaciones(premiosGordos, matriuCollas[colla - 1][i].numero);
+            if (matriuCollas[colla - 1][i] != null) {
+                cantidad += comprobarPremioGordo(premiosGordos, matriuCollas[colla - 1][i].numero);
                 if (cantidad == 0) {
-                    cantidad += comprobarDosUltimos(premiosGordos, matriuCollas[colla - 1][i].numero);
+                    cantidad += comprobarAproximaciones(premiosGordos, matriuCollas[colla - 1][i].numero);
                     if (cantidad == 0) {
-                        cantidad += comprobarUltimo(premiosGordos, matriuCollas[colla - 1][i].numero);
+                        cantidad += comprobarDosUltimos(premiosGordos, matriuCollas[colla - 1][i].numero);
                         if (cantidad == 0) {
-                            cantidad += comprobarCentena(premiosGordos, matriuCollas[colla - 1][i].numero);
+                            cantidad += comprobarUltimo(premiosGordos, matriuCollas[colla - 1][i].numero);
+                            if (cantidad == 0) {
+                                cantidad += comprobarCentena(premiosGordos, matriuCollas[colla - 1][i].numero);
+                            }
                         }
                     }
                 }
+                cantidad += comprobarPremioMil(premios1000, matriuCollas[colla - 1][i].numero);
             }
-            cantidad += comprobarPremioMil(premios1000, matriuCollas[colla - 1][i].numero);
 
         }
 
@@ -616,18 +626,36 @@ public class ProyectoNavidad {
             /*SE MUESTRA UNA TABLA CON LA INFORMACIÓN DE LOS MIEMBROS DE LA COLLA Y LOS PREMIOS, 
           ADEMAS DEL AÑO, EL NUMERO DE CADA MIEMBRO Y EL DINERO APORTADO*/
         } else {
-            print(idioma, "| ANY | MEMBRES | DINERS | PREMI |");
+            System.out.println("+================================================+");
+            print(idioma, "| AÑO        | MIEMBROS | DINERO |     PREMIO    |");
+            System.out.println();
+            System.out.println("+================================================+");
+
             int dineroTot = 0;
             for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
-                dineroTot += matriuCollas[colla - 1][i].dinero;
+                if (matriuCollas[colla - 1][i] != null) {
+                    dineroTot += matriuCollas[colla - 1][i].dinero;
+                }
             }
-            System.out.println("| " + anyoComprobacion + " | " + matriuCollas[colla - 1].length + " | " + dineroTot + " | " + cantidad + " |");
-            print(idioma, "| NOMBRE         | NUMERO | DINERO | PREMI |");
+            String dino = String.format("%-4s", String.valueOf(dineroTot));
+            String anyo = String.format("%-10s", String.valueOf(anyoComprobacion));
+            String numMiembros = String.format("%-4s", String.valueOf(matriuCollas[colla - 1].length));
+
+            System.out.println("| " + anyo + String.format("%-7s", " | ") + numMiembros + String.format("%-5s", " | ") + dino + " | " + String.format("%13s", String.valueOf(cantidad)) + " |");
+            System.out.println("+================================================+\n");
+
+            System.out.println("+================================================+");
+            print(idioma, "| NOMBRE          | NUMERO | DINERO |   PREMIO   |");
+            System.out.println();
+            System.out.println("+================================================+");
             for (int i = 0; i < matriuCollas[colla - 1].length; i++) {
-                double dineroRep = (double) matriuCollas[colla - 1][i].dinero / dineroTot;
-                dineroRep *= cantidad;
-                System.out.println("| " + matriuCollas[colla - 1][i].nombre + " | " + matriuCollas[colla - 1][i].numero + " | " + matriuCollas[colla - 1][i].dinero + " | " + (String.format("%.2f", dineroRep)));
+                if (matriuCollas[colla - 1][i] != null) {
+                    double dineroRep = (double) matriuCollas[colla - 1][i].dinero / dineroTot;
+                    dineroRep *= cantidad;
+                    System.out.println("| " + matriuCollas[colla - 1][i].nombre + " | " + matriuCollas[colla - 1][i].numero + String.format("%-6s", "  | ") + String.format("%-4s", String.valueOf(matriuCollas[colla - 1][i].dinero)) + " | " + String.format("%10s", (String.format("%.2f", dineroRep))) + " |");
+                }
             }
+            System.out.println("+================================================+");
         }
     }
 
@@ -640,29 +668,18 @@ public class ProyectoNavidad {
      * @param linea,RECIBE UNA CADENA DE TEXTO A ESCRIBIR
      * @param nombreFichero, NOMBRE DEL FICHERO EN EL QUE SE DEBE ESCRIBIR LA
      * LINEA
+     * @throws java.io.IOException
      */
-    public static void escribirFicheroTexto(String linea, String nombreFichero) {
+    public static void escribirFicheroTexto(String linea, String nombreFichero) throws IOException {
         FileWriter fw = null;
-        try {
-            File f = new File(RUTA + nombreFichero + EXTENSION_TXT);
-            fw = new FileWriter(f, true);
-            PrintWriter pw = new PrintWriter(fw);
-            pw.println(linea);
-            pw.flush();
-            pw.close();
+        File f = new File(RUTA + nombreFichero + EXTENSION_TXT);
+        fw = new FileWriter(f, true);
+        PrintWriter pw = new PrintWriter(fw);
+        pw.println(linea);
+        pw.flush();
+        pw.close();
+        fw.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(ProyectoNavidad.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fw.close();
-
-            } catch (IOException ex) {
-                Logger.getLogger(ProyectoNavidad.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 
     /**
@@ -675,28 +692,15 @@ public class ProyectoNavidad {
      * @param nombreFichero, NOMBRE DEL FICHERO EN EL QUE SE DEBE ESCRIBIR LA
      * LINEA
      */
-    public static void escribirFicheroBinario(String linea, String nombreFichero) {
+    public static void escribirFicheroBinario(String linea, String nombreFichero) throws FileNotFoundException, IOException {
         FileOutputStream fos = null;
-        try {
-            File f = new File(RUTA + nombreFichero + EXTENSION_BIN);
-            fos = new FileOutputStream(f, true);
-            DataOutputStream dos = new DataOutputStream(fos);
-            dos.writeUTF(linea);
-            dos.flush();
-            dos.close();
-
-        } catch (IOException ex) {
-            Logger.getLogger(ProyectoNavidad.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fos.close();
-
-            } catch (IOException ex) {
-                Logger.getLogger(ProyectoNavidad.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        File f = new File(RUTA + nombreFichero + EXTENSION_BIN);
+        fos = new FileOutputStream(f, true);
+        DataOutputStream dos = new DataOutputStream(fos);
+        dos.writeUTF(linea);
+        dos.flush();
+        dos.close();
+        fos.close();
     }
 
     /**
@@ -706,42 +710,32 @@ public class ProyectoNavidad {
      * PERSONA EN UN FICHERO BINARIO
      *
      * @param matriuCollas, RECIBE LA MATRIZ PARA INTRODUCIR LOS DATOS
+     * @throws java.io.IOException
      */
-    public static void escribirCollasBinario(Persona[][] matriuCollas) {
+    public static void escribirCollasBinario(Persona[][] matriuCollas) throws IOException {
         FileOutputStream fos = null;
-        try {
-            File f = new File(RUTA + "collas" + EXTENSION_BIN);
-            //SE CREA EL FICHERO POR SI NO EXISTE
-            if (!f.exists()) {
-                f.createNewFile();
-            }
-            fos = new FileOutputStream(f, false);
-            DataOutputStream dos = new DataOutputStream(fos);
-            //SI EL OBJETO DE LA POSICION DE LA MATRIZ NO ES NULL, SE ESCRIBEN LOS DATOS DE LAS PERSONAS
-            for (int i = 0; i < matriuCollas.length; i++) {
-                for (int j = 0; j < matriuCollas[0].length; j++) {
-                    if (matriuCollas[i][j] != null) {
-                        dos.writeUTF(matriuCollas[i][j].nombre);
-                        dos.writeInt(matriuCollas[i][j].numero);
-                        dos.writeInt(matriuCollas[i][j].dinero);
-                    }
-
-                }
-                // SE REALIZA UN SALTO DE LINEA PARA SEPARLAS EN EL FICHERO
-                dos.writeUTF("\n");
-            }
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ProyectoNavidad.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        File f = new File(RUTA + "collas" + EXTENSION_BIN);
+        //SE CREA EL FICHERO POR SI NO EXISTE
+        if (!f.exists()) {
+            f.createNewFile();
         }
+        fos = new FileOutputStream(f, false);
+        DataOutputStream dos = new DataOutputStream(fos);
+        //SI EL OBJETO DE LA POSICION DE LA MATRIZ NO ES NULL, SE ESCRIBEN LOS DATOS DE LAS PERSONAS
+        for (int i = 0; i < matriuCollas.length; i++) {
+            for (int j = 0; j < matriuCollas[0].length; j++) {
+                if (matriuCollas[i][j] != null) {
+                    dos.writeUTF(matriuCollas[i][j].nombre);
+                    dos.writeInt(matriuCollas[i][j].numero);
+                    dos.writeInt(matriuCollas[i][j].dinero);
+                }
+
+            }
+            // SE REALIZA UN SALTO DE LINEA PARA SEPARLAS EN EL FICHERO
+            dos.writeUTF("\n");
+        }
+
+        fos.close();
 
     }
 
@@ -758,7 +752,7 @@ public class ProyectoNavidad {
     public static String formatearCollas(Persona[][] p, String[] nombresCollas) {
         String result = "";
         for (int i = 0; i < p.length; i++) {
-            result += (nombresCollas[i].toUpperCase()) +"\n";
+            result += (nombresCollas[i].toUpperCase()) + "\n";
             for (int j = 0; j < p[0].length; j++) {
                 if (p[i][j] != null) {
                     result += p[i][j].nombre + " " + p[i][j].numero + " " + p[i][j].dinero + "\n";
@@ -798,7 +792,7 @@ public class ProyectoNavidad {
      * @throws IOException
      */
     public static boolean comprobarFicheroColla() throws IOException {
-        File f = new File(RUTA + "collas" + EXTENSION_BIN);
+        File f = new File(RUTA + NOM_FICHERO_COLLAS + EXTENSION_BIN);
         boolean vacio = false;
         if (!f.exists() || f.length() == 0) {
             f.createNewFile();
@@ -819,11 +813,22 @@ public class ProyectoNavidad {
      * @throws IOException
      */
     public static int ContadorNombres() throws FileNotFoundException, IOException {
-        RandomAccessFile raf = new RandomAccessFile(RUTA + "colla2" + EXTENSION_BIN, "rw");
+        RandomAccessFile raf = new RandomAccessFile(RUTA + NOM_FICHERO_NOMBRE_COLLAS + EXTENSION_BIN, "rw");
         /*DIVIDIMOS LA LONGITUD POR 12, YA QUE CADA REGISTRO EN EL ARCHIVO OCUPA 12 BYTES 
         (4 bytes para el nombre y 2 bytes para cada uno de los enteros)*/
         int resultado = (int) raf.length() / 12;
         return resultado;
+    }
+
+    public static void opcionesMenuCollasSolitario(String idioma) throws IOException {
+        print(idioma, "Menu:");
+        System.out.println();
+        print(idioma, "1. Solitario: ");
+        System.out.println();
+        print(idioma, "2. Colla: ");
+        System.out.println();
+        print(idioma, "3. Salir: ");
+        System.out.println();
     }
 
     /**
@@ -845,15 +850,7 @@ public class ProyectoNavidad {
 
         boolean salir = false;
         while (!salir) {
-            print(idioma, "Menu:");
-            System.out.println();
-            print(idioma, "1. Solitario: ");
-            System.out.println();
-            print(idioma, "2. Colla: ");
-            System.out.println();
-            print(idioma, "3. Salir: ");
-            System.out.println();
-
+            opcionesMenuCollasSolitario(idioma);
             int opcion = escanearEntero("Elige una opcion: ", idioma);
             switch (opcion) {
                 /*SI ELIGE ESTA OPCIÓN, SE PIDE EL AÑO DEL SORTEO Y SE COMPRUEBA SI EXISTE 
@@ -884,6 +881,8 @@ public class ProyectoNavidad {
                     } else {
                         matriuCollas = actualizarMatriuCollas(contadFilas());
                         nombreCollas = actualizarNombreCollas(ContadorNombres());
+                        print(idioma, "Se han importado las collas y los nombres de las collas.");
+                        System.out.println();
                     }
                     menuCollas(matriuCollas, nombreCollas, premiosGordos, premios1000, idioma);
                 }
@@ -906,7 +905,7 @@ public class ProyectoNavidad {
      */
     public static void escribirNombresFichero(String[] nCollas) throws FileNotFoundException, IOException {
 
-        File f = new File(RUTA + "colla2" + EXTENSION_BIN);
+        File f = new File(RUTA + NOM_FICHERO_NOMBRE_COLLAS + EXTENSION_BIN);
         if (!f.exists()) {
             f.createNewFile();
         }
@@ -917,6 +916,21 @@ public class ProyectoNavidad {
 
         }
 
+    }
+
+    public static void opcionsMenuCollas(String idioma) throws IOException {
+        print(idioma, "Menu collas:");
+        System.out.println();
+        print(idioma, "1. Crear colla: ");
+        System.out.println();
+        print(idioma, "2. Añadir persona a colla: ");
+        System.out.println();
+        print(idioma, "3. Comprobar numeros colla: ");
+        System.out.println();
+        print(idioma, "4. Printear collas: ");
+        System.out.println();
+        print(idioma, "5. Salir");
+        System.out.println();
     }
 
     /**
@@ -937,18 +951,7 @@ public class ProyectoNavidad {
 
         boolean salir = false;
         while (!salir) {
-            print(idioma, "Menu collas:");
-            System.out.println();
-            print(idioma, "1. Crear colla: ");
-            System.out.println();
-            print(idioma, "2. Añadir persona a colla: ");
-            System.out.println();
-            print(idioma, "3. Comprobar numeros colla: ");
-            System.out.println();
-            print(idioma, "4. Printear collas: ");
-            System.out.println();
-            print(idioma, "5. Salir");
-            System.out.println();
+            opcionsMenuCollas(idioma);
             int opcion = escanearEntero("Elige una opcion: ", idioma);
             switch (opcion) {
                 /*ESTA OPCIÓN PERMITE AL USUARIO CREAR UNA COLLA NUEVA, AÑADIENDO UNA MATRIZ NUEVA
@@ -956,6 +959,7 @@ public class ProyectoNavidad {
                 case 1 -> {
                     matriuCollas = añadirColla(matriuCollas);
                     nombreCollas = añadirNombreCollas(nombreCollas, idioma);
+                    matriuCollas = añadirPersonaAColla(matriuCollas, nombreCollas.length - 1, idioma);
                     escribirCollasBinario(matriuCollas);
                     escribirNombresFichero(nombreCollas);
                 }
@@ -993,7 +997,7 @@ public class ProyectoNavidad {
      * PEDIR NOMBRE
      *
      * FUNCIÓN QUE PIDE EL NOMBRE DE LA COLLA
-     * 
+     *
      * @param idioma
      * @return nombreColla, DEVUELVE EL NOMBRE INTRODUCIDO
      * @throws java.io.IOException
@@ -1001,18 +1005,19 @@ public class ProyectoNavidad {
     public static String pedirNombre(String idioma) throws IOException {
         String nombreColla;
         boolean salir = false;
-
+        final int MAX_CAR = 10;
         do {
             print(idioma, "Nombre colla: ");
             nombreColla = s.next();
 
-            if (nombreColla.length() < 10) {
+            if (nombreColla.length() < MAX_CAR) {
                 salir = true;
-                for (int i = 10 - nombreColla.length(); i > 0; i--) {
+                for (int i = MAX_CAR - nombreColla.length(); i > 0; i--) {
                     nombreColla += " ";
                 }
             } else {
                 print(idioma, "Debe de ser de menos de diez caraceteres.");
+                System.out.println();
             }
         } while (!salir);
 
@@ -1020,26 +1025,24 @@ public class ProyectoNavidad {
     }
 
     /**
-     *ACTUALIZAR EL NOMBRE DE LAS COLLAS
-     * 
-     * 
+     * ACTUALIZAR EL NOMBRE DE LAS COLLAS
+     *
+     *
      * @param numNombres
      * @return
+     * @throws java.io.FileNotFoundException
      * @throws IOException
      */
     public static String[] actualizarNombreCollas(int numNombres) throws FileNotFoundException, IOException {
         String[] nombres = new String[numNombres];
-
-        RandomAccessFile raf = new RandomAccessFile(RUTA + "colla2" + EXTENSION_BIN, "r");
+        final int MAX_BYTE_REGISTRE = 12;
+        RandomAccessFile raf = new RandomAccessFile(RUTA + NOM_FICHERO_NOMBRE_COLLAS + EXTENSION_BIN, "r");
         int aux = 0;
-        for (int pos = 0; pos < raf.length(); pos += 12) {
+        for (int pos = 0; pos < raf.length(); pos += MAX_BYTE_REGISTRE) {
             raf.seek(pos);
             String nombre = raf.readUTF();
             nombres[aux] = nombre;
             aux++;
-        }
-        for (int i = 0; i < nombres.length; i++) {
-            System.out.println(nombres[i]);
         }
 
         return nombres;
@@ -1048,13 +1051,13 @@ public class ProyectoNavidad {
 
     /**
      * AÑADIR NOMBRE DE COLLAS
-     * 
+     *
      * FUNCION QUE SOLICITA EL NUEVO NOMBRE DE LAS COLLAS
-     * 
+     *
      * @param nCollas, RECIBE EL VECTOR DE LAS COLLAS
      * @param idioma, RECIBE EL IDIOMA SOLICITADO POR EL USUARIO
      * @return, DEVUELVE EL NUEVO NOMBRE DE LAS COLLAS
-     * @throws IOException 
+     * @throws IOException
      */
     public static String[] añadirNombreCollas(String[] nCollas, String idioma) throws IOException {
         String[] nuevoNomCollas = new String[nCollas.length + 1];
@@ -1069,13 +1072,15 @@ public class ProyectoNavidad {
 
     /**
      * MENU COLLAS
-     * 
-     * ESTA FUNCIÓN MUESTRA EL NUMERO DE COLLAS PARA QUE EL USUARIO ELIJA CON CUAL CONTINUAR
-     * 
-     * @param nombreCollas, RECIBE EL NOMBRE DE LAS COLLAS PARA POSTERIORMENTE MOSTRARLAS
+     *
+     * ESTA FUNCIÓN MUESTRA EL NUMERO DE COLLAS PARA QUE EL USUARIO ELIJA CON
+     * CUAL CONTINUAR
+     *
+     * @param nombreCollas, RECIBE EL NOMBRE DE LAS COLLAS PARA POSTERIORMENTE
+     * MOSTRARLAS
      * @param idioma, RECIBE EL IDIOMA SELECIONADO POR EL USUARIO
      * @return opcion, DEVUELVE LA OPCION SELCCIONADA POR EL USUAIRIO
-     * @throws IOException 
+     * @throws IOException
      */
     public static int menuCollasNoms(String[] nombreCollas, String idioma) throws IOException {
         for (int i = 0; i < nombreCollas.length; i++) {
@@ -1087,14 +1092,14 @@ public class ProyectoNavidad {
 
     /**
      * AÑADIR PERSONA COLLA
-     * 
+     *
      * FUNCIÓN QUE AÑADE A UNA PERSONA A UNA COLLA CREADA
-     * 
+     *
      * @param colla
      * @param fila
      * @param idioma
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static Persona[][] añadirPersonaAColla(Persona[][] colla, int fila, String idioma) throws IOException {
         Persona p = pedirPersona(idioma);
@@ -1140,9 +1145,10 @@ public class ProyectoNavidad {
 
     /**
      * AÑADIR COLLA
-     * 
-     * FUNCIÓN QUE SE UTILIZA PARA AÑADIR UNA FILA VACÍA A UNA MATRIZ DE OBJETOS DE LA CLASE PERSONA
-     * 
+     *
+     * FUNCIÓN QUE SE UTILIZA PARA AÑADIR UNA FILA VACÍA A UNA MATRIZ DE OBJETOS
+     * DE LA CLASE PERSONA
+     *
      * @param colla, RECIBE LA MATRIZ
      * @return matriuCollaNueva, devuelve la nueva matriz de collas
      */
@@ -1157,20 +1163,22 @@ public class ProyectoNavidad {
 
         return matriuCollaNueva;
     }
-    
+
     /**
      * CREAR MATRIZ DE COLLAS
-     * 
+     *
      * FUNCIÓN QUE CREA LA MATRIZ DE LAS COLLAS DE OBJETOS DE LA CLASE PERSONA
-     * DONDE CADA COLUMNA REPRESENTA A UNA PERSONA DE LA COLLA Y CADA FILA REPRESENTA UNA POSICIÓN DE LA COLLA
-     * 
+     * DONDE CADA COLUMNA REPRESENTA A UNA PERSONA DE LA COLLA Y CADA FILA
+     * REPRESENTA UNA POSICIÓN DE LA COLLA
+     *
      * @param idioma, RECIBE EL IDIOMA SELECCIONADO POR EL USUARIO
-     * @return matrizCollas, DEVUELVE LA MATRIZ CON TODAS LAS PERSONAS INTRODUCIDAS POR EL USUARIO
-     * @throws IOException 
+     * @return matrizCollas, DEVUELVE LA MATRIZ CON TODAS LAS PERSONAS
+     * INTRODUCIDAS POR EL USUARIO
+     * @throws IOException
      */
     public static Persona[][] crearMatriuColla(String idioma) throws IOException {
 
-        int personas = escanearEntero("Cuantas personas sois en tu colla?", idioma);
+        int personas = escanearEntero("Cuantas personas sois en tu colla? ", idioma);
         Persona[][] matrizCollas = new Persona[1][personas];
 
         for (int i = 0; i < matrizCollas.length; i++) {
@@ -1185,17 +1193,17 @@ public class ProyectoNavidad {
 
     /**
      * AÑO EXISTENTE
-     * 
+     *
      * FUNCIÓN QUE VERIFICA LA EXISTENCIA DE UN AÑO EN UN ARCHIVO DE TEXTO
-     * 
+     *
      * @param anyo, RECIBE EL AÑO DEL SORTEO
-     * @return result, DEVUELVE SI EL AÑO EXISTE O NO 
+     * @return result, DEVUELVE SI EL AÑO EXISTE O NO
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public static boolean ExisteAnyo(String anyo) throws FileNotFoundException, IOException {
         boolean result = false;
-        File f = new File(RUTA + "anyo" + EXTENSION_TXT);
+        File f = new File(RUTA + NOM_FICHERO_ANYOS + EXTENSION_TXT);
         String linea;
         FileReader reader = new FileReader(f);
         BufferedReader buffer = new BufferedReader(reader);
@@ -1211,13 +1219,14 @@ public class ProyectoNavidad {
 
     /**
      * ACTUALIZAR PREMIOS GORDOS
-     * 
-     * FUNCIÓN QUE SE ENCARGA DE LEER LOS PREMIOSGORDOS DE LA LOTERÍA DEL ARCHIVO DE TEXTO CORRESPONDIENTE 
-     * A UN AÑO ESPECÍFICO Y LOS ALMACENA EN UN VECTOR DE ENTEROS
-     * 
+     *
+     * FUNCIÓN QUE SE ENCARGA DE LEER LOS PREMIOSGORDOS DE LA LOTERÍA DEL
+     * ARCHIVO DE TEXTO CORRESPONDIENTE A UN AÑO ESPECÍFICO Y LOS ALMACENA EN UN
+     * VECTOR DE ENTEROS
+     *
      * @param anyo, RECIBE EL AÑO DEL SORTEO
      * @param premiosGordos, RECIBE LOS PREMIOSGORDOS PARA ACTUALIZARLOS
-     * @throws IOException 
+     * @throws IOException
      */
     public static void actualizarPremiosGordos(String anyo, int[] premiosGordos) throws IOException {
         FileReader reader = null;
@@ -1239,16 +1248,18 @@ public class ProyectoNavidad {
         }
 
     }
-    
+
     /**
      * ACTUALIZAR PREMIOS GORDOS
-     * 
-     * FUNCIÓN QUE SE ENCARGA DE LEER LOS PREMIOS1000 DE LA LOTERÍA DEL ARCHIVO DE TEXTO CORRESPONDIENTE 
-     * A UN AÑO ESPECÍFICO Y LOS ALMACENA EN UN VECTOR DE ENTEROS
-     * 
+     *
+     * FUNCIÓN QUE SE ENCARGA DE LEER LOS PREMIOS1000 DE LA LOTERÍA DEL ARCHIVO
+     * DE TEXTO CORRESPONDIENTE A UN AÑO ESPECÍFICO Y LOS ALMACENA EN UN VECTOR
+     * DE ENTEROS
+     *
      * @param anyo, RECIBE EL AÑO DEL SORTEO
-     * @param premios1000, RECIBE LOS PREMIOS1000 PARA ACTUALIZARLOS
-     * @throws IOException 
+     * @param premios1000, RECIBE LOS PREMIOS1000 PARA AC
+     * @throws java.io.FileNotFoundException
+     * @throws IOException
      */
     public static void actualizarPremios1000(String anyo, int[] premios1000) throws FileNotFoundException, IOException {
         FileReader reader = null;
@@ -1281,45 +1292,49 @@ public class ProyectoNavidad {
 
     /**
      * MOSTRAR AÑOS
-     * 
+     *
      * ESTA FUNCIÓN NOS MUESTRA LOS AÑOS DE LOS SORTEOS REALIZADOS
-     * 
+     *
      * @param idioma, RECIBE EL IDIOMA SELECCIONADO POR EL USUARIO
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public static void printearAnyos(String idioma) throws FileNotFoundException, IOException {
         FileReader reader = null;
-        File f = new File(RUTA + "anyo" + EXTENSION_TXT);
+        File f = new File(RUTA + NOM_FICHERO_ANYOS + EXTENSION_TXT);
         String linea;
         reader = new FileReader(f);
         BufferedReader buffer = new BufferedReader(reader);
         linea = buffer.readLine();
-        print(idioma, "Años: ");System.out.println();
+        print(idioma, "Años: ");
+        System.out.println();
         while (linea != null) {
             System.out.println(linea);
             linea = buffer.readLine();
         }
 
     }
-    
+
+    public static void crearFicheroAnyo() throws IOException{
+        File f = new File(RUTA + NOM_FICHERO_ANYOS + EXTENSION_TXT);
+        if (!f.exists()) {
+            f.createNewFile();
+        }
+    }
     /**
      * VERRIFICAR AÑOS
-     * 
-     * ESTA FUNCIÓN COMPRUEBA LOS AÑOS EXISTENTES Y SI ESTAN VACIOS, 
-     * SI NO EXISTE EL AÑO INTRODUCIDO CREA UN NUEVO FICHERO CON ESE AÑO DE SORTEO
-     * 
+     *
+     * ESTA FUNCIÓN COMPRUEBA LOS AÑOS EXISTENTES Y SI ESTAN VACIOS, SI NO
+     * EXISTE EL AÑO INTRODUCIDO CREA UN NUEVO FICHERO CON ESE AÑO DE SORTEO
+     *
      * @return vacio, DEVUELVE SI EL FICHERO ESTA VACIO O NO
-     * @throws IOException 
+     * @throws IOException
      */
     public static boolean verificarFicheroAnyos() throws IOException {
         FileReader reader = null;
         boolean vacio = false;
 
-        File f = new File(RUTA + "anyo" + EXTENSION_TXT);
-        if (!f.exists()) {
-            f.createNewFile();
-        }
+        File f = new File(RUTA + NOM_FICHERO_ANYOS + EXTENSION_TXT);
 
         String linea;
         reader = new FileReader(f);
@@ -1334,26 +1349,26 @@ public class ProyectoNavidad {
     }
 
     /**
-     * 
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException 
+     *
+     * @return @throws FileNotFoundException
+     * @throws IOException
      */
     public static int contadFilas() throws FileNotFoundException, IOException {
         int filas = 0;
         int pos = 0;
         boolean salir = false;
-        RandomAccessFile raf = new RandomAccessFile(RUTA + "collas" + EXTENSION_BIN, "r");
+        RandomAccessFile raf = new RandomAccessFile(RUTA + NOM_FICHERO_COLLAS + EXTENSION_BIN, "r");
 
         while (!salir) {
             raf.seek(pos);
             if (raf.readUTF().equals("\n")) {
                 filas++;
+                pos += 3;
             }
 
             pos += 25;
 
-            if (pos > raf.length()) {
+            if (pos > raf.length() - 25) {
                 salir = true;
             }
         }
@@ -1363,12 +1378,14 @@ public class ProyectoNavidad {
     }
 
     /**
-     * AÑADIR PERSONA 
-     * 
-     * LA FUNCIÓN BUSCA LA PRIMERA POSICIÓN VACÍA EN LA FILA INDICADA Y AGREGA LA PERSONA EN ESA POSICIÓN.
-     * SI NO ENCUENTRA UNA POSICIÓN VACÍA, CREA UNA NUEVA MATRIZ CON UNA COLUMNA ADICIONAL Y COPIA 
-     * LOS DATOS DE LA MATRIZ ORIGINAL EN LA NUEVA MATRIZ ANTES DE AGREGAR LA PERSONA EN LA POSICIÓN VACÍA
-     * 
+     * AÑADIR PERSONA
+     *
+     * LA FUNCIÓN BUSCA LA PRIMERA POSICIÓN VACÍA EN LA FILA INDICADA Y AGREGA
+     * LA PERSONA EN ESA POSICIÓN. SI NO ENCUENTRA UNA POSICIÓN VACÍA, CREA UNA
+     * NUEVA MATRIZ CON UNA COLUMNA ADICIONAL Y COPIA LOS DATOS DE LA MATRIZ
+     * ORIGINAL EN LA NUEVA MATRIZ ANTES DE AGREGAR LA PERSONA EN LA POSICIÓN
+     * VACÍA
+     *
      * @param colla, RECIBE LA MATRIZ
      * @param fila, RECIBE LA POSICION
      * @param p, RECIBE LAS PERSONAS
@@ -1411,18 +1428,21 @@ public class ProyectoNavidad {
     }
 
     /**
-     * 
+     *
      * @param filas
      * @return
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public static Persona[][] actualizarMatriuCollas(int filas) throws FileNotFoundException, IOException {
         Persona[][] matriuCollas = new Persona[filas + 1][1];
-        RandomAccessFile raf = new RandomAccessFile(RUTA + "collas" + EXTENSION_BIN, "r");
+        final int MAX_BYTE_REGISTRE = 25;
+        final int SALT_LINEA_BYTE = 3;
+        RandomAccessFile raf = new RandomAccessFile(RUTA + NOM_FICHERO_COLLAS + EXTENSION_BIN, "r");
         int fila = 0;
         int pos = 0;
         boolean salir = false;
+        
 
         raf.seek(pos);
         while (!salir) {
@@ -1439,15 +1459,15 @@ public class ProyectoNavidad {
                 matriuCollas = añadirPersonaFAColla(matriuCollas, fila, p);
 
             } else {
-                pos += 3;
+                pos += SALT_LINEA_BYTE;
                 fila++;
                 salto = true;
             }
             if (!salto) {
-                pos += 25;
+                pos += MAX_BYTE_REGISTRE;
             }
 
-            if (pos > raf.length() - 25) {
+            if (pos > raf.length() - MAX_BYTE_REGISTRE) {
                 salir = true;
             }
 
@@ -1472,17 +1492,18 @@ public class ProyectoNavidad {
 
         return cont;
     }
-    
+
     /**
      * MULTILENGUAJE
-     * 
-     * ESTA FUNCIÓN BUSCA LA LÍNEA EN EL ARCHIVO EN ESPAÑOL Y LUEGO SALTA LAS LÍNEAS NECESARIAS 
-     * EN EL ARCHIVO DEL IDIOMA ESPECIFICADO ANTES DE IMPRIMIR LA LÍNEA TRADUCIDA
-     * 
+     *
+     * ESTA FUNCIÓN BUSCA LA LÍNEA EN EL ARCHIVO EN ESPAÑOL Y LUEGO SALTA LAS
+     * LÍNEAS NECESARIAS EN EL ARCHIVO DEL IDIOMA ESPECIFICADO ANTES DE IMPRIMIR
+     * LA LÍNEA TRADUCIDA
+     *
      * @param idioma, RECIBE EL IDIOMA ESPECIFICADO POR EL USUARIO
      * @param linea, RECIBE LA LINEA DE TEXTO
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public static void print(String idioma, String linea) throws FileNotFoundException, IOException {
         FileReader reader = null;
