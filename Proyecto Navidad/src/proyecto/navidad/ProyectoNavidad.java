@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class ProyectoNavidad {
-
+    //CONSTANTES GLOBALES
     static final String RUTA = "sorteos/";
     static final String RUTA_IDIOMAS = "traducciones/";
     static final String NOM_FICHERO_COLLAS = "collas";
@@ -30,17 +30,25 @@ public class ProyectoNavidad {
     static final int PREMIO_APROXPRIMER = 20000;
     static final int PREMIO_APROXSEGUNDO = 12500;
     static final int PREMIO_APROXTERCERO = 9600;
-
+    
     static Scanner s = new Scanner(System.in);
     static Random rnd = new Random();
-
+    /**
+     * FUNCIÓN PRINCIPAL MAIN
+     * SE ASIGNA LOS GANADORES DE LOS PRINCIPALES PREMIOS A LA TABLA DE PREMIOSGORDOS
+     * LOS GANADORES DE 1000 EUROS SON ASIGNADOS A LA TABLA DE PREMIOS1000
+     * @param args
+     * @throws IOException 
+     */
     public static void main(String[] args) throws IOException {
 
         int[] premiosGordos = ganadores();
         int[] premios1000 = ganadores1000(premiosGordos);
         menu(premiosGordos, premios1000, eleccionIdioma());
     }
-
+    /**
+     * FUNCIÓN PARA CREAR UN DIRECTORIO DONDE MÁS ADELANTE GUARDAREMOS NUESTROS FICHEROS
+     */
     public static void crearDirectorio() {
         File directorio = new File("sorteos");
         if (!directorio.exists()) {
@@ -58,7 +66,7 @@ public class ProyectoNavidad {
      * ESTA FUNCIÓN NOS MUESTRA TRES IDIOMAS A ELEGIR DEPENDIENTO CUAL ELIJA EL
      * PROGRAMA SE MOSTRARA EN EL IDIOMA INDICADO POR EL USUARIO
      *
-     * @return Idioma, DEVUELVE EL IDIOMA EN EL CUAL SE ESCRIBIRAN LOS TEXTOS.
+     * @return Idioma, DEVUELVE EL IDIOMA EN EL CUAL SE ESCRIBIRÁN LOS TEXTOS.
      * @throws java.io.IOException
      */
     public static String eleccionIdioma() throws IOException {
@@ -95,7 +103,11 @@ public class ProyectoNavidad {
         } while (!seleccionado);
         return idioma;
     }
-
+    /**
+     * FUNCIÓN PARA EL MOSTRAR POR PANTALLA EL MENÚ PRINCIPAL.
+     * @param idioma UN STRING "IDIOMA" COMO PARÁMETRO
+     * @throws IOException 
+     */
     public static void opcionsMenu(String idioma) throws IOException {
         print(idioma, "1. Realizar Sorteo.");
         System.out.println();
@@ -110,7 +122,7 @@ public class ProyectoNavidad {
      *
      * @param premiosGordos VARIABLE QUE ALMACENARA LOS 13 PREMIOS MAYORES
      * @param premios1000 VARIABLE QUE ALMACENARA LOS 1794 PREMIOS DE 1000
-     * @param idioma
+     * @param idioma SE LE PASA EL COMO PARÁMETRO EL IDIOMA SELECCIONADO
      * @throws java.io.IOException
      */
     public static void menu(int[] premiosGordos, int[] premios1000, String idioma) throws IOException {
@@ -164,7 +176,7 @@ public class ProyectoNavidad {
      *
      * @param mtj MENSAJE QUE DEVOLVEMOS EN CASO DE NO INTRODUCIR UN ENTERO
      * (NUMERO)
-     * @param idioma
+     * @param idioma PARÁMETRO DEL IDIOMA SELECCIONADO
      * @return num, DEVOLVEMOS EL NUMERO INTRODUCIDO
      * @throws java.io.IOException
      */
@@ -239,7 +251,7 @@ public class ProyectoNavidad {
      *
      * @param premiosGordos RECIBE EL VECTOR LLENO DE LOS "premiosGordos"
      * @param premios1000 RECIBE EL VECTOR LLENO DE LOS "premios100"
-     * @param idioma
+     * @param idioma PARÁMETRO DEL IDIOMA SELECCIONADO
      * @throws java.io.IOException
      */
     public static void sorteig(int[] premiosGordos, int[] premios1000, String idioma) throws IOException {
@@ -503,13 +515,13 @@ public class ProyectoNavidad {
     }
 
     /**
-     * DATOS DE LAS PESONAS
+     * DATOS DE LAS PERSONAS
      *
      * PROCEDIMIENTO QUE SOLICITA LOS DATOS DE LAS PERSONAS Y COMPRUEBA SI LOS
      * DATOS INTRODUCIDOS SON CORRECTOS
      *
-     * @param idioma
-     * @return, DEVEULEVE EL OBJETO PERSONA
+     * @param idioma SE LE PASA UN STRING "IDIOMA" COMO PARÁMETRO
+     * @return, DEVUELVE EL OBJETO PERSONA
      * @throws java.io.IOException
      */
     public static Persona pedirPersona(String idioma) throws IOException {
@@ -545,14 +557,14 @@ public class ProyectoNavidad {
     }
 
     /**
-     * COMPRUEBA EL NUMERO INTRODUCIDO
+     * COMPRUEBA EL NÚMERO INTRODUCIDO
      *
      * SI EL NUMERO INGRESADO COINCIDE CON ALGUN NUMERO GAANDOR DEL PREMIO SE
      * ACTULIZA LA VARIABLE "cantidad" CON EL VALOR CORRESPONDIENTE
      *
-     * @param premiosGordos
-     * @param premios1000
-     * @param idioma
+     * @param premiosGordos RECIBE EL PARÁMETRO DE LA TABLA DE LOS PREMIOS PRINCIPALES
+     * @param premios1000 PARÁMETRO DE LA TABLA DE LOS PREMIOS DE 1000 EUROS
+     * @param idioma PARÁMETRO DEL IDIOMA
      * @throws java.io.IOException
      */
     public static void comprobarNumero(int[] premiosGordos, int[] premios1000, String idioma) throws IOException {
@@ -597,7 +609,7 @@ public class ProyectoNavidad {
      * @param matriuCollas, UNA MATRIZ DE PERSONAS QUE REPRESENTA A LOS MIEMBROS
      * DE LA COLLA
      * @param anyoComprobacion, RECIBE EL AÑO DE REALIZACIÓN DEL SORTEO
-     * @param idioma
+     * @param idioma RECIBE UN STRING "IDIOMA" COMO PARÁMETRO
      * @throws java.io.IOException
      */
     public static void comprobarNumeroColla(int[] premiosGordos, int[] premios1000, int colla, Persona[][] matriuCollas, int anyoComprobacion, String idioma) throws IOException {
@@ -751,8 +763,8 @@ public class ProyectoNavidad {
      * LEGIBLE EN FORMA DE CADENA DE TEXTO
      *
      * @param p, RECIBE LA MATRIZ DE LAS PERSONAS
-     * @param nombresCollas
-     * @return
+     * @param nombresCollas SE LE PASA LA TABLA DEL NÚMERO DE COLLAS
+     * @return DEVUELVE UN STRING CON LOS DATOS "ORDENADOS"
      */
     public static String formatearCollas(Persona[][] p, String[] nombresCollas) {
         String result = "";
@@ -827,7 +839,7 @@ public class ProyectoNavidad {
     /**
      * FUNCIÓN PARA VISUALIZAR EL MENÚ Y ELEGIR CUALQUIERA DE LAS OPCIONES PARA DESPUÉS COMPROBAR UN NÚMERO.
      * LAS OPCIONES SON EN SOLITARIO O EN COLLA
-     * @param idioma
+     * @param idioma PARÁMETRO DEL IDIOMA SELECCIONADO
      * @throws IOException 
      */
     public static void opcionesMenuCollasSolitario(String idioma) throws IOException {
@@ -853,7 +865,7 @@ public class ProyectoNavidad {
      * LOS NUMEROS GANADORES
      * @param premios1000,RECIBE EL VECTOS DE PREMIOS1000 PARA COMPROBAR LOS
      * NUMEROS GANADORES
-     * @param idioma
+     * @param idioma PARÁMETRO DEL IDIOMA SELECCIONADO
      * @throws IOException
      */
     public static void menuCollasSolitario(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000, String idioma) throws IOException {
@@ -959,7 +971,7 @@ public class ProyectoNavidad {
      * LOS NUMEROS GANADORES
      * @param premios1000,RECIBE EL VECTOS DE PREMIOS1000 PARA COMPROBAR LOS
      * NUMEROS GANADORES
-     * @param idioma
+     * @param idioma PARÁMETRO DEL IDIOMA SELECCIONADO
      * @throws IOException
      */
     public static void menuCollas(Persona[][] matriuCollas, String[] nombreCollas, int[] premiosGordos, int[] premios1000, String idioma) throws IOException {
@@ -1013,7 +1025,7 @@ public class ProyectoNavidad {
      *
      * FUNCIÓN QUE PIDE EL NOMBRE DE LA COLLA
      *
-     * @param idioma
+     * @param idioma PARÁMETRO DEL IDIOMA SELECCIONADO
      * @return nombreColla, DEVUELVE EL NOMBRE INTRODUCIDO
      * @throws java.io.IOException
      */
@@ -1272,7 +1284,7 @@ public class ProyectoNavidad {
      * DE ENTEROS
      *
      * @param anyo, RECIBE EL AÑO DEL SORTEO
-     * @param premios1000, RECIBE LOS PREMIOS1000 PARA AC
+     * @param premios1000, RECIBE LA TABLA DE LOS PREMIOS DE 1000 EUROS
      * @throws java.io.FileNotFoundException
      * @throws IOException
      */
