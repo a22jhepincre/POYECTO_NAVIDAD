@@ -36,7 +36,9 @@ Menu colles:
 2. Afegir persona a colla
 3. Comprovar números colla
 4. Printar colles
-5. Sortir
+5. Eliminar colla: 
+6. Printear una colla: 
+7. Salir
 "Escull una opció: 
 Digues-me que any de loteria vols: 
 Any no existeix tt
@@ -51,3 +53,5 @@ Selecciona el teu llenguatge:
 Anys: 
 Les colles y els noms de les colles han sigut importades.
 Ha de ser de menys de 10 caracters.
+S'ha eliminat la colla amb èxit.
+Només tens una colla, no la podem eliminar.

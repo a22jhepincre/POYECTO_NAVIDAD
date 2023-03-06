@@ -5,11 +5,12 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class ProyectoNavidad {
+
     //CONSTANTES GLOBALES
     static final String RUTA = "sorteos/";
     static final String RUTA_IDIOMAS = "traducciones/";
     static final String NOM_FICHERO_COLLAS = "collas";
-    static final String NOM_FICHERO_NOMBRE_COLLAS = "colla2";
+    static final String NOM_FICHERO_NOMBRE_COLLAS = "nombreCollas";
     static final String NOM_FICHERO_ANYOS = "anyo";
     static final String ANSI_RED = "\033[0;31m";
     static final String ANSI_GREEN = "\u001B[32m";
@@ -30,15 +31,17 @@ public class ProyectoNavidad {
     static final int PREMIO_APROXPRIMER = 20000;
     static final int PREMIO_APROXSEGUNDO = 12500;
     static final int PREMIO_APROXTERCERO = 9600;
-    
+
     static Scanner s = new Scanner(System.in);
     static Random rnd = new Random();
+
     /**
-     * FUNCIÓN PRINCIPAL MAIN
-     * SE ASIGNA LOS GANADORES DE LOS PRINCIPALES PREMIOS A LA TABLA DE PREMIOSGORDOS
-     * LOS GANADORES DE 1000 EUROS SON ASIGNADOS A LA TABLA DE PREMIOS1000
+     * FUNCIÓN PRINCIPAL MAIN SE ASIGNA LOS GANADORES DE LOS PRINCIPALES PREMIOS
+     * A LA TABLA DE PREMIOSGORDOS LOS GANADORES DE 1000 EUROS SON ASIGNADOS A
+     * LA TABLA DE PREMIOS1000
+     *
      * @param args
-     * @throws IOException 
+     * @throws IOException
      */
     public static void main(String[] args) throws IOException {
 
@@ -46,8 +49,10 @@ public class ProyectoNavidad {
         int[] premios1000 = ganadores1000(premiosGordos);
         menu(premiosGordos, premios1000, eleccionIdioma());
     }
+
     /**
-     * FUNCIÓN PARA CREAR UN DIRECTORIO DONDE MÁS ADELANTE GUARDAREMOS NUESTROS FICHEROS
+     * FUNCIÓN PARA CREAR UN DIRECTORIO DONDE MÁS ADELANTE GUARDAREMOS NUESTROS
+     * FICHEROS
      */
     public static void crearDirectorio() {
         File directorio = new File("sorteos");
@@ -103,10 +108,12 @@ public class ProyectoNavidad {
         } while (!seleccionado);
         return idioma;
     }
+
     /**
      * FUNCIÓN PARA EL MOSTRAR POR PANTALLA EL MENÚ PRINCIPAL.
+     *
      * @param idioma UN STRING "IDIOMA" COMO PARÁMETRO
-     * @throws IOException 
+     * @throws IOException
      */
     public static void opcionsMenu(String idioma) throws IOException {
         print(idioma, "1. Realizar Sorteo.");
@@ -504,8 +511,10 @@ public class ProyectoNavidad {
 
         return cantidad;
     }
+
     /**
-     * CREAMOS LA CLASE PERSONA CON SUS RESPECTIVOS ATRIBUTOS, NOMBRE, NÚMERO Y DINERO
+     * CREAMOS LA CLASE PERSONA CON SUS RESPECTIVOS ATRIBUTOS, NOMBRE, NÚMERO Y
+     * DINERO
      */
     public static class Persona {
 
@@ -562,7 +571,8 @@ public class ProyectoNavidad {
      * SI EL NUMERO INGRESADO COINCIDE CON ALGUN NUMERO GAANDOR DEL PREMIO SE
      * ACTULIZA LA VARIABLE "cantidad" CON EL VALOR CORRESPONDIENTE
      *
-     * @param premiosGordos RECIBE EL PARÁMETRO DE LA TABLA DE LOS PREMIOS PRINCIPALES
+     * @param premiosGordos RECIBE EL PARÁMETRO DE LA TABLA DE LOS PREMIOS
+     * PRINCIPALES
      * @param premios1000 PARÁMETRO DE LA TABLA DE LOS PREMIOS DE 1000 EUROS
      * @param idioma PARÁMETRO DEL IDIOMA
      * @throws java.io.IOException
@@ -836,11 +846,13 @@ public class ProyectoNavidad {
         int resultado = (int) raf.length() / 12;
         return resultado;
     }
+
     /**
-     * FUNCIÓN PARA VISUALIZAR EL MENÚ Y ELEGIR CUALQUIERA DE LAS OPCIONES PARA DESPUÉS COMPROBAR UN NÚMERO.
-     * LAS OPCIONES SON EN SOLITARIO O EN COLLA
+     * FUNCIÓN PARA VISUALIZAR EL MENÚ Y ELEGIR CUALQUIERA DE LAS OPCIONES PARA
+     * DESPUÉS COMPROBAR UN NÚMERO. LAS OPCIONES SON EN SOLITARIO O EN COLLA
+     *
      * @param idioma PARÁMETRO DEL IDIOMA SELECCIONADO
-     * @throws IOException 
+     * @throws IOException
      */
     public static void opcionesMenuCollasSolitario(String idioma) throws IOException {
         print(idioma, "Menu:");
@@ -939,11 +951,12 @@ public class ProyectoNavidad {
         }
 
     }
+
     /**
-     * MENÚ COLLAS
-     * FUNCIÓN PARA MOSTRAR EL MENÚ DISPONIBLE DE LAS COLLAS.
+     * MENÚ COLLAS FUNCIÓN PARA MOSTRAR EL MENÚ DISPONIBLE DE LAS COLLAS.
+     *
      * @param idioma EL IDIOMA ELEGIDO
-     * @throws IOException 
+     * @throws IOException
      */
     public static void opcionsMenuCollas(String idioma) throws IOException {
         print(idioma, "Menu collas:");
@@ -956,7 +969,11 @@ public class ProyectoNavidad {
         System.out.println();
         print(idioma, "4. Printear collas: ");
         System.out.println();
-        print(idioma, "5. Salir");
+        print(idioma, "5. Eliminar colla: ");
+        System.out.println();
+        print(idioma, "6. Printear una colla: ");
+        System.out.println();
+        print(idioma, "7. Salir");
         System.out.println();
     }
 
@@ -1012,12 +1029,63 @@ public class ProyectoNavidad {
                 case 4 ->
                     System.out.println(formatearCollas(matriuCollas, nombreCollas));
                 /*ESTA OPCIÓN PERMITE AL USUARIO SALIR DEL MENU*/
-                case 5 ->
+                case 5 -> {
+                    if(nombreCollas.length > 1){
+                    int collaAEliminar = menuCollasNoms(nombreCollas, idioma) - 1;
+                    matriuCollas = eliminarColla(matriuCollas, collaAEliminar);
+                    escribirCollasBinario(matriuCollas);
+                    nombreCollas = eliminarNombreColla(nombreCollas, collaAEliminar);
+                    escribirNombresFichero(nombreCollas);
+                    print(idioma, "Se ha eliminado la colla con exito.");
+                    } else {
+                        print(idioma, "Solo tienes una colla, no podemos eliminarla.");System.out.println();
+                    }
+                }
+                case 6 -> {
+                    printColla(matriuCollas, nombreCollas, menuCollasNoms(nombreCollas, idioma) - 1);
+                }
+                case 7 ->
                     salir = true;
                 default ->
                     print(idioma, "Escoge una opcion");
             }
         }
+    }
+
+    public static void printColla(Persona[][] matriuColla, String[] nCollas, int fila) {
+        System.out.println(nCollas[fila].toUpperCase());
+        for (int i = 0; i < matriuColla[fila].length; i++) {
+            if (matriuColla[fila][i] != null) {
+                System.out.println(matriuColla[fila][i].nombre + " " + matriuColla[fila][i].numero + " " + matriuColla[fila][i].dinero);
+            }
+        }
+        System.out.println();
+    }
+
+    public static Persona[][] eliminarColla(Persona[][] matriuColla, int fila) {
+        Persona[][] matriuCollaNueva = new Persona[matriuColla.length - 1][matriuColla[0].length];
+        for (int i = 0; i < matriuColla.length - 1; i++) {
+            if (i != fila) {
+                for (int j = 0; j < matriuColla[i].length; j++) {
+                    if (matriuColla[i][j] != null) {
+                        matriuCollaNueva[i][j] = matriuColla[i][j];
+                    }
+                }
+            }
+        }
+
+        return matriuCollaNueva;
+    }
+
+    public static String[] eliminarNombreColla(String[] nCollas, int fila) {
+        String[] nCollasNueva = new String[nCollas.length - 1];
+        for (int i = 0; i < nCollas.length - 1; i++) {
+            if (i != fila) {
+                nCollasNueva[i] = nCollas[i];
+            }
+        }
+
+        return nCollasNueva;
     }
 
     /**
@@ -1043,7 +1111,7 @@ public class ProyectoNavidad {
                     nombreColla += " ";
                 }
             } else {
-                print(idioma, "Debe de ser de menos de diez caraceteres.");
+                print(idioma, "Debe de ser de menos de 10 caraceteres.");
                 System.out.println();
             }
         } while (!salir);
@@ -1053,9 +1121,11 @@ public class ProyectoNavidad {
 
     /**
      * ACTUALIZAR EL NOMBRE DE LAS COLLAS
-     * 
-     * FUNCIÓN QUE RECIBE COMO PARÁMETRO UNA CANTIDAD DE NOMBRES
-     * ACCEDE A UN FICHERO DE ACCESO DIRECTO, LEE LA TABLA DE NOMBRES Y LA DEVUELVE ACTUALIZADA.
+     *
+     * FUNCIÓN QUE RECIBE COMO PARÁMETRO UNA CANTIDAD DE NOMBRES ACCEDE A UN
+     * FICHERO DE ACCESO DIRECTO, LEE LA TABLA DE NOMBRES Y LA DEVUELVE
+     * ACTUALIZADA.
+     *
      * @param numNombres CANTIDAD DE NOMBRES
      * @return DEVUELVE EL NOMBRE DE LA COLLA ACTUALIZADO
      * @throws java.io.FileNotFoundException
@@ -1341,11 +1411,14 @@ public class ProyectoNavidad {
         }
 
     }
+
     /**
      * CREAR FICHERO DE AÑO
-     * 
-     * FUNCIÓN QUE COMPRUEBA SI UN FICHERO DE UN AÑO EN ESPECÍFICO EXISTE. SI NO EXISTE, LO CREA.
-     * @throws IOException 
+     *
+     * FUNCIÓN QUE COMPRUEBA SI UN FICHERO DE UN AÑO EN ESPECÍFICO EXISTE. SI NO
+     * EXISTE, LO CREA.
+     *
+     * @throws IOException
      */
     public static void crearFicheroAnyo() throws IOException {
         File f = new File(RUTA + NOM_FICHERO_ANYOS + EXTENSION_TXT);
@@ -1383,10 +1456,11 @@ public class ProyectoNavidad {
 
     /**
      * FUNCIÓN CONTARFILAS
-     * 
-     * ACCEDEMOS A NUESTRO FICHERO DE COLLA DE MANERA DIRECTA,LEEMOS LÍNEA A LÍNEA
-     * Y VAMOS CONTANDO LAS FILAS CADA VEZ QUE HAGAMOS UN SALTO DE LÍNEA.
+     *
+     * ACCEDEMOS A NUESTRO FICHERO DE COLLA DE MANERA DIRECTA,LEEMOS LÍNEA A
+     * LÍNEA Y VAMOS CONTANDO LAS FILAS CADA VEZ QUE HAGAMOS UN SALTO DE LÍNEA.
      * DE ESTA MANERA SABEMOS CUÁNTOS REGISTROS TENEMOS.
+     *
      * @return @throws FileNotFoundException
      * @throws IOException
      */
@@ -1466,10 +1540,13 @@ public class ProyectoNavidad {
 
     /**
      * ACTUALIZAR MATRIZ DE COLLAS
-     * 
-     * FUNCIÓN A LA QUE SE LE PASA COMO PARÁMETRO LAS FILAS DE LA MATRIZ DE COLLAS, SE ACCEDE
-     * AL FICHERO DE MANERA DIRECTA (RANDOM ACCESS FILE) Y COMPRUEBA SI EXISTE DENTRO DEL FICHERO, ACTUALIZÁNDOLO EN CASO DE NO EXISTIR.
-     * CADA REGISTRO OCUPA UNA LÍNEA DEL FICHERO, Y CADA REGISTRO OCUPA 25 BYTES EN UN FICHERO BINARIO.
+     *
+     * FUNCIÓN A LA QUE SE LE PASA COMO PARÁMETRO LAS FILAS DE LA MATRIZ DE
+     * COLLAS, SE ACCEDE AL FICHERO DE MANERA DIRECTA (RANDOM ACCESS FILE) Y
+     * COMPRUEBA SI EXISTE DENTRO DEL FICHERO, ACTUALIZÁNDOLO EN CASO DE NO
+     * EXISTIR. CADA REGISTRO OCUPA UNA LÍNEA DEL FICHERO, Y CADA REGISTRO OCUPA
+     * 25 BYTES EN UN FICHERO BINARIO.
+     *
      * @param filas
      * @return DEVUELVE LA MATRIZ DE REGISTRO ACTUALIZADA
      * @throws FileNotFoundException
@@ -1516,16 +1593,19 @@ public class ProyectoNavidad {
 
         return matriuCollas;
     }
-    
+
     /**
-    * CONTADOR DE LINEAS
-    *
-    * ESTA FUNCIÓN BUSCA UNA LINEA ESPECIFICA EN LOS ARCHIVOS DE TEXTO DE LOS IDIOMAS
-    *
-    * @param idioma, RECIBE EL IDIOMA ESPECIFICADO POR EL USUARIO
-    * @param linea, RECIBE LA LINEA DE TEXTO
-    * @return cont, DEVUELVE EL NÚMERO DE LÍNEAS QUE SE HAN LEÍDO DESDE EL ARCHIVO HASTA QUE SE HA ENCONTRADO LA LÍNEA QUE SE BUSCABA 
-    */
+     * CONTADOR DE LINEAS
+     *
+     * ESTA FUNCIÓN BUSCA UNA LINEA ESPECIFICA EN LOS ARCHIVOS DE TEXTO DE LOS
+     * IDIOMAS
+     *
+     * @param idioma, RECIBE EL IDIOMA ESPECIFICADO POR EL USUARIO
+     * @param linea, RECIBE LA LINEA DE TEXTO
+     * @return cont, DEVUELVE EL NÚMERO DE LÍNEAS QUE SE HAN LEÍDO DESDE EL
+     * ARCHIVO HASTA QUE SE HA ENCONTRADO LA LÍNEA QUE SE BUSCABA
+     * @throws java.io.FileNotFoundException
+     */
     public static int contador(String idioma, String linea) throws FileNotFoundException, IOException {
         int cont = 0;
         FileReader reader = null;

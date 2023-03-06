@@ -36,7 +36,9 @@ Menu lists:
 2. Add person to group
 3. Check group numbers
 4. Print groups
-5. Exit
+5. Delete group: 
+6. Print one group: 
+7. Exit
 "Choose an option: 
 What year of lottery do you want:
 Year does not exist tt
@@ -51,3 +53,5 @@ Select your language:
 Years: 
 Groups and groups names have been imported.
 It has to be less than ten characters.
+Colla has been successfully removed.
+You only have one collar, we can't delete it.

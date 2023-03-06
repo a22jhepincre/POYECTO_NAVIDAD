@@ -36,7 +36,9 @@ Menu collas:
 2. Añadir persona a colla: 
 3. Comprobar numeros colla: 
 4. Printear collas: 
-5. Salir
+5. Eliminar colla: 
+6. Printear una colla: 
+7. Salir
 "Elige una opcion: 
 Dime que año de loteria quieres: 
 Año no existe tt
@@ -50,4 +52,6 @@ Nombre:
 Selecciona tu idioma: 
 Años: 
 Se han importado las collas y los nombres de las collas.
-Debe de ser de menos de diez caraceteres.
+Debe de ser de menos de 10 caraceteres.
+Se ha eliminado la colla con exito.
+Solo tienes una colla, no podemos eliminarla.
