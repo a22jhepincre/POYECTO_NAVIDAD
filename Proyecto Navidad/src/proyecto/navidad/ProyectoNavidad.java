@@ -1051,7 +1051,13 @@ public class ProyectoNavidad {
             }
         }
     }
-
+    
+    /**
+     * FUNCIÓN QUE SOLO PRINTEA UNA COLLA EN ESPECIFICO.
+     * @param matriuColla LE PASAMOS LA MATRIZ DE COLLAS
+     * @param nCollas EL NOMBRE DE LA COLLA QUE VAMOS A PRINTEAR
+     * @param fila LA FILA QUE QUEREMOS PRINTEAR
+     */
     public static void printColla(Persona[][] matriuColla, String[] nCollas, int fila) {
         System.out.println(nCollas[fila].toUpperCase());
         for (int i = 0; i < matriuColla[fila].length; i++) {
@@ -1061,7 +1067,13 @@ public class ProyectoNavidad {
         }
         System.out.println();
     }
-
+    
+    /**
+     * FUNCIÓN QUE ELIMINAR UNA COLLA
+     * @param matriuColla PASAMOS LA MATRIZ DE COLLAS LA CUAL QUEREMOS MODIFICAR
+     * @param fila PASAMOS LA FILA QUE QUEREMOS MODIFICAR/ELIMINAR
+     * @return DEVOLVEMOS LA MATRIZ SIN LA FILA QUE QUEREMOS ELIMINAR
+     */
     public static Persona[][] eliminarColla(Persona[][] matriuColla, int fila) {
         Persona[][] matriuCollaNueva = new Persona[matriuColla.length - 1][matriuColla[0].length];
         for (int i = 0; i < matriuColla.length - 1; i++) {
@@ -1076,7 +1088,13 @@ public class ProyectoNavidad {
 
         return matriuCollaNueva;
     }
-
+    
+    /**
+     * FUNCIÓN QUE ELIMINA EL NOMBRE DE LA COLLA QUE QUEREMOS ELIMINAR
+     * @param nCollas LE PASAMOS EL ARRAY DE LOS NOMBRES DE LAS COLLAS
+     * @param fila LE PASAMOS LA FILA QUE QUEREMOS ELIMINAR
+     * @return DEVOLVEMOS SIN LA FILA QUE QUEREMOS ELIMINAR
+     */
     public static String[] eliminarNombreColla(String[] nCollas, int fila) {
         String[] nCollasNueva = new String[nCollas.length - 1];
         for (int i = 0; i < nCollas.length - 1; i++) {
